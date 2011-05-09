@@ -724,6 +724,65 @@
 \newtoks\tntoksfour
 \newtoks\tntoksfive
 
+\def\resumo{
+\ifnum\titlenotecount>0 % was =1
+    \insert\footins{%
+    \reset@font\footnotesize
+        \interlinepenalty\interfootnotelinepenalty
+        \splittopskip\footnotesep
+        \splitmaxdepth \dp\strutbox \floatingpenalty \@MM
+        \hsize\columnwidth \@parboxrestore
+        \protected@edef\@currentlabel{%
+        }%
+        \color@begingroup
+\ifnum\titlenotecount=1
+      \@maketntext{%
+         \raisebox{4pt}{$\ast$}\rule\z@\footnotesep\ignorespaces\the\tntoks\@finalstrut\strutbox}%
+\fi
+\ifnum\titlenotecount=2
+      \@maketntext{%
+      \raisebox{4pt}{$\ast$}\rule\z@\footnotesep\ignorespaces\the\tntoks\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\dagger$}\rule\z@\footnotesep\ignorespaces\the\tntokstwo\@finalstrut\strutbox}%
+\fi
+\ifnum\titlenotecount=3
+      \@maketntext{%
+         \raisebox{4pt}{$\ast$}\rule\z@\footnotesep\ignorespaces\the\tntoks\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\dagger$}\rule\z@\footnotesep\ignorespaces\the\tntokstwo\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\ddagger$}\rule\z@\footnotesep\ignorespaces\the\tntoksthree\@finalstrut\strutbox}%
+\fi
+\ifnum\titlenotecount=4
+      \@maketntext{%
+         \raisebox{4pt}{$\ast$}\rule\z@\footnotesep\ignorespaces\the\tntoks\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\dagger$}\rule\z@\footnotesep\ignorespaces\the\tntokstwo\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\ddagger$}\rule\z@\footnotesep\ignorespaces\the\tntoksthree\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\S$}\rule\z@\footnotesep\ignorespaces\the\tntoksfour\@finalstrut\strutbox}%
+\fi
+\ifnum\titlenotecount=5
+      \@maketntext{%
+         \raisebox{4pt}{$\ast$}\rule\z@\footnotesep\ignorespaces\the\tntoks\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\dagger$}\rule\z@\footnotesep\ignorespaces\the\tntokstwo\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\ddagger$}\rule\z@\footnotesep\ignorespaces\the\tntoksthree\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\S$}\rule\z@\footnotesep\ignorespaces\the\tntoksfour\par\@finalstrut\strutbox}%
+\@maketntext{%
+         \raisebox{4pt}{$\P$}\rule\z@\footnotesep\ignorespaces\the\tntoksfive\@finalstrut\strutbox}%
+\fi
+   \color@endgroup} %g}
+\fi
+\setcounter{footnote}{0}
+\section*{RESUMO}\normalsize %\the\parskip \the\baselineskip%\ninept
+}
+
+\def\endresumo{\if@twocolumn\else\endquotation\fi}
+
 \def\abstract{
 \ifnum\titlenotecount>0 % was =1
     \insert\footins{%
