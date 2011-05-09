@@ -80,37 +80,16 @@
 %
 % 1st. author
 \alignauthor
-Giancarlo Rampanelli\\
-       \affaddr{Instituto de Informática}\\
-       \affaddr{Universidade Federal do Rio Grande do Sul}\\
-       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 220}\\
-       \affaddr{Porto Alegre, Brasil}\\
-       \email{gian419@gmail.com}
-% 2nd. author
-\alignauthor
-Felipe Cecagno\\
-       \affaddr{Instituto de Informática}\\
-       \affaddr{Universidade Federal do Rio Grande do Sul}\\
-       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 220}\\
-       \affaddr{Porto Alegre, Brasil}\\
-       \email{fcecagno@gmail.com}
-\and  % use '\and' if you need 'another row' of author names
-% 3rd. author
-\alignauthor
-André Schulz\\
-       \affaddr{Instituto de Informática}\\
-       \affaddr{Universidade Federal do Rio Grande do Sul}\\
-       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 220}\\
-       \affaddr{Porto Alegre, Brasil}\\
-       \email{afertschulz@gmail.com}
-% 4th. author
-\alignauthor
+Giancarlo Rampanelli, 
+Felipe Cecagno,
+André Schulz,
 Valter Roesler\\
+       \affaddr{Laboratório do PRAV}\\
        \affaddr{Instituto de Informática}\\
        \affaddr{Universidade Federal do Rio Grande do Sul}\\
-       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 233}\\
+       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 220}\\
        \affaddr{Porto Alegre, Brasil}\\
-       \email{roesler@inf.ufrgs.br}
+       \email{\{grampanelli, fcecagno, aschulz, roesler\}@inf.ufrgs.br}
 }
 \date{15 de maio de 2011}
 
@@ -148,7 +127,7 @@ Valter Roesler\\
 \todo{este é um capítulo que provavelmente iremos reduzir ou remover para caber tudo em oito páginas}
 
 Um sistema que permite que uma pessoa comunique-se, ao vivo, com uma ou mais
-pessoas, cada qual em sua máquina, através da transmissão da sua fala (capturada pelo microfone) e da sua imagem em forma de vídeo (capturada pela câmera), ao mesmo tempo em que escuta e visualiza os outros participantes, representa um sistema de transmissão de vídeo interativo em tempo real (doravante chamado STVITR) \todo{melhorar essa abreviação}. Tais sistemas são complexos de serem desenvolvidos, já que, além da necessidade do áudio e do vídeo serem transmitidos, recebidos e exibidos de forma contínua por todos os participantes, é preciso que essa transmissão ocorra com um baixíssimo atraso: se o intervalo de tempo entre o instante da captura do áudio e do vídeo e o instante da sua exibição nas máquinas dos outros participantes for maior que 400 milissegundos, por exemplo, o resultado pode ser uma interação altamente frustrante (KUROSE; ROSS, 1999).
+pessoas, cada qual em sua máquina, através da transmissão da sua fala (capturada pelo microfone) e da sua imagem em forma de vídeo (capturada pela câmera), ao mesmo tempo em que escuta e visualiza os outros participantes, representa um sistema de transmissão de vídeo interativo em tempo real (doravante chamado STVITR) \todo{melhorar essa abreviação}. Tais sistemas são complexos de serem desenvolvidos, já que, além da necessidade do áudio e do vídeo serem transmitidos, recebidos e exibidos de forma contínua por todos os participantes, é preciso que essa transmissão ocorra com um baixíssimo atraso: se o intervalo de tempo entre o instante da captura do áudio e do vídeo e o instante da sua exibição nas máquinas dos outros participantes for maior que 400 milissegundos, por exemplo, o resultado pode ser uma interação altamente frustrante \cite{kurose_1999}.
 
 É um desafio desenvolver com qualidade tais sistemas pois as redes atuais, em geral, suportam apenas uma pequena taxa de bit/s. O desafio se torna ainda maior na área dos dispositivos móveis, que, além de terem hardware limitado, que torna a tarefa da decodificação e da exibição do vídeo menos eficiente, também têm limitações de rede, pois costumam utilizar 3G ou Internet sem fio, ambos suscetíveis a alta perda de pacotes e, na maioria das vezes, a baixas velocidades (HUYNH-THU; GHANBARI, 2008).
 
@@ -174,7 +153,7 @@ Um STVITR pode ser dividido, basicamente, em dois módulos:
 
 Android é um sistema operacional de código aberto (desenvolvido pela empresa Google) para dispositivos móveis construído sobre uma versão modificada do kernel Linux. Em comparação aos outros sistemas operacionais para smartphones existentes, o Android é caracterizado por aplicações de vídeo mais simples. Isso se deve às limitações das APIs fornecidas pelo Android para programação de vídeo e, alternativamente, à grande complexidade para criar tais aplicativos sem a utilização dessas APIs. A dificuldade de se encontrar bons aplicativos de vídeo para Android se torna ainda mais marcante na área de STVITR.
 
-Devido ao crescente número de usuários do Android, a demanda por aplicações de vídeo diferenciadas (com maior número de funcionalidades) para esse sistema operacional da Google aumenta no mesmo ritmo. Para poder suprir essa demanda de forma rápida e qualificada, os desenvolvedores de aplicativos procuram por  frameworks de que lhes deem mais flexibilidade e mais recursos na programação em comparação às APIs tradicionais. Neste trabalho, será proposta uma solução que visa servir como alternativa às classes padrão do Android. Essa ideia será implementada na forma de um framework \todo{como o framework nao está completo podemos incluí-lo como trabalho futuro e apresentar apenas a solução, ou entao podemos supor que o framework esta pronto, ja que comprovamos que a estrategia funciona}, visando abstrair dos seus usuários (os programadores) as partes mais trabalhosas e menos intuitivas da alternativa, para que seja possível a criação de tais aplicativos de vídeo para Android de forma simples e rápida.
+Devido ao crescente número de usuários do Android, a demanda por aplicações de vídeo diferenciadas (com maior número de funcionalidades) para esse sistema operacional da Google aumenta no mesmo ritmo. Para poder suprir essa demanda de forma rápida e qualificada, os desenvolvedores de aplicativos procuram por  frameworks de que lhes deem mais flexibilidade e mais recursos na programação em comparação às APIs tradicionais. Neste trabalho, será proposta uma solução que visa servir como alternativa às classes padrão do Android. Essa ideia será implementada na forma de um framework \todo{como o framework não está completo podemos incluí-lo como trabalho futuro e apresentar apenas a solução, ou então podemos supor que o framework esta pronto, já que comprovamos que a estrategia funciona}, visando abstrair dos seus usuários (os programadores) as partes mais trabalhosas e menos intuitivas da alternativa, para que seja possível a criação de tais aplicativos de vídeo para Android de forma simples e rápida.
 
 Aplicativos para Android são escritos com a linguagem de programação Java e rodam na máquina virtual Dalvik. O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos (ABLESON; COLLINS; SEN, 2008).
 
@@ -184,7 +163,7 @@ Considerando os dois módulos de um STVITR descritos anteriormente, as classes f
 
 Existem outras classes relacionadas, mas não passam de pequenas extensões ou encapsulamentos das classes acima, sem importância para este trabalho. Também há classes relacionadas a envio e recebimento de dados genéricos pela rede que poderiam ser utilizadas em conjunto com as classes acima. A seguir serão explicadas as utilidades básicas de cada uma dessas cinco classes. Então, com base nessa descrição, serão levantadas possíveis estratégias de se desenvolver um STVITR com elas, e as limitações de cada estratégia.
 
-\subsection{CLASSE MEDIARECORDER}
+\subsection{Classe MediaRecorder}
 A Classe MediaRecorder realiza a captura de áudio e de vídeo (a partir do microfone e da câmera, respectivamente) e codifica-os utilizando o hardware do aparelho. Os dados codificados podem ser salvos encapsulados em um arquivo, ou podem ser transmitidos pela rede com a utilização de sockets. A classe também pode exibir um preview da captura para o usuário local.
 Basicamente, as etapas necessárias são as seguintes:
 \begin{enumerate}
@@ -201,7 +180,7 @@ mMediaRecorder.setPreviewDisplay(<superfície local>);
 
 Portanto, a classe pode ser utilizada de duas formas diferentes: salvando em um arquivo ou utilizando um socket. É importante notar que não há como acessar diretamente os dados capturados nem os codificados, pois este não é o objetivo da classe (a classe mais adequada para essa tarefa é a Camera).
 
-\subsection{CLASSE CAMERA}
+\subsection{Classe Camera}
 A classe Camera realiza a captura de vídeo (a partir da câmera) e pode exibir um preview da captura para o usuário local. Ela pode ser utilizada de duas formas: para tirar fotos (ou seja, salvar um quadro da captura, codificando-o e encapsulado-o em um arquivo) ou para instalar um callback que é chamado a cada frame capturado e que recebe os dados não codificados do frame capturado.
 
 Basicamente, as etapas necessárias são as seguintes:
@@ -220,7 +199,7 @@ takePicture(<Camera.ShutterCallback>,<Camera.PictureCallback>,<Camera.PictureCal
 @Override public void onPreviewFrame (byte[] data, Camera camera){}
 \end{enumerate}
 
-\subsection{CLASSE AUDIORECORD}
+\subsection{Classe AudioRecord}
 A classe AudioRecord realiza a captura de áudio (a partir do microfone) e, enquanto captura, escreve os dados não codificados em um buffer principal. Esses dados podem ser transferidos para um buffer secundário sempre que se desejar, para que possam ser utilizados.
 
 Basicamente, as etapas necessárias são as seguintes:
@@ -233,7 +212,7 @@ mAudioRecord.startRecording();
 record.read(<buffer secundário>,<índice inicial do buffer secundário>,<número de bytes a transferir>);
 \end{enumerate}
 
-\subsection{CLASSE MEDIAPLAYER}
+\subsection{Classe MediaPlayer}
 A classe MediaPlayer fornece funções de alto nível para a exibição de vídeos. Basicamente, permite a escolha da origem do vídeo (arquivo local, servidor web ou streaming por RTSP), e faz o início da exibição (HASHIMI; KOMATINENI, 2009). Dada a origem do vídeo, a classe realiza a decodificação do áudio e do vídeo em hardware e os renderiza.
 
 Basicamente, as etapas necessárias são as seguintes:
@@ -247,7 +226,7 @@ mMediaPlayer.prepare();
 mMediaPlayer.start();
 \end{enumerate}
 
-\subsection{CLASSE AUDIOTRACK}
+\subsection{Classe AudioTrack}
 A classe AudioTrack serve para renderizar áudio. Sempre que se desejar renderizar áudio com ela, deve-se transferir os dados de áudio não codificados de um buffer secundário para o buffer principal da classe.
 
 Basicamente, as etapas necessárias são as seguintes:
@@ -266,7 +245,7 @@ mAudioTrack.play();
 
 \section{Estratégias para STVITR com as classes padrão}
 
-\subsection{ESTRATÉGIA 1}
+\subsection{Estratégia 1}
 É a técnica implementada em \todo{trab alemao}.
 
 \subsubsection{Do lado da origem}
@@ -331,7 +310,7 @@ E assim por diante. \todo{talvez fosse melhor representar essa linha de tempo co
 
 Portanto, nessa simulação, o delay é de 3.2 segundos. Além disso, ocorrem pausas de 1.4s a cada 2s de exibição do vídeo. Em um STVITR, o maior delay recomendado é de 400ms. Não existe uma norma para determinar a aceitabilidade pausas na exibição, mas é evidente que as pausas obtidas nesse método tornariam a comunicação altamente frustrante. O autor reconhece que a técnica não serve para STVITR, mas seu objetivo era identificar as limitações das APIs e propor a melhor aproximação possível de um STVITR. Segundo o autor, essa provavelmente é a técnica possível de ser implementada com as classes padrão do Android que mais se aproxima de um STVITR. No entanto, ele deixa claro que sempre podem surgir novas ideias. 
 
-\subsection{ESTRATÉGIA 2}
+\subsection{Estratégia 2}
 É a técnica implementada em \todo{sipdroid}.
 
 Esta técnica utiliza a capacidade da classe MediaPlayer em reproduzir conteúdo ao vivo \todo{diferenciar conteúdo ao vivo de conteúdo em tempo real} utilizando o protocolo RTSP.
@@ -357,11 +336,11 @@ Também fizemos uma comparação do RTSP do Android com o RTSP do VideoLAN utili
 
 Comparado ao método anterior, neste método não ocorrem pausas na exibição. Porém, segundo os testes de desempenho realizados com a classe MediaPlayer, o delay é maior que o do método anterior, devido ao baixo desempenho do RTSP utilizado juntamente com a classe MediaPlayer do Android.
 
-\subsection{ESTRATÉGIA 3}
+\subsection{Estratégia 3}
 
 Ao invés de utilizar a classe MediaRecorder para capturar, utilizar as classes Camera e AudioRecord. Com ambas as classes é possível se obter os dados não codificados dos quadros de vídeo e de áudio capturados. No entanto, não há nenhuma classe padrão do android que receba como parâmetro um quadro não codificado e que codifique-o. E quadros não codificados são grandes demais para serem transmitidos pela rede em tempo viável para STVITR. Poderia ser implementado um codificador/decodificador em Java. No entanto, a tarefa da codificação/decodificação é extremamente custosa computacionalmente, além de ser muito complexa de ser desenvolvida. Implementar uma tarefa custosa em uma linguagem que roda em máquina virtual que, por sua vez, roda em um dispositivo de baixo poder computacional, seria pouco eficiente. Além disso, mesmo que fosse possível codificar os quadros em Java, enviá-los ao destino e decodificá-los em Java em tempo viável para STVITR, não haveria como reproduzí-los utilizando as classes padrão do Android, visto que nenhuma delas tem a capacidade de receber como parâmetros quadros decodificados. Logo, esta estratégia não é possível.
 
-\subsection{ESTRATÉGIA 4}
+\subsection{Estratégia 4}
 
 \subsubsection{Lado da origem}
 
@@ -375,7 +354,7 @@ Receber cada frame e exibí-lo com alguma classe padrão do Android que decodifi
 
 Codecs de vídeo são mais eficazes que o codec de imagens JPEG, visto que um vídeo é um conjunto de imagens relacionadas entre si, e a compressão é realizada com base na relação entre essas imagens. Um codec JPEG apenas comprime uma imagem sem relacioná-la com nenhuma outra, portanto tem menos poder de compressão. Além disso, a função foto do Android não foi projetada para este uso e é pouco eficiente. Um dos motivos é que quando a função foto é chamada, o preview do vídeo capturado é interrompido. Para tirar uma nova foto é preciso reiniciar o preview. O método em si não foi testado, mas certamente a taxa de frames e o delay obtidos não chegariam perto do recomendado para STVITR. Outro problema dessa estratégia é não ter um correspondente para o áudio. Somente o vídeo seria transmitido.
 
-\subsection{ESTRATÉGIA 5}
+\subsection{Estratégia 5}
 Como o Android é de código aberto, essa estratégia seria copiar as libraries nativas (C/C++) internas (privadas) ao sistema operacional que interagem com as classes java MediaPlayer e MediaRecorder e com o hardware dos aparelhos e colá-las no em um novo projeto. Em seguida, compilaríamos essas libraries dentro do nosso projeto, com a utilização da NDK \todo{explicar o que é a ndk}. Desse modo, teríamos acesso aos quadros codificados/decodificados pelo hardware e, desse modo, poderíamos utilizar alguma classe genérica de transmissão de dados do Android para realizar a transmissão/recepção desses quadros. Assim, a implementação ficaria desta forma:
 
 Captura: câmera e microfone seriam acessados diretamente pelo C++, utilizando as libraries privadas do android correspondentes.
@@ -398,7 +377,7 @@ Pela análise acima, pode-se perceber que não foi possível contruir um STVITR 
 
 A solução consiste em:
 
-\subsubsection{Lado da origem}
+\subsection{Lado da origem}
 \begin{enumerate}
  \item Utilizar a classe Camera para capturar os quadros de vídeo e instalar um callback que receba cada frame não codificado obtido da captura. Com o auxilio dessa API, nós setamos os parâmetros de captura desejados (resolução, quadros/s, etc) e enviamos cada frame capturado no formato YUV420SP (também conhecido como NV21, que é o único formato de captura suportado por todos os aparelhos Android) para o C++. A JNI \todo{explicar o que é a JNI} é utilizada para passar os frames do Java para o C++.
 Um detalhe que convém citar é a utilização de Java reflection \todo{explicar o que é java reflection} para que se possa utilizar a função setPreviewCallbackWithBuffer em versões do android anteriores a 2.2, quase dobrando a taxa de frames em comparação ao método setPreviewCallback, visto que essa função evita que o GC (garbage collector do android) interrompa o programa a cada frame.
@@ -407,7 +386,7 @@ Um detalhe que convém citar é a utilização de Java reflection \todo{explicar
  \item Enviar os frames codificados para o destino utilizando a implementação de sockets do C/C++. (Poderia-se passar os quadros codificados para o Java e enviá-los com alguma classe padrão do Android, mas a tarefa de passar os quadros com a JNI é custosa e complexa de ser implementada).
 \end{enumerate}
 
-\subsubsection{Lado do destino}
+\subsection{Lado do destino}
 \begin{enumerate}
  \item Receber os quadros com a implementação de sockets do C/C++. (Igualmente poderia-se utilizar alguma classe padrão do Android, mas, pelo mesmo motivo citado no item Anterior, não é o mais indicado).
  \item Decodificar os quadros de áudio e de vídeo com o ffmpeg em C/C++ para o formato RGB. Para os casos em que o ffmpeg apenas decodifica para YUV420P, criamos uma função que converte de YUV420P para RGB.
@@ -441,7 +420,7 @@ O framework deverá consistir, basicamente, de \todo{como o framework não está
 \begin{itemize}
  \item Uma classe Java para realizar a captura e o envio dos frames de vídeo capturados não codificados para o C++ e para renderizar o preview da captura.
  \item Uma classe Java para realizar a captura e o envio dos frames de áudio capturados não codificados para o C++.
- \item Uma classe Java que extenda a classe GLSurfaceView do Android para ser a superfície na qual os frames serão renderizados.
+ \item Uma classe Java que estenda a classe GLSurfaceView do Android para ser a superfície na qual os frames serão renderizados.
  \item Uma classe Java que implemente a classe GLSurfaceView.Renderer do Android. Essa classe implementará o método onDrawFrame e chamará a função do C++ responsável por renderizar o frame.
  \item Uma classe Java responsável por renderizar os quadros de áudio decodificados provenientes do C++.
  \item Um elemento de layout \todo{explicar o que é um elemento de layout do android} que permitirá a fácil inclusão de uma superfície para exibir o vídeo que está sendo decodificado.
