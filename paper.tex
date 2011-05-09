@@ -28,15 +28,16 @@
 
 \documentclass{acm_proc_article-sp}
 
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{color}
+\usepackage{listings}
+
+\newcommand{\todo}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\bf \uppercase{#1}}}
+
 \begin{document}
 
-\title{A Sample {\ttlit ACM} SIG Proceedings Paper in LaTeX
-Format\titlenote{(Does NOT produce the permission block, copyright information nor page numbering). For use with ACM\_PROC\_ARTICLE-SP.CLS. Supported by ACM.}}
-\subtitle{[Extended Abstract]
-\titlenote{A full version of this paper is available as
-\textit{Author's Guide to Preparing ACM SIG Proceedings Using
-\LaTeX$2_\epsilon$\ and BibTeX} at
-\texttt{www.acm.org/eaddress.htm}}}
+\title{Uma nova API para criação de videoconferências em dispositivos móveis Android}
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -62,7 +63,7 @@ Format\titlenote{(Does NOT produce the permission block, copyright information n
 % without further effort on your part as the last section in
 % the body of your article BEFORE References or any Appendices.
 
-\numberofauthors{8} %  in this sample file, there are a *total*
+\numberofauthors{4} %  in this sample file, there are a *total*
 % of EIGHT authors. SIX appear on the 'first-page' (for formatting
 % reasons) and the remaining two appear in the \additionalauthors section.
 %
@@ -79,439 +80,444 @@ Format\titlenote{(Does NOT produce the permission block, copyright information n
 %
 % 1st. author
 \alignauthor
-Ben Trovato\titlenote{Dr.~Trovato insisted his name be first.}\\
-       \affaddr{Institute for Clarity in Documentation}\\
-       \affaddr{1932 Wallamaloo Lane}\\
-       \affaddr{Wallamaloo, New Zealand}\\
-       \email{trovato@corporation.com}
+Giancarlo Rampanelli\\
+       \affaddr{Instituto de Informática}\\
+       \affaddr{Universidade Federal do Rio Grande do Sul}\\
+       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 220}\\
+       \affaddr{Porto Alegre, Brasil}\\
+       \email{gian419@gmail.com}
 % 2nd. author
 \alignauthor
-G.K.M. Tobin\titlenote{The secretary disavows
-any knowledge of this author's actions.}\\
-       \affaddr{Institute for Clarity in Documentation}\\
-       \affaddr{P.O. Box 1212}\\
-       \affaddr{Dublin, Ohio 43017-6221}\\
-       \email{webmaster@marysville-ohio.com}
-% 3rd. author
-\alignauthor Lars Th{\o}rv{\"a}ld\titlenote{This author is the
-one who did all the really hard work.}\\
-       \affaddr{The Th{\o}rv{\"a}ld Group}\\
-       \affaddr{1 Th{\o}rv{\"a}ld Circle}\\
-       \affaddr{Hekla, Iceland}\\
-       \email{larst@affiliation.org}
+Felipe Cecagno\\
+       \affaddr{Instituto de Informática}\\
+       \affaddr{Universidade Federal do Rio Grande do Sul}\\
+       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 220}\\
+       \affaddr{Porto Alegre, Brasil}\\
+       \email{fcecagno@gmail.com}
 \and  % use '\and' if you need 'another row' of author names
+% 3rd. author
+\alignauthor
+André Schulz\\
+       \affaddr{Instituto de Informática}\\
+       \affaddr{Universidade Federal do Rio Grande do Sul}\\
+       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 220}\\
+       \affaddr{Porto Alegre, Brasil}\\
+       \email{afertschulz@gmail.com}
 % 4th. author
-\alignauthor Lawrence P. Leipuner\\
-       \affaddr{Brookhaven Laboratories}\\
-       \affaddr{Brookhaven National Lab}\\
-       \affaddr{P.O. Box 5000}\\
-       \email{lleipuner@researchlabs.org}
-% 5th. author
-\alignauthor Sean Fogarty\\
-       \affaddr{NASA Ames Research Center}\\
-       \affaddr{Moffett Field}\\
-       \affaddr{California 94035}\\
-       \email{fogartys@amesres.org}
-% 6th. author
-\alignauthor Charles Palmer\\
-       \affaddr{Palmer Research Laboratories}\\
-       \affaddr{8600 Datapoint Drive}\\
-       \affaddr{San Antonio, Texas 78229}\\
-       \email{cpalmer@prl.com}
+\alignauthor
+Valter Roesler\\
+       \affaddr{Instituto de Informática}\\
+       \affaddr{Universidade Federal do Rio Grande do Sul}\\
+       \affaddr{Av. Bento Gonçalves, 9500 - Bloco IV, Prédio 72, Sala 233}\\
+       \affaddr{Porto Alegre, Brasil}\\
+       \email{roesler@inf.ufrgs.br}
 }
-% There's nothing stopping you putting the seventh, eighth, etc.
-% author on the opening page (as the 'third row') but we ask,
-% for aesthetic reasons that you place these 'additional authors'
-% in the \additional authors block, viz.
-\additionalauthors{Additional authors: John Smith (The Th{\o}rv{\"a}ld Group,
-email: {\texttt{jsmith@affiliation.org}}) and Julius P.~Kumquat
-(The Kumquat Consortium, email: {\texttt{jpkumquat@consortium.net}}).}
-\date{30 July 1999}
-% Just remember to make sure that the TOTAL number of authors
-% is the number that will appear on the first page PLUS the
-% number that will appear in the \additionalauthors section.
+\date{15 de maio de 2011}
 
 \maketitle
+\begin{resumo}
+  Este artigo tem o objetivo de apresentar uma nova estratégia para criação de videoconferências em dispositivos móveis com sistema operacional Android. Será apresentado um estudo sobre as classes multimídia padrão do kit de desenvolvimento de software do Android, detalhando as limitações que dificultam o desenvolvimento de sistemas multimídia em tempo real sem a utilização de bibliotecas externas. Várias soluções são comparadas, ressaltando prós e contras, e conduzindo a necessidade da utilização de uma nova estratégia, detalhada neste artigo, que é baseada principalmente em bibliotecas alternativas. A ideia proposta é então validada num sistema Android real, mostrando suas vantagens.
+\end{resumo}
+
 \begin{abstract}
-This paper provides a sample of a \LaTeX\ document which conforms to
-the formatting guidelines for ACM SIG Proceedings.
-It complements the document \textit{Author's Guide to Preparing
-ACM SIG Proceedings Using \LaTeX$2_\epsilon$\ and Bib\TeX}. This
-source file has been written with the intention of being
-compiled under \LaTeX$2_\epsilon$\ and BibTeX.
-
-The developers have tried to include every imaginable sort
-of ``bells and whistles", such as a subtitle, footnotes on
-title, subtitle and authors, as well as in the text, and
-every optional component (e.g. Acknowledgments, Additional
-Authors, Appendices), not to mention examples of
-equations, theorems, tables and figures.
-
-To make best use of this sample document, run it through \LaTeX\
-and BibTeX, and compare this source code with the printed
-output produced by the dvi file.
+  This article aims to present a strategy for implementation of real-time interactive multimedia systems on Android-powered mobile devices. We will present a study about the standard multimedia classes of Android’s software development kit, detailing the limitations that hinder the development of real time multimedia systems without using external libraries. Some alternative solutions proposed in previous works will be presented, highlighting pros and cons of each one, concluding with the contribution of this paper, a solution based primarily on alternative libraries.
 \end{abstract}
 
+% http://www.acm.org/about/class/ccs98-html
 % A category with the (minimum) three required fields
-\category{H.4}{Information Systems Applications}{Miscellaneous}
-%A category including the fourth, optional field follows...
-\category{D.2.8}{Software Engineering}{Metrics}[complexity measures, performance measures]
+\category{}{Peer-to-peer multimedia systems and streaming}{}
+\category{}{Software development using multimedia techniques}{}
+%\category{H.4}{Information Systems Applications}{Miscellaneous}
 
-\terms{Theory}
+%\terms{Theory}
 
-\keywords{ACM proceedings, \LaTeX, text tagging} % NOT required for Proceedings
+\keywords{Interação multimídia de tempo real, Vídeo, JNI}
 
-\section{Introduction}
-The \textit{proceedings} are the records of a conference.
-ACM seeks to give these conference by-products a uniform,
-high-quality appearance.  To do this, ACM has some rigid
-requirements for the format of the proceedings documents: there
-is a specified format (balanced  double columns), a specified
-set of fonts (Arial or Helvetica and Times Roman) in
-certain specified sizes (for instance, 9 point for body copy),
-a specified live area (18 $\times$ 23.5 cm [7" $\times$ 9.25"]) centered on
-the page, specified size of margins (1.9 cm [0.75"]) top, (2.54 cm [1"]) bottom
-and (1.9 cm [.75"]) left and right; specified column width
-(8.45 cm [3.33"]) and gutter size (.83 cm [.33"]).
+\section{Introdução}
 
-The good news is, with only a handful of manual
-settings\footnote{Two of these, the {\texttt{\char'134 numberofauthors}}
-and {\texttt{\char'134 alignauthor}} commands, you have
-already used; another, {\texttt{\char'134 balancecolumns}}, will
-be used in your very last run of \LaTeX\ to ensure
-balanced column heights on the last page.}, the \LaTeX\ document
-class file handles all of this for you.
+\todo{verificar se os autores ficarão dessa forma ou agrupados}
 
-The remainder of this document is concerned with showing, in
-the context of an ``actual'' document, the \LaTeX\ commands
-specifically available for denoting the structure of a
-proceedings paper, rather than with giving rigorous descriptions
-or explanations of such commands.
+\todo{verificar categorias oficiais da acm}
 
-\section{The {\secit Body} of The Paper}
-Typically, the body of a paper is organized
-into a hierarchical structure, with numbered or unnumbered
-headings for sections, subsections, sub-subsections, and even
-smaller sections.  The command \texttt{{\char'134}section} that
-precedes this paragraph is part of such a
-hierarchy.\footnote{This is the second footnote.  It
-starts a series of three footnotes that add nothing
-informational, but just give an idea of how footnotes work
-and look. It is a wordy one, just so you see
-how a longish one plays out.} \LaTeX\ handles the numbering
-and placement of these headings for you, when you use
-the appropriate heading commands around the titles
-of the headings.  If you want a sub-subsection or
-smaller part to be unnumbered in your output, simply append an
-asterisk to the command name.  Examples of both
-numbered and unnumbered headings will appear throughout the
-balance of this sample document.
+\todo{verificar termos que serão utilizados}
 
-Because the entire article is contained in
-the \textbf{document} environment, you can indicate the
-start of a new paragraph with a blank line in your
-input file; that is why this sentence forms a separate paragraph.
+\todo{fazer introdução}
 
-\subsection{Type Changes and {\subsecit Special} Characters}
-We have already seen several typeface changes in this sample.  You
-can indicate italicized words or phrases in your text with
-the command \texttt{{\char'134}textit}; emboldening with the
-command \texttt{{\char'134}textbf}
-and typewriter-style (for instance, for computer code) with
-\texttt{{\char'134}texttt}.  But remember, you do not
-have to indicate typestyle changes when such changes are
-part of the \textit{structural} elements of your
-article; for instance, the heading of this subsection will
-be in a sans serif\footnote{A third footnote, here.
-Let's make this a rather short one to
-see how it looks.} typeface, but that is handled by the
-document class file. Take care with the use
-of\footnote{A fourth, and last, footnote.}
-the curly braces in typeface changes; they mark
-the beginning and end of
-the text that is to be in the different typeface.
+\section{Vídeo interativo em tempo real}
 
-You can use whatever symbols, accented characters, or
-non-English characters you need anywhere in your document;
-you can find a complete list of what is
-available in the \textit{\LaTeX\
-User's Guide}\cite{Lamport:LaTeX}.
+\todo{este é um capítulo que provavelmente iremos reduzir ou remover para caber tudo em oito páginas}
 
-\subsection{Math Equations}
-You may want to display math equations in three distinct styles:
-inline, numbered or non-numbered display.  Each of
-the three are discussed in the next sections.
+Um sistema que permite que uma pessoa comunique-se, ao vivo, com uma ou mais
+pessoas, cada qual em sua máquina, através da transmissão da sua fala (capturada pelo microfone) e da sua imagem em forma de vídeo (capturada pela câmera), ao mesmo tempo em que escuta e visualiza os outros participantes, representa um sistema de transmissão de vídeo interativo em tempo real (doravante chamado STVITR) \todo{melhorar essa abreviação}. Tais sistemas são complexos de serem desenvolvidos, já que, além da necessidade do áudio e do vídeo serem transmitidos, recebidos e exibidos de forma contínua por todos os participantes, é preciso que essa transmissão ocorra com um baixíssimo atraso: se o intervalo de tempo entre o instante da captura do áudio e do vídeo e o instante da sua exibição nas máquinas dos outros participantes for maior que 400 milissegundos, por exemplo, o resultado pode ser uma interação altamente frustrante (KUROSE; ROSS, 1999).
 
-\subsubsection{Inline (In-text) Equations}
-A formula that appears in the running text is called an
-inline or in-text formula.  It is produced by the
-\textbf{math} environment, which can be
-invoked with the usual \texttt{{\char'134}begin. . .{\char'134}end}
-construction or with the short form \texttt{\$. . .\$}. You
-can use any of the symbols and structures,
-from $\alpha$ to $\omega$, available in
-\LaTeX\cite{Lamport:LaTeX}; this section will simply show a
-few examples of in-text equations in context. Notice how
-this equation: \begin{math}\lim_{n\rightarrow \infty}x=0\end{math},
-set here in in-line math style, looks slightly different when
-set in display style.  (See next section).
+É um desafio desenvolver com qualidade tais sistemas pois as redes atuais, em geral, suportam apenas uma pequena taxa de bit/s. O desafio se torna ainda maior na área dos dispositivos móveis, que, além de terem hardware limitado, que torna a tarefa da decodificação e da exibição do vídeo menos eficiente, também têm limitações de rede, pois costumam utilizar 3G ou Internet sem fio, ambos suscetíveis a alta perda de pacotes e, na maioria das vezes, a baixas velocidades (HUYNH-THU; GHANBARI, 2008).
 
-\subsubsection{Display Equations}
-A numbered display equation -- one set off by vertical space
-from the text and centered horizontally -- is produced
-by the \textbf{equation} environment. An unnumbered display
-equation is produced by the \textbf{displaymath} environment.
+Um exemplo de utilização dessa técnica se dá em videoconferências, que correspondem a reuniões remotas nas quais os participantes podem, por vídeo, interagir e colaborar com o propósito da reunião. Mesmo estando, cada um, em lugares diferentes, a utilização do vídeo lhes sugere que todos estão presentes em uma mesma sala, aumentando a efetividade da colaboração em comparação a uma reunião remota por texto ou por voz apenas (TSCHÖKE, 2001).
 
-Again, in either environment, you can use any of the symbols
-and structures available in \LaTeX; this section will just
-give a couple of examples of display equations in context.
-First, consider the equation, shown as an inline equation above:
-\begin{equation}\lim_{n\rightarrow \infty}x=0\end{equation}
-Notice how it is formatted somewhat differently in
-the \textbf{displaymath}
-environment.  Now, we'll enter an unnumbered equation:
-\begin{displaymath}\sum_{i=0}^{\infty} x + 1\end{displaymath}
-and follow it with another numbered equation:
-\begin{equation}\sum_{i=0}^{\infty}x_i=\int_{0}^{\pi+2} f\end{equation}
-just to demonstrate \LaTeX's able handling of numbering.
+Um STVITR pode ser dividido, basicamente, em dois módulos:
+\begin{itemize}
+ \item Um módulo para gerenciar o lado da origem, dividido em 3 sub-módulos:
+ \begin{itemize}
+  \item Um sub-módulo para capturar quadros de áudio e de vídeo não comprimidos do microfone e da câmera, respectivamente.
+  \item Um sub-módulo para codificar os quadros de áudio e de vídeo.
+  \item Um sub-módulo para enviar pela rede os dados codificados.
+ \end{itemize}
+ \item Um módulo para gerenciar o lado do destino, dividido em 3 sub-módulos:
+ \begin{itemize}
+  \item Um sub-módulo para receber pela rede dados de áudio e de vídeo codificados.
+  \item Um sub-módulo para decodificar os dados.
+  \item Um sub-módulo para renderizar os quadros de áudio e de vídeo decodificados.
+ \end{itemize}
+\end{itemize}
 
-\subsection{Citations}
-Citations to articles \cite{bowman:reasoning, clark:pct, braams:babel, herlihy:methodology},
-conference
-proceedings \cite{clark:pct} or books \cite{salas:calculus, Lamport:LaTeX} listed
-in the Bibliography section of your
-article will occur throughout the text of your article.
-You should use BibTeX to automatically produce this bibliography;
-you simply need to insert one of several citation commands with
-a key of the item cited in the proper location in
-the \texttt{.tex} file \cite{Lamport:LaTeX}.
-The key is a short reference you invent to uniquely
-identify each work; in this sample document, the key is
-the first author's surname and a
-word from the title.  This identifying key is included
-with each item in the \texttt{.bib} file for your article.
+\section{Limitações das classes padrão do Android para desenvolver um STVITR}
 
-The details of the construction of the \texttt{.bib} file
-are beyond the scope of this sample document, but more
-information can be found in the \textit{Author's Guide},
-and exhaustive details in the \textit{\LaTeX\ User's
-Guide}\cite{Lamport:LaTeX}.
+Android é um sistema operacional de código aberto (desenvolvido pela empresa Google) para dispositivos móveis construído sobre uma versão modificada do kernel Linux. Em comparação aos outros sistemas operacionais para smartphones existentes, o Android é caracterizado por aplicações de vídeo mais simples. Isso se deve às limitações das APIs fornecidas pelo Android para programação de vídeo e, alternativamente, à grande complexidade para criar tais aplicativos sem a utilização dessas APIs. A dificuldade de se encontrar bons aplicativos de vídeo para Android se torna ainda mais marcante na área de STVITR.
 
-This article shows only the plainest form
-of the citation command, using \texttt{{\char'134}cite}.
-This is what is stipulated in the SIGS style specifications.
-No other citation format is endorsed.
+Devido ao crescente número de usuários do Android, a demanda por aplicações de vídeo diferenciadas (com maior número de funcionalidades) para esse sistema operacional da Google aumenta no mesmo ritmo. Para poder suprir essa demanda de forma rápida e qualificada, os desenvolvedores de aplicativos procuram por  frameworks de que lhes deem mais flexibilidade e mais recursos na programação em comparação às APIs tradicionais. Neste trabalho, será proposta uma solução que visa servir como alternativa às classes padrão do Android. Essa ideia será implementada na forma de um framework \todo{como o framework nao está completo podemos incluí-lo como trabalho futuro e apresentar apenas a solução, ou entao podemos supor que o framework esta pronto, ja que comprovamos que a estrategia funciona}, visando abstrair dos seus usuários (os programadores) as partes mais trabalhosas e menos intuitivas da alternativa, para que seja possível a criação de tais aplicativos de vídeo para Android de forma simples e rápida.
 
-\subsection{Tables}
-Because tables cannot be split across pages, the best
-placement for them is typically the top of the page
-nearest their initial cite.  To
-ensure this proper ``floating'' placement of tables, use the
-environment \textbf{table} to enclose the table's contents and
-the table caption.  The contents of the table itself must go
-in the \textbf{tabular} environment, to
-be aligned properly in rows and columns, with the desired
-horizontal and vertical rules.  Again, detailed instructions
-on \textbf{tabular} material
-is found in the \textit{\LaTeX\ User's Guide}.
+Aplicativos para Android são escritos com a linguagem de programação Java e rodam na máquina virtual Dalvik. O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos (ABLESON; COLLINS; SEN, 2008).
 
-Immediately following this sentence is the point at which
-Table 1 is included in the input file; compare the
-placement of the table here with the table in the printed
-dvi output of this document.
+Considerando os dois módulos de um STVITR descritos anteriormente, as classes fornecidas pelo Android que têm utilidade para cada um desses módulos são:
+*Para o módulo de origem: Classe MediaRecorder, Classe Camera, Classe AudioRecord.
+*Para o módulo de destino: Classe MediaPlayer, classe AudioTrack.
 
-\begin{table}
-\centering
-\caption{Frequency of Special Characters}
-\begin{tabular}{|c|c|l|} \hline
-Non-English or Math&Frequency&Comments\\ \hline
-\O & 1 in 1,000& For Swedish names\\ \hline
-$\pi$ & 1 in 5& Common in math\\ \hline
-\$ & 4 in 5 & Used in business\\ \hline
-$\Psi^2_1$ & 1 in 40,000& Unexplained usage\\
-\hline\end{tabular}
-\end{table}
+Existem outras classes relacionadas, mas não passam de pequenas extensões ou encapsulamentos das classes acima, sem importância para este trabalho. Também há classes relacionadas a envio e recebimento de dados genéricos pela rede que poderiam ser utilizadas em conjunto com as classes acima. A seguir serão explicadas as utilidades básicas de cada uma dessas cinco classes. Então, com base nessa descrição, serão levantadas possíveis estratégias de se desenvolver um STVITR com elas, e as limitações de cada estratégia.
 
-To set a wider table, which takes up the whole width of
-the page's live area, use the environment
-\textbf{table*} to enclose the table's contents and
-the table caption.  As with a single-column table, this wide
-table will ``float" to a location deemed more desirable.
-Immediately following this sentence is the point at which
-Table 2 is included in the input file; again, it is
-instructive to compare the placement of the
-table here with the table in the printed dvi
-output of this document.
+\subsection{CLASSE MEDIARECORDER}
+A Classe MediaRecorder realiza a captura de áudio e de vídeo (a partir do microfone e da câmera, respectivamente) e codifica-os utilizando o hardware do aparelho. Os dados codificados podem ser salvos encapsulados em um arquivo, ou podem ser transmitidos pela rede com a utilização de sockets. A classe também pode exibir um preview da captura para o usuário local.
+Basicamente, as etapas necessárias são as seguintes:
+\begin{enumerate}
+ \item Declarar uma instância da classe:
+MediaRecorder mMediaRecorder = new MediaRecorder();
+ \item Escolher o destino (arquivo ou socket):
+mMediaRecorder.setOutputFile(<destino>);
+ \item Iniciar a captura:
+mMediaRecorder.prepare();
+mMediaRecorder.start();
+ \item Exibir o preview da captura:
+mMediaRecorder.setPreviewDisplay(<superfície local>);
+\end{enumerate}
 
+Portanto, a classe pode ser utilizada de duas formas diferentes: salvando em um arquivo ou utilizando um socket. É importante notar que não há como acessar diretamente os dados capturados nem os codificados, pois este não é o objetivo da classe (a classe mais adequada para essa tarefa é a Camera).
 
-\begin{table*}
-\centering
-\caption{Some Typical Commands}
-\begin{tabular}{|c|c|l|} \hline
-Command&A Number&Comments\\ \hline
-\texttt{{\char'134}alignauthor} & 100& Author alignment\\ \hline
-\texttt{{\char'134}numberofauthors}& 200& Author enumeration\\ \hline
-\texttt{{\char'134}table}& 300 & For tables\\ \hline
-\texttt{{\char'134}table*}& 400& For wider tables\\ \hline\end{tabular}
-\end{table*}
-% end the environment with {table*}, NOTE not {table}!
+\subsection{CLASSE CAMERA}
+A classe Camera realiza a captura de vídeo (a partir da câmera) e pode exibir um preview da captura para o usuário local. Ela pode ser utilizada de duas formas: para tirar fotos (ou seja, salvar um quadro da captura, codificando-o e encapsulado-o em um arquivo) ou para instalar um callback que é chamado a cada frame capturado e que recebe os dados não codificados do frame capturado.
 
-\subsection{Figures}
-Like tables, figures cannot be split across pages; the
-best placement for them
-is typically the top or the bottom of the page nearest
-their initial cite.  To ensure this proper ``floating'' placement
-of figures, use the environment
-\textbf{figure} to enclose the figure and its caption.
+Basicamente, as etapas necessárias são as seguintes:
+\begin{enumerate}
+ \item Obter acesso à câmera:
+Camera mCamera = Camera.open();
+ \item Escolher a superfície de preview:
+mCamera.setPreviewDisplay(<superfície local>);
+ \item Instalar o callback (opcional):
+mCamera.setPreviewCallback(<contexto>);
+ \item Iniciar a captura:
+mCamera.startPreview();
+ \item Tirar foto (opcional):
+takePicture(<Camera.ShutterCallback>,<Camera.PictureCallback>,<Camera.PictureCallback>);
+ \item Obter os dados não codificados do frame capturado (opcional):
+@Override public void onPreviewFrame (byte[] data, Camera camera){}
+\end{enumerate}
 
-This sample document contains examples of \textbf{.eps}
-and \textbf{.ps} files to be displayable with \LaTeX.  More
-details on each of these is found in the \textit{Author's Guide}.
+\subsection{CLASSE AUDIORECORD}
+A classe AudioRecord realiza a captura de áudio (a partir do microfone) e, enquanto captura, escreve os dados não codificados em um buffer principal. Esses dados podem ser transferidos para um buffer secundário sempre que se desejar, para que possam ser utilizados.
 
-\begin{figure}
-\centering
-\epsfig{file=fly.eps}
-\caption{A sample black and white graphic (.eps format).}
-\end{figure}
+Basicamente, as etapas necessárias são as seguintes:
+\begin{enumerate}
+ \item Declarar uma instância da classe:
+AudioRecord mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, <taxa de amostragem>,<numero de canais>,<bits por amostra>,<tamanho do buffer principal>);
+ \item Iniciar a captura:
+mAudioRecord.startRecording();
+ \item Transferir o conteúdo do buffer principal (quando desejado) para um buffer secundário:
+record.read(<buffer secundário>,<índice inicial do buffer secundário>,<número de bytes a transferir>);
+\end{enumerate}
 
-\begin{figure}
-\centering
-\epsfig{file=fly.eps, height=1in, width=1in}
-\caption{A sample black and white graphic (.eps format)
-that has been resized with the \texttt{epsfig} command.}
-\end{figure}
+\subsection{CLASSE MEDIAPLAYER}
+A classe MediaPlayer fornece funções de alto nível para a exibição de vídeos. Basicamente, permite a escolha da origem do vídeo (arquivo local, servidor web ou streaming por RTSP), e faz o início da exibição (HASHIMI; KOMATINENI, 2009). Dada a origem do vídeo, a classe realiza a decodificação do áudio e do vídeo em hardware e os renderiza.
 
+Basicamente, as etapas necessárias são as seguintes:
+\begin{enumerate}
+ \item Declarar uma instância da classe:
+MediaPlayer mMediaPlayer = new MediaPlayer();
+ \item Escolher a origem do vídeo:
+mMediaPlayer.setDataSource(<origem do vídeo>);
+ \item Iniciar o processo de recebimento (caso a origem do vídeo seja remota), decodificação e renderização:
+mMediaPlayer.prepare();
+mMediaPlayer.start();
+\end{enumerate}
 
-As was the case with tables, you may want a figure
-that spans two columns.  To do this, and still to
-ensure proper ``floating'' placement of tables, use the environment
-\textbf{figure*} to enclose the figure and its caption.
+\subsection{CLASSE AUDIOTRACK}
+A classe AudioTrack serve para renderizar áudio. Sempre que se desejar renderizar áudio com ela, deve-se transferir os dados de áudio não codificados de um buffer secundário para o buffer principal da classe.
 
-Note that either {\textbf{.ps}} or {\textbf{.eps}} formats are
-used; use
-the \texttt{{\char'134}epsfig} or \texttt{{\char'134}psfig}
-commands as appropriate for the different file types.
+Basicamente, as etapas necessárias são as seguintes:
+\begin{enumerate}
+ \item Declarar uma instância da classe:
+mAudioTrack = new AudioTrack(<tipo de stream>,<taxa de amostragem>,<numero de canais>,<bits por amostra>,<tamanho do buffer principal>,<modo (estático ou stream)>);
+ \item Caso o modo utilizado seja o stream, chamar o método play():
+mAudioTrack.play();
+Nada será renderizado pois o buffer principal está vazio.
+ \item Transferir o conteúdo do buffer secundário (quando desejado) para o buffer principal:
+mAudioTrack.write(<buffer secundario>,<índice inicial do buffer secundário>,<número de bytes a transferir>);
+Caso o modo utilizado seja o stream, cada vez que o buffer principal receber novos dados, eles serão reproduzidos sem a necessidade de chamar o método play().
+ \item Caso o modo utilizado seja o estático, chamar o método play() para renderizar os dados (quando desejado):
+mAudioTrack.play();
+\end{enumerate}
 
-\subsection{Theorem-like Constructs}
-Other common constructs that may occur in your article are
-the forms for logical constructs like theorems, axioms,
-corollaries and proofs.  There are
-two forms, one produced by the
-command \texttt{{\char'134}newtheorem} and the
-other by the command \texttt{{\char'134}newdef}; perhaps
-the clearest and easiest way to distinguish them is
-to compare the two in the output of this sample document:
+\section{Estratégias para STVITR com as classes padrão}
 
-This uses the \textbf{theorem} environment, created by
-the\linebreak\texttt{{\char'134}newtheorem} command:
-\newtheorem{theorem}{Theorem}
-\begin{theorem}
-Let $f$ be continuous on $[a,b]$.  If $G$ is
-an antiderivative for $f$ on $[a,b]$, then
-\begin{displaymath}\int^b_af(t)dt = G(b) - G(a).\end{displaymath}
-\end{theorem}
+\subsection{ESTRATÉGIA 1}
+É a técnica implementada em \todo{trab alemao}.
 
-The other uses the \textbf{definition} environment, created
-by the \texttt{{\char'134}newdef} command:
-\newdef{definition}{Definition}
-\begin{definition}
-If $z$ is irrational, then by $e^z$ we mean the
-unique number which has
-logarithm $z$: \begin{displaymath}{\log e^z = z}\end{displaymath}
-\end{definition}
+\subsubsection{Do lado da origem}
 
-\begin{figure}
-\centering
-\psfig{file=rosette.ps, height=1in, width=1in,}
-\caption{A sample black and white graphic (.ps format) that has
-been resized with the \texttt{psfig} command.}
-\end{figure}
+Esta estratégia consiste em iniciar uma captura de áudio e de vídeo com a classe MediaRecorder passando como parâmetro ao método setOutputFile um descritor de arquivo local (ex: /sdcard/temp0.3gp) e finalizar a captura após um período curto (ex: 2 segundos). Os dados codificados do arquivo que está sendo gerado vão sendo enviados desde o início da captura, utilizando uma classe do Android para transmissão genérica de dados. Seria muito mais simples passar como parâmetro ao método setOutputFile um socket localizado no destino. Assim os dados seriam enviados diretamente sem a utilização de arquivo local. No entanto, estamos querendo criar um sistema de STVITR utilizando apenas as classes padrão do Android, e a classe MediaPlayer (única capaz de reproduzir vídeo) reproduz apenas dados encapsulados ou com o container 3GPP ou com o container MPEG-4 (exceto quando é utilizado RTSP, que será abordado na estratégia seguinte). Ambos containers são muito similares, e só podem ser incluídos ao final da gravação do arquivo. A classe MediaRecorder, ao final da gravação de um arquivo, insere, no início do arquivo, o header e os metadados do container escolhido. O método, então, ao finalizar o período curto de gravação, abre o início do arquivo que foi gerado localmente e envia os headers e os metadados para o destino. Enquanto os headers e os metadados são enviados, repete-se todo o processo com outro arquivo local (ex: /sdcard/temp1.3gp) de mesma duração do anterior, e assim sucessivamente.
 
-Two lists of constructs that use one of these
-forms is given in the
-\textit{Author's  Guidelines}.
+\subsubsection{Do lado do destino}
 
-\begin{figure*}
-\centering
-\epsfig{file=flies.eps}
-\caption{A sample black and white graphic (.eps format)
-that needs to span two columns of text.}
-\end{figure*}
-and don't forget to end the environment with
-{figure*}, not {figure}!
- 
-There is one other similar construct environment, which is
-already set up
-for you; i.e. you must \textit{not} use
-a \texttt{{\char'134}newdef} command to
-create it: the \textbf{proof} environment.  Here
-is a example of its use:
-\begin{proof}
-Suppose on the contrary there exists a real number $L$ such that
-\begin{displaymath}
-\lim_{x\rightarrow\infty} \frac{f(x)}{g(x)} = L.
-\end{displaymath}
-Then
-\begin{displaymath}
-l=\lim_{x\rightarrow c} f(x)
-= \lim_{x\rightarrow c}
-\left[ g{x} \cdot \frac{f(x)}{g(x)} \right ]
-= \lim_{x\rightarrow c} g(x) \cdot \lim_{x\rightarrow c}
-\frac{f(x)}{g(x)} = 0\cdot L = 0,
-\end{displaymath}
-which contradicts our assumption that $l\neq 0$.
-\end{proof}
+O lado do destino vai recebendo os dados de áudio e vídeo que estão sendo enviados e vai armazenando-os em um arquivo. Quando, enfim, chegam o header e os metadados do container escolhido, eles são inseridos no início desse arquivo. Somente nesse instante a classe MediaPlayer pode reproduzí-los. O processo é repetido para cada arquivo curto capturado, mas os dados são armazenados em um arquivo diferente para não sobrescrever o que está sendo reproduzido pela classe MediaPlayer.
 
-Complete rules about using these environments and using the
-two different creation commands are in the
-\textit{Author's Guide}; please consult it for more
-detailed instructions.  If you need to use another construct,
-not listed therein, which you want to have the same
-formatting as the Theorem
-or the Definition\cite{salas:calculus} shown above,
-use the \texttt{{\char'134}newtheorem} or the
-\texttt{{\char'134}newdef} command,
-respectively, to create it.
+\subsubsection{Análise da estratégia}
 
-\subsection*{A {\secit Caveat} for the \TeX\ Expert}
-Because you have just been given permission to
-use the \texttt{{\char'134}newdef} command to create a
-new form, you might think you can
-use \TeX's \texttt{{\char'134}def} to create a
-new command: \textit{Please refrain from doing this!}
-Remember that your \LaTeX\ source code is primarily intended
-to create camera-ready copy, but may be converted
-to other forms -- e.g. HTML. If you inadvertently omit
-some or all of the \texttt{{\char'134}def}s recompilation will
-be, to say the least, problematic.
+Segundo \todo{trab alemao}, a classe MediaRecorder leva 1,3 segundos (em média) para ser inicializada. E não é possivel inicializar um novo MediaRecorder antes de finalizar o anterior. Logo, utilizando esta estratégia, ocorreriam períodos de 1,3 segundos em que não se poderia capturar nada. Do lado do destino, considerando apenas essa limitação, isso seria percebido como travamentos de 1,3 segundos no vídeo seguidos de saltos de 1,3 segundos na sua exibição. A classe MediaPlayer só pode ser inicializada quando o arquivo estiver pronto, e a demora na sua inicialização é, em média, 0,83 segundos.
+supondo:
 
-\section{Conclusions}
-This paragraph will end the body of this sample document.
-Remember that you might still have Acknowledgments or
-Appendices; brief samples of these
-follow.  There is still the Bibliography to deal with; and
-we will make a disclaimer about that here: with the exception
-of the reference to the \LaTeX\ book, the citations in
-this paper are to articles which have nothing to
-do with the present subject and are used as
-examples only.
-%\end{document}  % This is where a 'short' article might terminate
+\begin{itemize}
+ \item duração de cada captura = 2s.
+ \item tempo para inicializar a classe MediaRecorder = 1.3s.
+ \item tempo para inicializar a classe MediaPlayer = 0.9s.
+ \item tempo para a classe MediaRecorder inserir os metadados no início do arquivo = 0.1s.
+ \item tempo para o lado do destino inserir os metadados no início do arquivo = 0.1s.
+ \item tempo para transmitir um pacote pela rede = 0.1s.
+ \item t = 0s a 1.3s: lado da origem: Classe MediaRecorder é inicializada.
+ \item t = 1.3s: lado da origem: a inicialização da Classe MediaRecorder está pronta e a captura inicia.
+ \item t = 1.3s a 3.3s: lado da origem: o arquivo local “01origem” está sendo gerado e os dados úteis do vídeo estão sendo transmitidos.
+ \item t = 1.4s: lado do destino: os primeiros pacotes começam a ser recebidos.
+ \item t = 3.3s: lado da origem: a captura é finalizada.
+ \item t = 3.4s: lado da origem: os metadados são inseridos pela classe MediaRecorder no início do arquivo local “01origem”. Em seguida o header e os metadados são enviados ao destino.
+ \item t = 3.4s: lado do destino: todos os pacotes de áudio e vídeo já foram recebidos. Faltam o header e os metadados.
+ \item t = 3.4s: lado da origem: a classe MediaRecorder é inicializada novamente.
+ \item t = 3.5s: lado do destino: o header e os metadados são recebidos.
+ \item t = 3.6s: destino: o header e os metadados são inseridos no início do arquivo “01destino”.
+ \item t = 3.6s: destino: a classe MediaPlayer é inicializada.
+ \item t = 4.5s: destino: a classe MediaPlayer começa a renderização do arquivo “01destino”. (delay = 4.5 - 1.3 = 3.2s).
+ \item t = 4.7s: origem: a inicialização da Classe MediaRecorder está pronta e a captura inicia.
+ \item t = 4.7s a 6.7s: origem: o arquivo local “02origem” está sendo gerado e os dados úteis do vídeo estão sendo transmitidos.
+ \item t = 4.8s: destino: os primeiros pacotes da nova captura começam a ser recebidos.
+ \item t = 6.5s: destino: a classe MediaPlayer finaliza a renderização do arquivo “01destino”.
+ \item t = 6.7s: origem: a captura é finalizada.
+ \item t = 6.8s: lado da origem: os metadados são inseridos pela classe MediaRecorder no início do arquivo local “02origem”. Em seguida o header e os metadados são enviados ao destino.
+ \item t = 6.8s: destino: todos os pacotes de áudio e vídeo já foram recebidos. Faltam o header e os metadados.
+ \item t = 6.8s: origem: a classe MediaRecorder é inicializada novamente.
+ \item t = 6.9s: destino: o header e os metadados são recebidos.
+ \item t = 7.0s: destino: o header e os metadados são inseridos no início do arquivo “02destino”.
+ \item t = 7,0s: destino: a classe MediaPlayer é inicializada.
+ \item t = 7.9s: destino: a classe MediaPlayer começa a renderização do arquivo “02destino”. (delay = 7.9 - 4.7 = 3.2s. Tempo sem exibição = 7.9 - 6.5 = 1.4s).
+ \item t = 8.1s: origem: a inicialização da Classe MediaRecorder está pronta e a captura inicia.
+ \item t = 8.1s a 10.1s: origem: o arquivo local “03origem” está sendo gerado e os dados úteis do vídeo estão sendo transmitidos.
+ \item t = 8.2s: destino: os primeiros pacotes da nova captura começam a ser recebidos.
+ \item t = 9.9s: destino: a classe MediaPlayer finaliza a renderização do arquivo “02destino”.
+ \item t = 10.1s: origem: a captura é finalizada.
+ \item t = 10.2s: lado da origem: os metadados são inseridos pela classe MediaRecorder no início do arquivo local “03origem”. Em seguida o header e os metadados são enviados ao destino.
+ \item t = 10.2s: destino: todos os pacotes de áudio e vídeo já foram recebidos. Faltam o header e os metadados.
+ \item t = 10.2s: origem: a classe MediaRecorder é inicializada novamente.
+ \item t = 10.3s: destino: o header e os metadados são recebidos.
+ \item t = 10.4s: destino: o header e os metadados são inseridos no início do arquivo “03destino”.
+ \item t = 10.4s: destino: a classe MediaPlayer é inicializada.
+ \item t = 11.3s: destino: a classe MediaPlayer começa a renderização do arquivo “03destino”. (delay = 11.3 - 8.1 = 3.2s. Tempo sem exibição = 11.3 - 9.9 = 1.4s).
+\end{itemize}
 
-%ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
-This section is optional; it is a location for you
-to acknowledge grants, funding, editing assistance and
-what have you.  In the present case, for example, the
-authors would like to thank Gerald Murray of ACM for
-his help in codifying this \textit{Author's Guide}
-and the \textbf{.cls} and \textbf{.tex} files that it describes.
+E assim por diante. \todo{talvez fosse melhor representar essa linha de tempo com uma imagem}
+
+Portanto, nessa simulação, o delay é de 3.2 segundos. Além disso, ocorrem pausas de 1.4s a cada 2s de exibição do vídeo. Em um STVITR, o maior delay recomendado é de 400ms. Não existe uma norma para determinar a aceitabilidade pausas na exibição, mas é evidente que as pausas obtidas nesse método tornariam a comunicação altamente frustrante. O autor reconhece que a técnica não serve para STVITR, mas seu objetivo era identificar as limitações das APIs e propor a melhor aproximação possível de um STVITR. Segundo o autor, essa provavelmente é a técnica possível de ser implementada com as classes padrão do Android que mais se aproxima de um STVITR. No entanto, ele deixa claro que sempre podem surgir novas ideias. 
+
+\subsection{ESTRATÉGIA 2}
+É a técnica implementada em \todo{sipdroid}.
+
+Esta técnica utiliza a capacidade da classe MediaPlayer em reproduzir conteúdo ao vivo \todo{diferenciar conteúdo ao vivo de conteúdo em tempo real} utilizando o protocolo RTSP.
+
+\subsubsection{Lado da origem}
+A classe MediaRecorder é utilizada para capturar vídeo. O método setOutputFile recebe como parâmetro um descritor de arquivo obtido de um socket implementado pela classe LocalSocket do Android. Isso significa que os dados capturados não são salvos em um arquivo local, mas sim diretamente enviados para um socket. Os dados do socket são lidos e tratados para ficarem de acordo com o protocolo RTSP.
+
+\subsubsection{Lado do destino}
+A classe MediaPlayer é inicializada e o seu método setDataSource é setado para o endereço do stream RTSP.
+
+\subsubsection{Análise do método}
+O método acaba resultando em um sistema de vídeo ao vivo, e não em um STVITR, pois a implementação de RTSP do Android não serve para tempo real. Para provar isso, realizamos o seguinte teste :
+
+\begin{enumerate}
+ \item Capturamos vídeo com uma webcam conectada a um desktop utilizando o software VideoLAN .
+ \item Direcionamos o fluxo para um servidor de streaming RTSP (Darwin Streaming Server) especificado por um arquivo SDP (Session Description Protocol).
+ \item Recebemos o stream em um Motorola Milestone rodando Android 2.0.1 utilizando a API MediaPlayer.
+\end{enumerate}
+
+O delay obtido foi de 10 segundos. Recebendo o mesmo stream no próprio VLC (ao invés de recebê-lo no Android), o delay foi de 1 segundo.	 	 	
+
+Também fizemos uma comparação do RTSP do Android com o RTSP do VideoLAN utilizando diversos links RTSP encontrados na Internet. Para todos eles, o vídeo exibido no Android foi exibido com um atraso entre 2 e 20 segundos após o mesmo vídeo sendo exibido no VídeoLAN.
+
+Comparado ao método anterior, neste método não ocorrem pausas na exibição. Porém, segundo os testes de desempenho realizados com a classe MediaPlayer, o delay é maior que o do método anterior, devido ao baixo desempenho do RTSP utilizado juntamente com a classe MediaPlayer do Android.
+
+\subsection{ESTRATÉGIA 3}
+
+Ao invés de utilizar a classe MediaRecorder para capturar, utilizar as classes Camera e AudioRecord. Com ambas as classes é possível se obter os dados não codificados dos quadros de vídeo e de áudio capturados. No entanto, não há nenhuma classe padrão do android que receba como parâmetro um quadro não codificado e que codifique-o. E quadros não codificados são grandes demais para serem transmitidos pela rede em tempo viável para STVITR. Poderia ser implementado um codificador/decodificador em Java. No entanto, a tarefa da codificação/decodificação é extremamente custosa computacionalmente, além de ser muito complexa de ser desenvolvida. Implementar uma tarefa custosa em uma linguagem que roda em máquina virtual que, por sua vez, roda em um dispositivo de baixo poder computacional, seria pouco eficiente. Além disso, mesmo que fosse possível codificar os quadros em Java, enviá-los ao destino e decodificá-los em Java em tempo viável para STVITR, não haveria como reproduzí-los utilizando as classes padrão do Android, visto que nenhuma delas tem a capacidade de receber como parâmetros quadros decodificados. Logo, esta estratégia não é possível.
+
+\subsection{ESTRATÉGIA 4}
+
+\subsubsection{Lado da origem}
+
+Utilizar a função de foto da classe câmera, que retorna um frame codificado em JPEG, e enviar cada frame pela rede para o destino.
+
+\subsubsection{Lado do destino}
+
+Receber cada frame e exibí-lo com alguma classe padrão do Android que decodifique e exiba imagens JPEG.
+
+\subsubsection{Análise da estratégia}
+
+Codecs de vídeo são mais eficazes que o codec de imagens JPEG, visto que um vídeo é um conjunto de imagens relacionadas entre si, e a compressão é realizada com base na relação entre essas imagens. Um codec JPEG apenas comprime uma imagem sem relacioná-la com nenhuma outra, portanto tem menos poder de compressão. Além disso, a função foto do Android não foi projetada para este uso e é pouco eficiente. Um dos motivos é que quando a função foto é chamada, o preview do vídeo capturado é interrompido. Para tirar uma nova foto é preciso reiniciar o preview. O método em si não foi testado, mas certamente a taxa de frames e o delay obtidos não chegariam perto do recomendado para STVITR. Outro problema dessa estratégia é não ter um correspondente para o áudio. Somente o vídeo seria transmitido.
+
+\subsection{ESTRATÉGIA 5}
+Como o Android é de código aberto, essa estratégia seria copiar as libraries nativas (C/C++) internas (privadas) ao sistema operacional que interagem com as classes java MediaPlayer e MediaRecorder e com o hardware dos aparelhos e colá-las no em um novo projeto. Em seguida, compilaríamos essas libraries dentro do nosso projeto, com a utilização da NDK \todo{explicar o que é a ndk}. Desse modo, teríamos acesso aos quadros codificados/decodificados pelo hardware e, desse modo, poderíamos utilizar alguma classe genérica de transmissão de dados do Android para realizar a transmissão/recepção desses quadros. Assim, a implementação ficaria desta forma:
+
+Captura: câmera e microfone seriam acessados diretamente pelo C++, utilizando as libraries privadas do android correspondentes.
+
+Codificação: em hardware, utilizando as libraries privadas do android correspondentes.
+
+Transmissão: alguma classe padrão do Android para transmissão genérica de dados.
+
+Recepção: alguma classe padrão do Android para transmissão genérica de dados.
+
+Decodificação: em hardware, utilizando as libraries privadas do android correspondentes.
+
+Renderização: display e alto falante seriam acessados diretamente pelo C++, utilizando as libraries privadas do android correspondentes.
+
+Esta seria a solução mais eficiente possível, visto que todas as tarefas pesadas seriam realizadas em hardware, e os quadros trafegariam pela rede comprimidos. Contudo, como as bibliotecas nativas interagem com o resto do Android, e o sistema operacional muda muito a cada nova versão (e muda a cada modelo de aparelho também, mesmo dentro de uma mesma versão), haveria probabilidade de 50\% \todo{segundo desenvolvedor do android, apresentar fonte} do aplicativo deixar de funcionar em diferentes versões do Android ou funcionar apenas no modelo de aparelho cujo código utilizamos, e a manutenção para fazê-lo voltar a funcionar ou para que funcione em múltiplos aparelhos com certeza seria inviável em termos de complexidade. Por esses motivos, tal uso das bibliotecas privadas do Android não deve ser feito, segundo os desenvolvedores do Android. Além disso, com essa solução estaríamos limitados a utilizar os codecs suportados por padrão pelos aparelhos android. Por todos esses motivos, descartamos essa alternativa.
+
+\section{Solução adotada}
+
+Pela análise acima, pode-se perceber que não foi possível contruir um STVITR utilizando-se apenas as classes padrão do Android. É claro que novas idéias podem surgir. A solução adotada baseia-se em algumas das classes padrão do Android apresentadas, mas sua parte principal é focada em implementações independentes.
+
+A solução consiste em:
+
+\subsubsection{Lado da origem}
+\begin{enumerate}
+ \item Utilizar a classe Camera para capturar os quadros de vídeo e instalar um callback que receba cada frame não codificado obtido da captura. Com o auxilio dessa API, nós setamos os parâmetros de captura desejados (resolução, quadros/s, etc) e enviamos cada frame capturado no formato YUV420SP (também conhecido como NV21, que é o único formato de captura suportado por todos os aparelhos Android) para o C++. A JNI \todo{explicar o que é a JNI} é utilizada para passar os frames do Java para o C++.
+Um detalhe que convém citar é a utilização de Java reflection \todo{explicar o que é java reflection} para que se possa utilizar a função setPreviewCallbackWithBuffer em versões do android anteriores a 2.2, quase dobrando a taxa de frames em comparação ao método setPreviewCallback, visto que essa função evita que o GC (garbage collector do android) interrompa o programa a cada frame.
+ \item Utilizar a classe AudioRecord para capturar os quadros de áudio, e obter os quadros não codificados da captura. Para isso desenvolvemos uma classe em Java que faz uso da classe AudioRecord, e captura o audio do microfone. Cada frame capturado é enviado ao C++ no formato RAW (PCM) com a utilização da JNI.
+ \item Como o Android roda sobre um kernel Linux (FU et al., 2010), foi possível compilar o ffmpeg \todo{explicar o que é o ffmpeg} em C (com a NDK) adaptado para o Android. Desse modo, é possível codificar cada quadro de forma mais eficiente que em um codificador Java. No entanto, a implementação de diversos codecs de vídeo importantes fornecida pelo ffmpeg requer que o quadro decodificado de entrada esteja no formato YUV420P. Nesses casos, antes de codificar o quadro, é preciso convertê-lo de YUV420SP para YUV420P, numa função implementada por nós.
+ \item Enviar os frames codificados para o destino utilizando a implementação de sockets do C/C++. (Poderia-se passar os quadros codificados para o Java e enviá-los com alguma classe padrão do Android, mas a tarefa de passar os quadros com a JNI é custosa e complexa de ser implementada).
+\end{enumerate}
+
+\subsubsection{Lado do destino}
+\begin{enumerate}
+ \item Receber os quadros com a implementação de sockets do C/C++. (Igualmente poderia-se utilizar alguma classe padrão do Android, mas, pelo mesmo motivo citado no item Anterior, não é o mais indicado).
+ \item Decodificar os quadros de áudio e de vídeo com o ffmpeg em C/C++ para o formato RGB. Para os casos em que o ffmpeg apenas decodifica para YUV420P, criamos uma função que converte de YUV420P para RGB.
+ \item Não há como acessar o alto falante e para renderizar os quadros de áudio diretamente do C++. A solução encontrada é passar os quadros de áudio decodificados para a classe AudioTrack utilizando a JNI. Desse modo, eles são reproduzidos. A API AudioTrack toca frames de audio que são entregues a ela no formato RAW (PCM). Para enviarmos os frames de áudio do C++ para o Java, primeiramente tentamos chamar uma função Java a partir do C++ utilizando a JNI, passando como parâmetro o frame, que seria a solução mais simples. No entanto, esta solução ativa o Garbage collector a cada frame, o que causa uma enorme queda no desempenho, logo essa alternativa foi descartada. A alternativa que implementamos para evitar o GC foi utilizar uma técnica da JNI um pouco mais trabalhosa. Em resumo, essa técnica consiste na criação de um array em Java que representa um frame e de um array em C++ que também representa um frame. Em seguida, com chamadas a algumas funções da JNI, associamos os dois arrays para a mesma posição de memória para que eles sejam tratados como se fossem um só. Assim, cada vez que se atualiza o array do C++ com os dados do novo frame decodificado, essa atualização é automaticamente propagada ao array do java, sem que seja feita nenhuma cópia e nenhuma alocação de memoria adicional, resultando na solução mais eficiente que encontramos para renderizar o áudio.
+ \item Não há como acessar o display para renderizar os quadros de vídeo diretamente do C++. Também não há alguma classe Java que receba como parâmetros quadros decodificados e renderize-os. A solução encontrada foi renderizar os quadros de vídeo com OpenGL ES \todo{explicar o que é opengl es} em C++, desenhando um retângulo com as dimensões desejadas e aplicando o frame de vídeo decodificado como textura RGB ao retângulo. No entanto, para que a renderização seja exibida no display, é necessário que a função de renderização do C++ seja chamada de dentro do método onDrawFrame da classe GLSurfaceView.Renderer do Java e retorne para esse método a cada frame.
+\end{enumerate}
+
+Outro detalhe importante, caso o frame decodificado esteja numa resolução, e se queira renderizá-lo em outra, verificamos que realizando esse redimensionamento com o ffmpeg é mais lento que com o OpenGL ES. Ainda assim, caso a versão do OpenGL ES do aparelho utilizado seja a 1.0, o redimensionamento é feito em software. Caso seja 1.1 em diante, o redimensionamento é feito em hardware. Outro detalhe: algumas versões do OpenGL ES suportam apenas texturas sobre retângulos de resolução cujas dimensões são potência de 2. Para poder desenhar o vídeo em qualquer resolução, criamos uma função que gera um retângulo com dimensões de potência de dois imediatamente maiores que as que irão ser utilizadas. Em seguida, a cada frame, aplica-se a textura com qualquer dimensão sobre parte desse retângulo.
+
+Também realizamos cálculos considerando a resolução máxima da tela e a orientação do celular para que a exibição do vídeo esteja sempre centralizada na tela, independentemente da resolução e da orientação.
+
+\section{Análise técnica}
+
+\begin{enumerate}
+ \item Inicialmente foi testada a decodificação e a exibição de um arquivo de vídeo local com a estratégia implementada. Como resultado, para um vídeo de resolução 176x144, foram decodificados 227 quadros por segundo. A taxa de exibição obtida foi de 60 quadros por segundo (valor máximo suportado pelo aparelho).
+ \item \todo{Apresentar integração com o iva e o resultado da integração, primeiro do desktop para o celular, depois de celular para celular. Para isso basta copiar as tabelas do outro artigo}.
+ \item \todo{Apresentar a integração ao mconf}.
+ \item \todo{Verificar se não houve outros testes que podem ser incluídos}.
+\end{enumerate}
+
+\section{Conclusão}
+
+\todo{escrever conclusão}
+
+\section{Trabalhos futuros}
+
+Estamos desenvolvendo um framework que irá encapsular todas as partes complexas da implementação dessa técnica. O framework permitirá que seja possível implementar aplicativos de interação por vídeo com a estratégia acima de modo simples e rápido, mas ao mesmo tempo oferecendo flexibilidade ao programador com relação a aspectos como, por exemplo, escolha do codec de vídeo a ser utilizado e a escolha da forma de transmissão/recepção dos dados codificados. Por exemplo, o programador, se desejar, poderá implementar seu próprio protocolo para transmissão, utilizar um protocolo padrão já existente, ou utilizar a transmissão fornecida pelo framework. Também será possível utilizar o framework para arquivos de vídeo locais que estão codificados com codecs ou formatos não suportados em hardware pelo android, visto que o ffmpeg suporta, em software, um número muito grande de codecs.
+
+O framework deverá consistir, basicamente, de \todo{como o framework não está pronto, escrevi como eu imagino que será}:
+
+\begin{itemize}
+ \item Uma classe Java para realizar a captura e o envio dos frames de vídeo capturados não codificados para o C++ e para renderizar o preview da captura.
+ \item Uma classe Java para realizar a captura e o envio dos frames de áudio capturados não codificados para o C++.
+ \item Uma classe Java que extenda a classe GLSurfaceView do Android para ser a superfície na qual os frames serão renderizados.
+ \item Uma classe Java que implemente a classe GLSurfaceView.Renderer do Android. Essa classe implementará o método onDrawFrame e chamará a função do C++ responsável por renderizar o frame.
+ \item Uma classe Java responsável por renderizar os quadros de áudio decodificados provenientes do C++.
+ \item Um elemento de layout \todo{explicar o que é um elemento de layout do android} que permitirá a fácil inclusão de uma superfície para exibir o vídeo que está sendo decodificado.
+ \item Um elemento de layout que permitirá a fácil inclusão de uma superfície para exibir o preview do vídeo que está sendo capturado pela câmera.
+ \item Biblitecas C++ compiladas no formato .so (shared libraries). Essas bibliotecas terão a implementação do ffmpeg e a implementação da parte nativa do framework responsável por interagir com o ffmpeg e com o Java. A implementação da parte nativa do framework corresponderá a duas classes: uma responsável por gerenciar o lado da origem e uma para o lado do destino.
+\end{itemize}
+
+A instalação do framework consistirá na criação de um Android Project no Eclipse \todo{explicar o que é o eclipse} ao qual as bibliotecas Java do framework deverão ser incluídas. As bibliotecas .so deverão ser incluídas em um diretório libs/armeabi dentro da raiz do projeto. \todo{caso o programador usuário do framework queira ter acesso às bibliotecas .so a partir do C++, então talvez seja necessário ter os headers das bibliotecas, mas não tenho certeza disso. E nesse caso ele também terá que fazer alguns ajustes ao makefile do seu projeto. Mas só saberei disso depois que tiver terminando de implementar o framework}.
+
+A utilização do framework deverá ser, basicamente, desta forma \todo{como o framework não está pronto, escrevi como eu imagino que será}:
+
+a) Iniciar uma captura de áudio e/ou vídeo, exibir um preview, enviar os quadros capturados do Java para o C++, codificar os quadros e enviar ao(s) destino(s) utilizando o método de envio implementado pelo framework:
+
+O programador usuário do framework poderá escolher em qual elemento de layout ele quer exibir a captura. Por exemplo, caso ele queira exibir a captura em um Dialog \todo{explicar o que é um Dialog}, ele deverá criar uma classe que estenda a classe Dialog do Android, chamar o método do Android setContentView passando como parâmetro a esse método o elemento de layout correspondente ao preview da captura fornecido pelo framework. Em seguida, ele deverá criar uma nova instância da classe de captura (fornecida pelo framework) com o método findViewById passando como parâmetro a esse método a view de captura fornecida pelo framework. Por fim, com a instância criada, deverá chamar o método start da classe de captura fornecida pelo framework, passando os parâmetros de captura desejados (taxa de quadros por segundo, resolução, etc \todo{só saberei melhor todos os parâmetros que serão necessários quando tiver terminando de implementar o framework. Isso vale para todos os métodos e classes do framework} e os ips aos quais ele quer transmitir o vídeo. O código será semelhante a este:
+
+\begin{lstlisting}
+class VideoDialog extends Dialog {
+    public CaptureDialog(Context context) {
+        setContentView(R.layout.video_capture);
+        VideoCapture videoWindow;
+        videoWindow = (VideoCapture) findViewById(R.id.video_capture);
+        videoWindow.start(<parametros de captura>,<lista de ips>);
+    }
+}
+\end{lstlisting}
+
+Caso ele queira exibir o preview da captura em outro elemento que não um Dialog (em tela cheia em uma nova activity \todo{explicar o que é uma activity}, por exemplo), o procedimento é praticamente idêntico, porém de acordo com as características do elemento desejado, seguindo as recomendações do Android.
+
+Para o áudio, ele apenas precisa declarar uma nova instância da classe de captura de áudio fornecida pelo framework e chamar o método start dela passando os parâmetros de captura desejados (frequência, bits por amostra, etc) e os ips aos quais ele quer transmitir o áudio.
+
+Ao chamar o método start (tanto o do vídeo como o do áudio), a captura será iniciada e os quadros serão enviados ao C++ automaticamente. Também automaticamentes os quadros vão sendo enviados aos ips passados como parâmetro.
+
+b) Iniciar um recebimento de áudio e/ou vídeo utilizando o método de recebimento implementado pelo framework e decodificar e renderizar os quadros:
+
+Para exibir o vídeo, o procedimento é o mesmo que para exibir o preview da captura. A diferença é que a classe e o elemento de layout utilizados devem ser os relacionados ao destino, e não à origem. Além disso, o método start não necessita de parâmetros.
+
+Para reproduzir o áudio, ele precisa declarar uma nova instância da classe de renderização de áudio fornecida pelo framework e, com essa instância, chamar o método start da classe. 
+
+Ao seguir os itens a) e b), o áudio e o vídeo serão exibidos sincronizadamente no destino. Esse é o uso mais simples do framework. No entanto, para dar maior flexibilidade ao programador, exitirão outros usos possíveis (cada qual deles, no entanto, adicionará mais complexidade ao desenvolvimento do framework). Por exemplo:
+
+c) Iniciar uma captura de áudio e/ou vídeo, exibir um preview, enviar os quadros capturados do Java ao C++ e dar acesso aos dados dos quadros não codificados ao programador em C++:
+
+Para isso o programador deverá seguir os passos do item a), mas sem informar um ip. Em seguida, deverá criar um arquivo C/C++ dentro do qual ele instalará um callback que receberá os dados desejados. \todo{só saberei melhor como deverá ser esse arquivo C/C++ quando tiver terminando de implementar o framework. O mesmo vale para o makefile que o usuário deverá criar}. Isso poderá ser útil caso o programador não queira transmitir os dados, mas apenas realizar um processamento sobre eles ou codificá-los utilizando sua própria implementação de codec.
+
+d) Iniciar uma captura de áudio e/ou vídeo, exibir um preview, enviar os quadros capturados do Java ao C++, codificar os quadros e dar acesso aos dados dos quadros codificados ao programador em C++:
+
+Idem ao item c). Isso pode ser útil caso o programador queira utilizar o seu próprio protocolo de transmissão, bastando encapsular os dados utilizando o protocolo que ele implementar. Nesse caso o programador deverá ser responsável pela sincronização do áudio com o vídeo \todo{provavelmente ele terá acesso a um timestamp dos dados}.
+
+e) Reproduzir um arquivo local, e não um stream:
+
+\todo{só saberei melhor como será isso quando tiver terminando de implementar o framework, mas imagino que o processo será semelhante ao item b), porém o método start deverá receber como parâmetro o caminho do arquivo local}. Isso poderá ser útil para reproduzir arquivos codificados com codecs não suportados pelo hardware do aparelho, visto que a decodificação do ffmpeg é realizada em software.
+
+f) Iniciar um recebimento de áudio e/ou vídeo utilizando um método ou protocolo de recebimento implementado pelo usuário programador:
+
+Isso será responsabilidade do programador, que provavelmente utilizará essa técnica em conjunto com a do item d). Após receber os dados codificados utilizando a sua implementação específica, o programador pode, se quiser, passá-los ao decodificador do framework  (que posteriormente poderá chamar o renderizador), contanto que os dados estejam de acordo com o suportado pelo decodificador.
+
+g) Iniciar um recebimento de áudio e/ou vídeo utilizando o método de recebimento implementado pelo framework e dar acesso aos quadros codificados ao programador em C/C++:
+
+\todo{só saberei melhor como será isso quando tiver terminando de implementar o framework, mas imagino que o processo será semelhante ao item b), porém o programador deverá criar um arquivo C/C++ dentro do qual ele instalará um callback que receberá os dados desejados. Só saberei melhor como deverá ser esse arquivo C/C++ quando tiver terminando de implementar o framework. O mesmo vale para o makefile que o usuário deverá criar}. Isso poderá ser útil caso o programador não queira renderizar os dados, mas apenas realizar um processamento sobre eles ou decodificá-los utilizando sua própria implementação de codec.
+
+h) Iniciar um recebimento de áudio e/ou vídeo utilizando o método de recebimento implementado pelo framework, decodificar os dados e dar acesso aos quadros decodificados ao programador em C/C++:
+
+Idem ao item g). Isso poderá ser útil caso o programador não queira renderizar os dados, mas apenas realizar um processamento sobre eles.
+
+i) Apenas renderizar quadro(s) de áudio e/ou de vídeo decodificado(s), sem utilizar qualquer outra funcionalidade do framework:
+
+Como o Android não dá suporte a isso com suas classes padrão para o vídeo, essa utilidade pode ser muito importante. O framework fornece essa implementação complexa (por lidar com utilização não trivial da JNI do OpenGL ES em C++ e em Java) encapsulada, de fácil uso para o programador. \todo{só saberei melhor como será isso quando tiver terminando de implementar o framework, mas imagino que o programador poderá chamar um método, a partir do C/C++ ou do Java, passando como parâmetro o quadro de áudio ou de vídeo decodificado. Provavelmente os formatos aceitos serão, para o áudio, RAW PCM, e para o vídeo, algum(s) tipo(s) de RGB e de YUV, mas também é possível utilizar o ffmpeg para converter formatos, logo talvez sejam aceitos um maior número de formatos}.
+
+j) \todo{só conseguirei imaginar outros usos possíveis ao longo da implementação do framework}.
 
 %
 % The following two commands are all you need in the
 % initial runs of your .tex file to
 % produce the bibliography for the citations in your paper.
 \bibliographystyle{abbrv}
-\bibliography{sigproc}  % sigproc.bib is the name of the Bibliography in this case
+\bibliography{paper}  % sigproc.bib is the name of the Bibliography in this case
 % You must have a proper ".bib" file
 %  and remember to run:
 % latex bibtex latex latex
@@ -519,53 +525,6 @@ and the \textbf{.cls} and \textbf{.tex} files that it describes.
 %
 % ACM needs 'a single self-contained file'!
 %
-%APPENDICES are optional
-%\balancecolumns
-\appendix
-%Appendix A
-\section{Headings in Appendices}
-The rules about hierarchical headings discussed above for
-the body of the article are different in the appendices.
-In the \textbf{appendix} environment, the command
-\textbf{section} is used to
-indicate the start of each Appendix, with alphabetic order
-designation (i.e. the first is A, the second B, etc.) and
-a title (if you include one).  So, if you need
-hierarchical structure
-\textit{within} an Appendix, start with \textbf{subsection} as the
-highest level. Here is an outline of the body of this
-document in Appendix-appropriate form:
-\subsection{Introduction}
-\subsection{The Body of the Paper}
-\subsubsection{Type Changes and  Special Characters}
-\subsubsection{Math Equations}
-\paragraph{Inline (In-text) Equations}
-\paragraph{Display Equations}
-\subsubsection{Citations}
-\subsubsection{Tables}
-\subsubsection{Figures}
-\subsubsection{Theorem-like Constructs}
-\subsubsection*{A Caveat for the \TeX\ Expert}
-\subsection{Conclusions}
-\subsection{Acknowledgments}
-\subsection{Additional Authors}
-This section is inserted by \LaTeX; you do not insert it.
-You just add the names and information in the
-\texttt{{\char'134}additionalauthors} command at the start
-of the document.
-\subsection{References}
-Generated by bibtex from your ~.bib file.  Run latex,
-then bibtex, then latex twice (to resolve references)
-to create the ~.bbl file.  Insert that ~.bbl file into
-the .tex source file and comment out
-the command \texttt{{\char'134}thebibliography}.
-% This next section command marks the start of
-% Appendix B, and does not continue the present hierarchy
-\section{More Help for the Hardy}
-The acm\_proc\_article-sp document class file itself is chock-full of succinct
-and helpful comments.  If you consider yourself a moderately
-experienced to expert user of \LaTeX, you may find reading
-it useful but please remember not to change it.
 \balancecolumns
 % That's all folks!
 \end{document}
