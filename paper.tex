@@ -123,43 +123,45 @@ Valter Roesler\\
 \todo{este é um capítulo que provavelmente iremos reduzir para caber tudo em oito páginas}
 
 Um sistema que permite que uma pessoa comunique-se, ao vivo, com uma ou mais
-pessoas, cada qual em sua máquina, através da transmissão da sua fala (capturada pelo microfone) e da sua imagem em forma de vídeo (capturada pela câmera), ao mesmo tempo em que escuta e visualiza os outros participantes, representa um sistema de transmissão de vídeo interativo em tempo real. Tais sistemas são complexos de serem desenvolvidos, já que, além da necessidade do áudio e do vídeo serem transmitidos, recebidos e exibidos de forma contínua por todos os participantes, é preciso que essa transmissão ocorra com um baixíssimo atraso: se o intervalo de tempo entre o instante da captura do áudio e do vídeo e o instante da sua exibição nas máquinas dos outros participantes for maior que 400 milissegundos, por exemplo, o resultado pode ser uma interação altamente frustrante \cite{kurose_1999}.
+pessoas, cada qual em sua máquina, através da transmissão da sua fala (capturada pelo microfone) e da sua imagem em forma de vídeo (capturada pela câmera), ao mesmo tempo em que escuta e visualiza os outros participantes, representa um sistema de transmissão de vídeo interativo em tempo real. Tais sistemas são complexos de serem desenvolvidos, já que, além da necessidade do áudio e do vídeo serem transmitidos, recebidos e exibidos de forma contínua por todos os participantes, é preciso que essa transmissão ocorra com um baixíssimo atraso: se o intervalo de tempo entre o instante da captura do áudio e do vídeo e o instante da sua exibição nas máquinas dos outros participantes for maior que 400 milissegundos, por exemplo, o resultado pode ser uma interação altamente frustrante \cite{kurose_2001}.
 
-É um desafio desenvolver com qualidade tais sistemas pois as redes atuais, em geral, suportam apenas uma pequena taxa de bit/s. O desafio se torna ainda maior na área dos dispositivos móveis, que, além de terem hardware limitado, que torna a tarefa da decodificação e da exibição do vídeo menos eficiente, também têm limitações de rede, pois costumam utilizar 3G ou Internet sem fio, ambos suscetíveis a alta perda de pacotes e, na maioria das vezes, a baixas velocidades (HUYNH-THU; GHANBARI, 2008).
+É um desafio desenvolver com qualidade tais sistemas pois as redes atuais, em geral, suportam apenas uma pequena taxa de bit/s. O desafio se torna ainda maior na área dos dispositivos móveis, que, além de terem hardware limitado, que torna a tarefa da decodificação e da exibição do vídeo menos eficiente, também têm limitações de rede, pois costumam utilizar 3G ou Internet sem fio, ambos suscetíveis a alta perda de pacotes e, na maioria das vezes, a baixas velocidades \cite{huynh-thu_2008}.
 
-Um exemplo de utilização dessa técnica se dá em videoconferências, que correspondem a reuniões remotas nas quais os participantes podem, por vídeo, interagir e colaborar com o propósito da reunião. Mesmo estando, cada um, em lugares diferentes, a utilização do vídeo lhes sugere que todos estão presentes em uma mesma sala, aumentando a efetividade da colaboração em comparação a uma reunião remota por texto ou por voz apenas (TSCHÖKE, 2001).
+Um exemplo de utilização dessa técnica se dá em videoconferências, que correspondem a reuniões remotas nas quais os participantes podem, por vídeo, interagir e colaborar com o propósito da reunião. Mesmo estando, cada um, em lugares diferentes, a utilização do vídeo lhes sugere que todos estão presentes em uma mesma sala, aumentando a efetividade da colaboração em comparação a uma reunião remota por texto ou por voz apenas.
 
 Um vídeo interativo pode ser dividido, basicamente, em dois módulos:
 \begin{itemize}
  \item Um módulo para gerenciar o lado da origem, dividido em 3 sub-módulos:
  \begin{itemize}
-  \item Um sub-módulo para capturar quadros de áudio e de vídeo não comprimidos do microfone e da câmera, respectivamente.
-  \item Um sub-módulo para codificar os quadros de áudio e de vídeo.
-  \item Um sub-módulo para enviar pela rede os dados codificados.
+  \item Um sub-módulo para capturar quadros de áudio e de vídeo não comprimidos do microfone e da câmera, respectivamente;
+  \item Um sub-módulo para codificar os quadros de áudio e de vídeo;
+  \item Um sub-módulo para enviar pela rede os dados codificados;
  \end{itemize}
  \item Um módulo para gerenciar o lado do destino, dividido em 3 sub-módulos:
  \begin{itemize}
-  \item Um sub-módulo para receber pela rede dados de áudio e de vídeo codificados.
-  \item Um sub-módulo para decodificar os dados.
+  \item Um sub-módulo para receber pela rede dados de áudio e de vídeo codificados;
+  \item Um sub-módulo para decodificar os dados;
   \item Um sub-módulo para renderizar os quadros de áudio e de vídeo decodificados.
  \end{itemize}
 \end{itemize}
 
 Neste trabalho iremos apresentar uma nova estratégia para criação de videoconferências em dispositivos móveis com sistema operacional Android.
 
-\section{Limitações das classes padrão do Android para desenvolver um STVITR}
+\section{Análise da SDK do Android para multimídia}
 
 Android é um sistema operacional de código aberto (desenvolvido pela empresa Google) para dispositivos móveis construído sobre uma versão modificada do kernel Linux. Em comparação aos outros sistemas operacionais para smartphones existentes, o Android é caracterizado por aplicações de vídeo mais simples. Isso se deve às limitações das APIs fornecidas pelo Android para programação de vídeo e, alternativamente, à grande complexidade para criar tais aplicativos sem a utilização dessas APIs. A dificuldade de se encontrar bons aplicativos de vídeo para Android se torna ainda mais marcante na área de STVITR.
 
-Devido ao crescente número de usuários do Android, a demanda por aplicações de vídeo diferenciadas (com maior número de funcionalidades) para esse sistema operacional da Google aumenta no mesmo ritmo. Para poder suprir essa demanda de forma rápida e qualificada, os desenvolvedores de aplicativos procuram por  frameworks de que lhes deem mais flexibilidade e mais recursos na programação em comparação às APIs tradicionais. Neste trabalho, será proposta uma solução que visa servir como alternativa às classes padrão do Android. Essa ideia será implementada na forma de um framework \todo{como o framework não está completo podemos incluí-lo como trabalho futuro e apresentar apenas a solução, ou então podemos supor que o framework esta pronto, já que comprovamos que a estrategia funciona}, visando abstrair dos seus usuários (os programadores) as partes mais trabalhosas e menos intuitivas da alternativa, para que seja possível a criação de tais aplicativos de vídeo para Android de forma simples e rápida.
+Devido ao crescente número de usuários do Android, a demanda por aplicações de vídeo diferenciadas (com maior número de funcionalidades) aumenta no mesmo ritmo. Para poder suprir essa demanda de forma rápida e qualificada, os desenvolvedores de aplicativos procuram por frameworks que lhes deem mais flexibilidade e mais recursos na programação em comparação às APIs tradicionais. Neste trabalho, será proposta uma solução que visa servir como alternativa às classes padrão do Android. Essa solução será implementada na forma de um framework \todo{como o framework não está completo podemos incluí-lo como trabalho futuro e apresentar apenas a solução, ou então podemos supor que o framework esta pronto, já que comprovamos que a estratégia funciona}, visando abstrair dos seus usuários (os programadores) as partes mais trabalhosas e menos intuitivas da alternativa, para que seja possível a criação de tais aplicativos de forma simples e rápida.
 
-Aplicativos para Android são escritos com a linguagem de programação Java e rodam na máquina virtual Dalvik. O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos (ABLESON; COLLINS; SEN, 2008).
+Aplicativos para Android são escritos na linguagem de programação Java e executam sobre a máquina virtual Dalvik  . O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos \cite{ableson_2009}.
 
 Considerando os dois módulos de um STVITR descritos anteriormente, as classes fornecidas pelo Android que têm utilidade para cada um desses módulos são:
-*Para o módulo de origem: Classe MediaRecorder, Classe Camera, Classe AudioRecord.
-*Para o módulo de destino: Classe MediaPlayer, classe AudioTrack.
+\begin{itemize}
+ \item para o módulo de origem: MediaRecorder, Camera e AudioRecord;
+ \item para o módulo de destino: MediaPlayer e AudioTrack.
+\end{itemize}
 
-Existem outras classes relacionadas, mas não passam de pequenas extensões ou encapsulamentos das classes acima, sem importância para este trabalho. Também há classes relacionadas a envio e recebimento de dados genéricos pela rede que poderiam ser utilizadas em conjunto com as classes acima. A seguir serão explicadas as utilidades básicas de cada uma dessas cinco classes. Então, com base nessa descrição, serão levantadas possíveis estratégias de se desenvolver um STVITR com elas, e as limitações de cada estratégia.
+Existem outras classes relacionadas, porém estas apresentam pequenas extensões ou encapsulamentos das classes acima, sem importância para este trabalho. Também existem classes relacionadas ao envio e recebimento de dados genéricos pela rede que poderiam ser utilizadas em conjunto com as classes acima. A seguir as classes supracitadas serão detalhadas, e com base nas características de cada uma serão apresentadas estratégias de desenvolvimento de um STVITR bem como suas limitações.
 
 \subsection{Classe MediaRecorder}
 A Classe MediaRecorder realiza a captura de áudio e de vídeo (a partir do microfone e da câmera, respectivamente) e codifica-os utilizando o hardware do aparelho. Os dados codificados podem ser salvos encapsulados em um arquivo, ou podem ser transmitidos pela rede com a utilização de sockets. A classe também pode exibir um preview da captura para o usuário local.
