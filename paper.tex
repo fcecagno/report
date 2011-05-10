@@ -399,13 +399,83 @@ Outro detalhe importante, caso o frame decodificado esteja numa resolução, e s
 Também realizamos cálculos considerando a resolução máxima da tela e a orientação do celular para que a exibição do vídeo esteja sempre centralizada na tela, independentemente da resolução e da orientação.
 
 \section{Análise técnica}
+\subsection{Teste 1}
+Foi testada a decodificação e a exibição de um arquivo de vídeo local com a estratégia implementada em um dispositivo HTC Magic. Como resultado, para um vídeo de resolução 176x144, foram decodificados 227 quadros por segundo. A taxa de exibição obtida foi de 60 quadros por segundo (valor máximo suportado pelo aparelho).
+\subsection{Teste 2}
+Implementamos um aplicativo de videoconferência entre dispositivos móveis com a técnica apresentada. Para testar, realizamos uma conversa por vídeo entre dois aparelhos Android caracterizados pela tabela \todo{numero da tabela}.
+\begin{table*}
+\centering
+\caption{Dispositivos utilizados nos testes}
+\begin{tabular}{|c|c|c|c|c|l} \hline
+Modelo&Processador&Versao do Android&Resolução máxima&Versão do OpenGL ES\\ \hline
+Motorola Milestone A853&500MHz&2.0.1&480x854&1.0\\ \hline
+Samsung Galaxy GT-I9000B&1000MHz&2.1-update1&480x800&1.1\\
+\hline\end{tabular}
+\end{table*}
+Os parâmetros de codificação de vídeo foram:
+\begin{itemize}
+ \item Resolução: 320x240
+ \item Codec: MPEG-4
+ \item Taxa de bits: 256Kbps
+ \item GOP: 12
+ \item Taxa de quadros: 15/s
+\end{itemize}
+Os parâmetros de codificação de áudio foram:
+\begin{itemize}
+ \item Codec: MP2
+ \item Taxa de bits: 64Kbps
+ \item Frequência: 22050Hz
+ \item Bits por amostra: 16
+ \item Canais: 1
+ \item Taxa de quadros: 19/s
+\end{itemize}
+O vídeo era ampliado com o OpenGL ES para a resolução máxima do respectivo aparelho. A tabela \todo{numero da tabela} exibe os resultados do teste.
+\begin{table*}
+\centering
+\caption{Resultados do Teste 2}
+\begin{tabular}{|c|c|c|c|l} \hline
+Dispositivo&Tipo de medida&Taxa de quadros&Tempo médio por quadro\\ \hline
+Motorola&Captura do vídeo&15/s&1,16ms\\ \hline
+Motorola&Captura do áudio&19/s&0,07ms\\ \hline
+Samsung&Renderização do vídeo&14/s&2,88ms\\ \hline
+Samsung&Renderização do áudio&18/s&19,62ms\\ \hline
+Samsung&Captura do vídeo&15/s&0,72ms\\ \hline
+Samsung&Captura do áudio&19/s&0,03ms\\ \hline
+Motorola&Renderização do vídeo&15/s&16,03ms\\ \hline
+Motorola&Renderização do áudio&19/s&33,39ms\\
+\hline\end{tabular}
+\end{table*}
+O delay obtido ficou abaixo dos 400ms.
+\subsection{Teste 3}
+Realizamos uma transmissão de vídeo do Samsung para o Motorola (especificados na tabela \todo{numero da tabela}). Os parâmetros de codificação do áudio e do vídeo utilizados foram os mesmos do teste 2, porém com a taxa de quadros do vídeo igual a 30/s. A tabela \todo{numero tab} exibe os resultados do teste.
+\begin{table*}
+\centering
+\caption{Resultados do Teste 3}
+\begin{tabular}{|c|c|c|c|l} \hline
+Dispositivo&Tipo de medida&Taxa de quadros&Tempo médio por quadro\\ \hline
+Samsung&Captura do vídeo&30/s&0,58ms\\ \hline
+Samsung&Captura do áudio&19/s&0,02ms\\ \hline
+Motorola&Renderização do vídeo&29/s&12,77ms\\ \hline
+Motorola&Renderização do áudio&18/s&24,24ms\\
+\hline\end{tabular}
+\end{table*}
+O delay obtido ficou abaixo dos 400ms.
+\subsection{Teste 4}
+O IVA é um sistema de videoconferências para computadores do tipo desktop. Seu foco principal é o ensino a distância. Utilizando a estratégia explicada neste trabalho, implementamos um aplicativo para Android que permite que o usuário do celular participe de videoconferências do IVA enviando seu vídeo e/ou visualizando o vídeo dos outros participantes.
 
-\begin{enumerate}
- \item Inicialmente foi testada a decodificação e a exibição de um arquivo de vídeo local com a estratégia implementada. Como resultado, para um vídeo de resolução 176x144, foram decodificados 227 quadros por segundo. A taxa de exibição obtida foi de 60 quadros por segundo (valor máximo suportado pelo aparelho).
- \item \todo{Apresentar integração com o iva e o resultado da integração, primeiro do desktop para o celular, depois de celular para celular. Para isso basta copiar as tabelas do outro artigo}.
- \item \todo{Apresentar a integração ao mconf}.
- \item \todo{Verificar se não houve outros testes que podem ser incluídos}.
-\end{enumerate}
+Neste teste, o aplicativo Android recebeu um vídeo em tempo real codificado com MPEG-4 (vídeo) e MP2 (áudio) do IVA rodando em um desktop. Os parâmetros de codificação do vídeo foram: 1400 bit/s de taxa de codificação, 854x480 de resolução, 12 de GOP, codificado a 15 quadros por segundo. O áudio foi codificado a uma taxa de 128 bit/s. O Motorola (especificado na tabela \todo{numero da tabela}), rodando nosso aplicativo, recebeu e exibiu esta transmissão mantendo a taxa de 15 quadros por segundo. O áudio e o vídeo foram renderizados sincronizadamente e o delay ficou abaixo dos 400ms. A figura \todo{numero} mostra o teste em execução.
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.2]{./ivamobile.jpg}
+ % ivamobile.jpg: 907x1385 pixel, 72dpi, 32.00x48.86 cm, bb=0 0 907 1385
+\caption{Nossa estratégia integrada ao sistema IVA}
+\end{figure}
+\subsection{Teste 5}
+Também integramos nossa estratégia a um outro sistema de videoconferências já existente chamado BigBlueButton, que funcionava apenas para desktops. Recebemos, no aplicativo Android, um fluxo de vídeo do BigBlueButton gerado por um desktop. O codec de vídeo utilizado foi FLV1 (também conhecido como Sorenson H.263), a uma resolução de 320x240. O vídeo foi exibido ampliado na máxima resolução no Samsung e no Motorola especificados na tabela \todo{numero tabela} e também em um tablet rodando Android. O delay ficou abaixo dos 400ms. \todo{inserir foto}.
+
+\todo{Apresentar a integração ao mconf}.
+
+\todo{Verificar se não houve outros testes que podem ser incluídos}.
 
 \section{Conclusão}
 
@@ -414,82 +484,6 @@ Também realizamos cálculos considerando a resolução máxima da tela e a orie
 \section{Trabalhos futuros}
 
 Estamos desenvolvendo um framework que irá encapsular todas as partes complexas da implementação dessa técnica. O framework permitirá que seja possível implementar aplicativos de interação por vídeo com a estratégia acima de modo simples e rápido, mas ao mesmo tempo oferecendo flexibilidade ao programador com relação a aspectos como, por exemplo, escolha do codec de vídeo a ser utilizado e a escolha da forma de transmissão/recepção dos dados codificados. Por exemplo, o programador, se desejar, poderá implementar seu próprio protocolo para transmissão, utilizar um protocolo padrão já existente, ou utilizar a transmissão fornecida pelo framework. Também será possível utilizar o framework para arquivos de vídeo locais que estão codificados com codecs ou formatos não suportados em hardware pelo android, visto que o ffmpeg suporta, em software, um número muito grande de codecs.
-
-O framework deverá consistir, basicamente, de \todo{como o framework não está pronto, escrevi como eu imagino que será}:
-
-\begin{itemize}
- \item Uma classe Java para realizar a captura e o envio dos frames de vídeo capturados não codificados para o C++ e para renderizar o preview da captura.
- \item Uma classe Java para realizar a captura e o envio dos frames de áudio capturados não codificados para o C++.
- \item Uma classe Java que estenda a classe GLSurfaceView do Android para ser a superfície na qual os frames serão renderizados.
- \item Uma classe Java que implemente a classe GLSurfaceView.Renderer do Android. Essa classe implementará o método onDrawFrame e chamará a função do C++ responsável por renderizar o frame.
- \item Uma classe Java responsável por renderizar os quadros de áudio decodificados provenientes do C++.
- \item Um elemento de layout \todo{explicar o que é um elemento de layout do android} que permitirá a fácil inclusão de uma superfície para exibir o vídeo que está sendo decodificado.
- \item Um elemento de layout que permitirá a fácil inclusão de uma superfície para exibir o preview do vídeo que está sendo capturado pela câmera.
- \item Biblitecas C++ compiladas no formato .so (shared libraries). Essas bibliotecas terão a implementação do ffmpeg e a implementação da parte nativa do framework responsável por interagir com o ffmpeg e com o Java. A implementação da parte nativa do framework corresponderá a duas classes: uma responsável por gerenciar o lado da origem e uma para o lado do destino.
-\end{itemize}
-
-A instalação do framework consistirá na criação de um Android Project no Eclipse \todo{explicar o que é o eclipse} ao qual as bibliotecas Java do framework deverão ser incluídas. As bibliotecas .so deverão ser incluídas em um diretório libs/armeabi dentro da raiz do projeto. \todo{caso o programador usuário do framework queira ter acesso às bibliotecas .so a partir do C++, então talvez seja necessário ter os headers das bibliotecas, mas não tenho certeza disso. E nesse caso ele também terá que fazer alguns ajustes ao makefile do seu projeto. Mas só saberei disso depois que tiver terminando de implementar o framework}.
-
-A utilização do framework deverá ser, basicamente, desta forma \todo{como o framework não está pronto, escrevi como eu imagino que será}:
-
-a) Iniciar uma captura de áudio e/ou vídeo, exibir um preview, enviar os quadros capturados do Java para o C++, codificar os quadros e enviar ao(s) destino(s) utilizando o método de envio implementado pelo framework:
-
-O programador usuário do framework poderá escolher em qual elemento de layout ele quer exibir a captura. Por exemplo, caso ele queira exibir a captura em um Dialog \todo{explicar o que é um Dialog}, ele deverá criar uma classe que estenda a classe Dialog do Android, chamar o método do Android setContentView passando como parâmetro a esse método o elemento de layout correspondente ao preview da captura fornecido pelo framework. Em seguida, ele deverá criar uma nova instância da classe de captura (fornecida pelo framework) com o método findViewById passando como parâmetro a esse método a view de captura fornecida pelo framework. Por fim, com a instância criada, deverá chamar o método start da classe de captura fornecida pelo framework, passando os parâmetros de captura desejados (taxa de quadros por segundo, resolução, etc \todo{só saberei melhor todos os parâmetros que serão necessários quando tiver terminando de implementar o framework. Isso vale para todos os métodos e classes do framework} e os ips aos quais ele quer transmitir o vídeo. O código será semelhante a este:
-
-\begin{lstlisting}
-class VideoDialog extends Dialog {
-    public CaptureDialog(Context context) {
-        setContentView(R.layout.video_capture);
-        VideoCapture videoWindow;
-        videoWindow = (VideoCapture) findViewById(R.id.video_capture);
-        videoWindow.start(<parametros de captura>,<lista de ips>);
-    }
-}
-\end{lstlisting}
-
-Caso ele queira exibir o preview da captura em outro elemento que não um Dialog (em tela cheia em uma nova activity \todo{explicar o que é uma activity}, por exemplo), o procedimento é praticamente idêntico, porém de acordo com as características do elemento desejado, seguindo as recomendações do Android.
-
-Para o áudio, ele apenas precisa declarar uma nova instância da classe de captura de áudio fornecida pelo framework e chamar o método start dela passando os parâmetros de captura desejados (frequência, bits por amostra, etc) e os ips aos quais ele quer transmitir o áudio.
-
-Ao chamar o método start (tanto o do vídeo como o do áudio), a captura será iniciada e os quadros serão enviados ao C++ automaticamente. Também automaticamentes os quadros vão sendo enviados aos ips passados como parâmetro.
-
-b) Iniciar um recebimento de áudio e/ou vídeo utilizando o método de recebimento implementado pelo framework e decodificar e renderizar os quadros:
-
-Para exibir o vídeo, o procedimento é o mesmo que para exibir o preview da captura. A diferença é que a classe e o elemento de layout utilizados devem ser os relacionados ao destino, e não à origem. Além disso, o método start não necessita de parâmetros.
-
-Para reproduzir o áudio, ele precisa declarar uma nova instância da classe de renderização de áudio fornecida pelo framework e, com essa instância, chamar o método start da classe. 
-
-Ao seguir os itens a) e b), o áudio e o vídeo serão exibidos sincronizadamente no destino. Esse é o uso mais simples do framework. No entanto, para dar maior flexibilidade ao programador, exitirão outros usos possíveis (cada qual deles, no entanto, adicionará mais complexidade ao desenvolvimento do framework). Por exemplo:
-
-c) Iniciar uma captura de áudio e/ou vídeo, exibir um preview, enviar os quadros capturados do Java ao C++ e dar acesso aos dados dos quadros não codificados ao programador em C++:
-
-Para isso o programador deverá seguir os passos do item a), mas sem informar um ip. Em seguida, deverá criar um arquivo C/C++ dentro do qual ele instalará um callback que receberá os dados desejados. \todo{só saberei melhor como deverá ser esse arquivo C/C++ quando tiver terminando de implementar o framework. O mesmo vale para o makefile que o usuário deverá criar}. Isso poderá ser útil caso o programador não queira transmitir os dados, mas apenas realizar um processamento sobre eles ou codificá-los utilizando sua própria implementação de codec.
-
-d) Iniciar uma captura de áudio e/ou vídeo, exibir um preview, enviar os quadros capturados do Java ao C++, codificar os quadros e dar acesso aos dados dos quadros codificados ao programador em C++:
-
-Idem ao item c). Isso pode ser útil caso o programador queira utilizar o seu próprio protocolo de transmissão, bastando encapsular os dados utilizando o protocolo que ele implementar. Nesse caso o programador deverá ser responsável pela sincronização do áudio com o vídeo \todo{provavelmente ele terá acesso a um timestamp dos dados}.
-
-e) Reproduzir um arquivo local, e não um stream:
-
-\todo{só saberei melhor como será isso quando tiver terminando de implementar o framework, mas imagino que o processo será semelhante ao item b), porém o método start deverá receber como parâmetro o caminho do arquivo local}. Isso poderá ser útil para reproduzir arquivos codificados com codecs não suportados pelo hardware do aparelho, visto que a decodificação do ffmpeg é realizada em software.
-
-f) Iniciar um recebimento de áudio e/ou vídeo utilizando um método ou protocolo de recebimento implementado pelo usuário programador:
-
-Isso será responsabilidade do programador, que provavelmente utilizará essa técnica em conjunto com a do item d). Após receber os dados codificados utilizando a sua implementação específica, o programador pode, se quiser, passá-los ao decodificador do framework  (que posteriormente poderá chamar o renderizador), contanto que os dados estejam de acordo com o suportado pelo decodificador.
-
-g) Iniciar um recebimento de áudio e/ou vídeo utilizando o método de recebimento implementado pelo framework e dar acesso aos quadros codificados ao programador em C/C++:
-
-\todo{só saberei melhor como será isso quando tiver terminando de implementar o framework, mas imagino que o processo será semelhante ao item b), porém o programador deverá criar um arquivo C/C++ dentro do qual ele instalará um callback que receberá os dados desejados. Só saberei melhor como deverá ser esse arquivo C/C++ quando tiver terminando de implementar o framework. O mesmo vale para o makefile que o usuário deverá criar}. Isso poderá ser útil caso o programador não queira renderizar os dados, mas apenas realizar um processamento sobre eles ou decodificá-los utilizando sua própria implementação de codec.
-
-h) Iniciar um recebimento de áudio e/ou vídeo utilizando o método de recebimento implementado pelo framework, decodificar os dados e dar acesso aos quadros decodificados ao programador em C/C++:
-
-Idem ao item g). Isso poderá ser útil caso o programador não queira renderizar os dados, mas apenas realizar um processamento sobre eles.
-
-i) Apenas renderizar quadro(s) de áudio e/ou de vídeo decodificado(s), sem utilizar qualquer outra funcionalidade do framework:
-
-Como o Android não dá suporte a isso com suas classes padrão para o vídeo, essa utilidade pode ser muito importante. O framework fornece essa implementação complexa (por lidar com utilização não trivial da JNI do OpenGL ES em C++ e em Java) encapsulada, de fácil uso para o programador. \todo{só saberei melhor como será isso quando tiver terminando de implementar o framework, mas imagino que o programador poderá chamar um método, a partir do C/C++ ou do Java, passando como parâmetro o quadro de áudio ou de vídeo decodificado. Provavelmente os formatos aceitos serão, para o áudio, RAW PCM, e para o vídeo, algum(s) tipo(s) de RGB e de YUV, mas também é possível utilizar o ffmpeg para converter formatos, logo talvez sejam aceitos um maior número de formatos}.
-
-j) \todo{só conseguirei imaginar outros usos possíveis ao longo da implementação do framework}.
 
 %
 % The following two commands are all you need in the
