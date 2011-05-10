@@ -149,19 +149,17 @@ Neste trabalho iremos apresentar uma nova estratégia para criação de videocon
 
 \section{Análise da SDK do Android para multimídia}
 
-Android é um sistema operacional de código aberto (desenvolvido pela empresa Google) para dispositivos móveis construído sobre uma versão modificada do kernel Linux. Em comparação aos outros sistemas operacionais para smartphones existentes, o Android é caracterizado por aplicações de vídeo mais simples. Isso se deve às limitações das APIs fornecidas pelo Android para programação de vídeo e, alternativamente, à grande complexidade para criar tais aplicativos sem a utilização dessas APIs. A dificuldade de se encontrar bons aplicativos de vídeo para Android se torna ainda mais marcante na área de STVITR.
+Android é um sistema operacional de código aberto (desenvolvido pela empresa Google) para dispositivos móveis construído sobre uma versão modificada do kernel Linux. Em comparação aos outros sistemas operacionais para smartphones existentes, o Android é caracterizado por aplicações de vídeo mais simples. Isso se deve às limitações das APIs fornecidas pelo Android para programação de vídeo e, alternativamente, à grande complexidade para criar tais aplicativos sem a utilização dessas APIs. A dificuldade de se encontrar bons aplicativos de vídeo para Android se torna ainda mais marcante na área de vídeo interativo.
 
-Devido ao crescente número de usuários do Android, a demanda por aplicações de vídeo diferenciadas (com maior número de funcionalidades) aumenta no mesmo ritmo. Para poder suprir essa demanda de forma rápida e qualificada, os desenvolvedores de aplicativos procuram por frameworks que lhes deem mais flexibilidade e mais recursos na programação em comparação às APIs tradicionais. Neste trabalho, será proposta uma solução que visa servir como alternativa às classes padrão do Android. Essa solução será implementada na forma de um framework \todo{como o framework não está completo podemos incluí-lo como trabalho futuro e apresentar apenas a solução, ou então podemos supor que o framework esta pronto, já que comprovamos que a estratégia funciona}, visando abstrair dos seus usuários (os programadores) as partes mais trabalhosas e menos intuitivas da alternativa, para que seja possível a criação de tais aplicativos de forma simples e rápida.
+Aplicativos para Android são escritos na linguagem de programação Java e executam sobre a máquina virtual Dalvik. O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos \cite{ableson_2009}.
 
-Aplicativos para Android são escritos na linguagem de programação Java e executam sobre a máquina virtual Dalvik  . O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos \cite{ableson_2009}.
-
-Considerando os dois módulos de um STVITR descritos anteriormente, as classes fornecidas pelo Android que têm utilidade para cada um desses módulos são:
+Considerando os dois módulos de um sistema de interação por vídeo descritos anteriormente, as classes fornecidas pelo Android que têm utilidade para cada um desses módulos são:
 \begin{itemize}
  \item para o módulo de origem: MediaRecorder, Camera e AudioRecord;
  \item para o módulo de destino: MediaPlayer e AudioTrack.
 \end{itemize}
 
-Existem outras classes relacionadas, porém estas apresentam pequenas extensões ou encapsulamentos das classes acima, sem importância para este trabalho. Também existem classes relacionadas ao envio e recebimento de dados genéricos pela rede que poderiam ser utilizadas em conjunto com as classes acima. A seguir as classes supracitadas serão detalhadas, e com base nas características de cada uma serão apresentadas estratégias de desenvolvimento de um STVITR bem como suas limitações.
+Existem outras classes relacionadas, porém estas apresentam pequenas extensões ou encapsulamentos das classes acima, sem importância para este trabalho. Também existem classes relacionadas ao envio e recebimento de dados genéricos pela rede que poderiam ser utilizadas em conjunto com as classes acima. A seguir as classes supracitadas serão detalhadas, e com base nas características de cada uma serão apresentadas estratégias de desenvolvimento de um sistema de vídeo interativo bem como suas limitações.
 
 \subsection{Classe MediaRecorder}
 A Classe MediaRecorder realiza a captura de áudio e de vídeo (a partir do microfone e da câmera, respectivamente) e codifica-os utilizando o hardware do aparelho. Os dados codificados podem ser salvos encapsulados em um arquivo, ou podem ser transmitidos pela rede com a utilização de sockets. A classe também pode exibir um preview da captura para o usuário local.
@@ -402,7 +400,7 @@ Também realizamos cálculos considerando a resolução máxima da tela e a orie
 \subsection{Teste 1}
 Foi testada a decodificação e a exibição de um arquivo de vídeo local com a estratégia implementada em um dispositivo HTC Magic. Como resultado, para um vídeo de resolução 176x144, foram decodificados 227 quadros por segundo. A taxa de exibição obtida foi de 60 quadros por segundo (valor máximo suportado pelo aparelho).
 \subsection{Teste 2}
-Implementamos um aplicativo de videoconferência entre dispositivos móveis com a técnica apresentada. Para testar, realizamos uma conversa por vídeo entre dois aparelhos Android caracterizados pela tabela \todo{numero da tabela}.
+Implementamos um aplicativo de videoconferência entre dispositivos móveis com a técnica apresentada. Para testar, realizamos uma conversa por vídeo com dois aparelhos Android caracterizados pela tabela \todo{numero da tabela}.
 \begin{table*}
 \centering
 \caption{Dispositivos utilizados nos testes}
@@ -473,9 +471,6 @@ Neste teste, o aplicativo Android recebeu um vídeo em tempo real codificado com
 \subsection{Teste 5}
 Também integramos nossa estratégia a um outro sistema de videoconferências já existente chamado BigBlueButton, que funcionava apenas para desktops. Recebemos, no aplicativo Android, um fluxo de vídeo do BigBlueButton gerado por um desktop. O codec de vídeo utilizado foi FLV1 (também conhecido como Sorenson H.263), a uma resolução de 320x240. O vídeo foi exibido ampliado na máxima resolução no Samsung e no Motorola especificados na tabela \todo{numero tabela} e também em um tablet rodando Android. O delay ficou abaixo dos 400ms. \todo{inserir foto}.
 
-\todo{Apresentar a integração ao mconf}.
-
-\todo{Verificar se não houve outros testes que podem ser incluídos}.
 
 \section{Conclusão}
 
@@ -483,7 +478,7 @@ Também integramos nossa estratégia a um outro sistema de videoconferências j�
 
 \section{Trabalhos futuros}
 
-Estamos desenvolvendo um framework que irá encapsular todas as partes complexas da implementação dessa técnica. O framework permitirá que seja possível implementar aplicativos de interação por vídeo com a estratégia acima de modo simples e rápido, mas ao mesmo tempo oferecendo flexibilidade ao programador com relação a aspectos como, por exemplo, escolha do codec de vídeo a ser utilizado e a escolha da forma de transmissão/recepção dos dados codificados. Por exemplo, o programador, se desejar, poderá implementar seu próprio protocolo para transmissão, utilizar um protocolo padrão já existente, ou utilizar a transmissão fornecida pelo framework. Também será possível utilizar o framework para arquivos de vídeo locais que estão codificados com codecs ou formatos não suportados em hardware pelo android, visto que o ffmpeg suporta, em software, um número muito grande de codecs.
+Estamos desenvolvendo um framework que irá encapsular todas as partes complexas da implementação dessa técnica. O framework permitirá que seja possível implementar aplicativos de interação por vídeo com a estratégia acima de modo simples e rápido, mas ao mesmo tempo oferecendo flexibilidade ao programador com relação a aspectos como, por exemplo, escolha dos codecs a serem utilizado e a escolha da forma de transmissão/recepção dos dados codificados. Por exemplo, o programador, se desejar, poderá implementar seu próprio protocolo para transmissão, utilizar um protocolo padrão já existente, ou utilizar a transmissão fornecida pelo framework. Também será possível utilizar o framework para arquivos de vídeo locais que estão codificados com codecs ou formatos não suportados em hardware pelo android, visto que o ffmpeg suporta, em software, um número muito grande de codecs.
 
 %
 % The following two commands are all you need in the
