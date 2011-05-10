@@ -120,20 +120,16 @@ Valter Roesler\\
 
 \todo{verificar termos que serão utilizados}
 
-\todo{fazer introdução}
-
-\section{Vídeo interativo em tempo real}
-
-\todo{este é um capítulo que provavelmente iremos reduzir ou remover para caber tudo em oito páginas}
+\todo{este é um capítulo que provavelmente iremos reduzir para caber tudo em oito páginas}
 
 Um sistema que permite que uma pessoa comunique-se, ao vivo, com uma ou mais
-pessoas, cada qual em sua máquina, através da transmissão da sua fala (capturada pelo microfone) e da sua imagem em forma de vídeo (capturada pela câmera), ao mesmo tempo em que escuta e visualiza os outros participantes, representa um sistema de transmissão de vídeo interativo em tempo real (doravante chamado STVITR) \todo{melhorar essa abreviação}. Tais sistemas são complexos de serem desenvolvidos, já que, além da necessidade do áudio e do vídeo serem transmitidos, recebidos e exibidos de forma contínua por todos os participantes, é preciso que essa transmissão ocorra com um baixíssimo atraso: se o intervalo de tempo entre o instante da captura do áudio e do vídeo e o instante da sua exibição nas máquinas dos outros participantes for maior que 400 milissegundos, por exemplo, o resultado pode ser uma interação altamente frustrante \cite{kurose_1999}.
+pessoas, cada qual em sua máquina, através da transmissão da sua fala (capturada pelo microfone) e da sua imagem em forma de vídeo (capturada pela câmera), ao mesmo tempo em que escuta e visualiza os outros participantes, representa um sistema de transmissão de vídeo interativo em tempo real. Tais sistemas são complexos de serem desenvolvidos, já que, além da necessidade do áudio e do vídeo serem transmitidos, recebidos e exibidos de forma contínua por todos os participantes, é preciso que essa transmissão ocorra com um baixíssimo atraso: se o intervalo de tempo entre o instante da captura do áudio e do vídeo e o instante da sua exibição nas máquinas dos outros participantes for maior que 400 milissegundos, por exemplo, o resultado pode ser uma interação altamente frustrante \cite{kurose_1999}.
 
 É um desafio desenvolver com qualidade tais sistemas pois as redes atuais, em geral, suportam apenas uma pequena taxa de bit/s. O desafio se torna ainda maior na área dos dispositivos móveis, que, além de terem hardware limitado, que torna a tarefa da decodificação e da exibição do vídeo menos eficiente, também têm limitações de rede, pois costumam utilizar 3G ou Internet sem fio, ambos suscetíveis a alta perda de pacotes e, na maioria das vezes, a baixas velocidades (HUYNH-THU; GHANBARI, 2008).
 
 Um exemplo de utilização dessa técnica se dá em videoconferências, que correspondem a reuniões remotas nas quais os participantes podem, por vídeo, interagir e colaborar com o propósito da reunião. Mesmo estando, cada um, em lugares diferentes, a utilização do vídeo lhes sugere que todos estão presentes em uma mesma sala, aumentando a efetividade da colaboração em comparação a uma reunião remota por texto ou por voz apenas (TSCHÖKE, 2001).
 
-Um STVITR pode ser dividido, basicamente, em dois módulos:
+Um vídeo interativo pode ser dividido, basicamente, em dois módulos:
 \begin{itemize}
  \item Um módulo para gerenciar o lado da origem, dividido em 3 sub-módulos:
  \begin{itemize}
@@ -148,6 +144,8 @@ Um STVITR pode ser dividido, basicamente, em dois módulos:
   \item Um sub-módulo para renderizar os quadros de áudio e de vídeo decodificados.
  \end{itemize}
 \end{itemize}
+
+Neste trabalho iremos apresentar uma nova estratégia para criação de videoconferências em dispositivos móveis com sistema operacional Android.
 
 \section{Limitações das classes padrão do Android para desenvolver um STVITR}
 
