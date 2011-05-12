@@ -94,32 +94,30 @@ Valter Roesler\\
 
 \maketitle
 \begin{resumo}
-  Este artigo tem o objetivo de apresentar uma nova estratégia para criação de videoconferências em dispositivos móveis com sistema operacional Android. Será apresentado um estudo sobre as classes multimídia padrão do kit de desenvolvimento de software do Android, detalhando as limitações que dificultam o desenvolvimento de sistemas multimídia em tempo real sem a utilização de bibliotecas externas. Várias soluções são comparadas, ressaltando prós e contras, e conduzindo a necessidade da utilização de uma nova estratégia, detalhada neste artigo, que é baseada principalmente em bibliotecas alternativas. A ideia proposta é então validada num sistema Android real, mostrando suas vantagens.
+  Este artigo tem o objetivo de apresentar uma nova estratégia para criação de videoconferências em dispositivos móveis com sistema operacional Android. É apresentado um estudo sobre as classes multimídia padrão do kit de desenvolvimento de software do Android, detalhando as limitações que dificultam o desenvolvimento de sistemas multimídia em tempo real sem a utilização de bibliotecas externas. Várias soluções propostas em trabalhos anteriores são comparadas, ressaltando prós e contras, e conduzindo a necessidade da utilização de uma nova estratégia, detalhada neste artigo, que é baseada principalmente em bibliotecas alternativas. A ideia proposta é então validada num sistema Android real, mostrando suas vantagens.
 \end{resumo}
 
 \begin{abstract}
-  This article aims to present a strategy for implementation of real-time interactive multimedia systems on Android-powered mobile devices. We will present a study about the standard multimedia classes of Android’s software development kit, detailing the limitations that hinder the development of real time multimedia systems without using external libraries. Some alternative solutions proposed in previous works will be presented, highlighting pros and cons of each one, concluding with the contribution of this paper, a solution based primarily on alternative libraries.
+  This paper aims to present a novel strategy for implementation of real-time interactive multimedia systems on Android-powered mobile devices. We will present a study about the standard multimedia classes of Android’s software development kit, detailing the limitations that hinder the development of real time multimedia systems without using external libraries. Some alternative solutions proposed in previous works will be presented, driving to the need of using a new strategy, detailed in this article, which is based primarily on alternative libraries. The proposed idea is then validated in a real Android system, showing its advantages.
 \end{abstract}
 
 % http://www.acm.org/about/class/ccs98-html
 % A category with the (minimum) three required fields
-\category{}{Peer-to-peer multimedia systems and streaming}{}
-\category{}{Software development using multimedia techniques}{}
+%\category{}{Peer-to-peer multimedia systems and streaming}{}
+%\category{}{Software development using multimedia techniques}{}
 %\category{H.4}{Information Systems Applications}{Miscellaneous}
 
-%\terms{Theory}
+
+\category{C.3}{Special-purpose and application-based systems}{Real-time and embedded systems}
+\category{J.7}{Computers in other systems}{Real time}
+\category{I.6}{Simulation and modeling}{Applications}
+\category{H.4}{Information systems applications}{Communications Applications}{Computer conferencing, teleconferencing, and videoconferencing}
+
+\terms{Design, Experimentation}
 
 \keywords{Interação multimídia de tempo real, Vídeo, JNI}
 
 \section{Introdução}
-
-\todo{verificar se os autores ficarão dessa forma ou agrupados}
-
-\todo{verificar categorias oficiais da acm}
-
-\todo{verificar termos que serão utilizados}
-
-\todo{este é um capítulo que provavelmente iremos reduzir para caber tudo em oito páginas}
 
 Um sistema que permite que uma pessoa comunique-se, ao vivo, com uma ou mais
 pessoas, cada qual em sua máquina, através da transmissão da sua fala (capturada pelo microfone) e da sua imagem em forma de vídeo (capturada pela câmera), ao mesmo tempo em que escuta e visualiza os outros participantes, representa um sistema de transmissão de vídeo interativo em tempo real. Tais sistemas são complexos de serem desenvolvidos, já que, além da necessidade do áudio e do vídeo serem transmitidos, recebidos e exibidos de forma contínua por todos os participantes, é preciso que essa transmissão ocorra com um baixíssimo atraso: se o intervalo de tempo entre o instante da captura do áudio e do vídeo e o instante da sua exibição nas máquinas dos outros participantes for maior que 400 milissegundos, por exemplo, o resultado pode ser uma interação altamente frustrante \cite{kurose_2001}.
@@ -144,13 +142,15 @@ Um vídeo interativo pode ser dividido, basicamente, em dois módulos:
  \end{itemize}
 \end{itemize}
 
-Neste trabalho iremos apresentar uma nova estratégia para criação de videoconferências em dispositivos móveis com sistema operacional Android.
+Neste trabalho iremos apresentar uma nova estratégia para criação de videoconferências em dispositivos móveis com sistema operacional Android. Para justificar as escolhas feitas e a utilização de bibliotecas alternativas, primeiramente faremos uma análise da SDK do Android para multimídia, seguida de uma comparação de possíveis estratégias, levantadas por trabalhos anteriores, para desenvolvimento de sistemas de interação por vídeo em tempo real com a utilização das classes padrão do Android apenas, e de suas limitações. Por fim, para validar a estratégia, são realizadas implementações e os devidos resultados são apresentados.
 
 \section{Análise da SDK do Android para multimídia}
 
 Android é um sistema operacional de código aberto para dispositivos móveis, desenvolvido numa colaboração entre Google e outros membros da Open Handset Alliance, e baseado no núcleo do Linux. Em comparação aos outros sistemas operacionais para smartphones existentes, o Android é caracterizado por aplicações de vídeo mais simples. Isso se deve às limitações das APIs fornecidas pelo Android para programação de vídeo e, alternativamente, à grande complexidade para criar tais aplicativos sem a utilização dessas APIs. A dificuldade de se encontrar bons aplicativos de vídeo para Android se torna ainda mais marcante na área de vídeo interativo.
 
-Aplicativos para Android são escritos na linguagem de programação Java e executam sobre a máquina virtual Dalvik. O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos \cite{ableson_2009}.
+Aplicativos para Android são escritos na linguagem de programação Java e executam sobre a máquina virtual Dalvik. O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos \cite{ableson_2009}. 
+
+É possível, ainda, desenvolver aplicativos em C/C++, visto que o Android roda sobre um kernel Linux (FU et al., 2010). Para isso, é necessário utilizar o kit de desenvolvimento nativo para Android (Android NDK). A necessidade de que parte do aplicativo seja escrito em Java, contudo, se mantém. A interação entre o código Java e o código nativo é feita com a utilização da JNI (Java Native Interface), que é uma interface que permite que um código que está rodando em uma máquina virtual chame e seja chamado por um código nativo (FU et al., 2010).
 
 Considerando os dois módulos de um sistema de interação por vídeo descritos anteriormente, as classes fornecidas pelo Android que têm utilidade para cada um desses módulos são:
 \begin{itemize}
@@ -169,7 +169,7 @@ A utilização do MediaRecorder acontece da seguinte forma:
   \begin{verbatim}
 MediaRecorder mMediaRecorder = new MediaRecorder();
   \end{verbatim}
- \item Escolher se as fontes de áudio e vídeo:
+ \item Escolher as fontes de áudio e vídeo:
   \begin{verbatim}
 mMediaRecorder.setAudioSource(<fonte de áudio>);
 mMediaRecorder.setVideoSource(<fonte de vídeo>);
@@ -317,7 +317,7 @@ mAudioTrack.play();
 
 \subsubsection{Do lado da origem}
 
-Esta estratégia consiste em iniciar uma captura de áudio e de vídeo com a classe MediaRecorder passando como parâmetro ao método setOutputFile um descritor de arquivo local (ex: /sdcard/temp0.3gp) e finalizar a captura após um período curto (ex: 2 segundos). Os dados codificados do arquivo que está sendo gerado vão sendo enviados desde o início da captura, utilizando uma classe do Android para transmissão genérica de dados. Seria muito mais simples passar como parâmetro ao método setOutputFile um socket localizado no destino. Assim os dados seriam enviados diretamente sem a utilização de arquivo local. No entanto, estamos querendo criar um sistema de STVITR utilizando apenas as classes padrão do Android, e a classe MediaPlayer (única capaz de reproduzir vídeo) reproduz apenas dados encapsulados ou com o container 3GPP ou com o container MPEG-4 (exceto quando é utilizado RTSP, que será abordado na estratégia seguinte). Ambos containers são muito similares, e só podem ser incluídos ao final da gravação do arquivo. A classe MediaRecorder, ao final da gravação de um arquivo, insere, no início do arquivo, o header e os metadados do container escolhido. O método, então, ao finalizar o período curto de gravação, abre o início do arquivo que foi gerado localmente e envia os headers e os metadados para o destino. Enquanto os headers e os metadados são enviados, repete-se todo o processo com outro arquivo local (ex: /sdcard/temp1.3gp) de mesma duração do anterior, e assim sucessivamente. \todo{dividir esse parágrafo em mais de um!}
+Esta estratégia consiste, primeiramente, em iniciar uma captura de áudio e de vídeo com a classe MediaRecorder passando como parâmetro ao método setOutputFile um descritor de arquivo local (ex: /sdcard/temp0.3gp) e finalizar a captura após um período curto (ex: 2 segundos). Os dados codificados do arquivo que está sendo gerado vão sendo enviados desde o início da captura, utilizando uma classe do Android para transmissão genérica de dados. Ao finalizar o período curto de gravação, a classe MediaRecorder insere, no ínicio do arquivo, o header e os metadados do container escolhido (que pode ser 3GPP ou MPEG-4) e envia os headers e os metadados do arquivo local para o destino. Enquanto os headers e os metadados são enviados, repete-se todo o processo com outro arquivo local (ex: /sdcard/temp1.3gp) de mesma duração do anterior, e assim sucessivamente.
 
 \subsubsection{Do lado do destino}
 
@@ -325,64 +325,14 @@ O lado do destino vai recebendo os dados de áudio e vídeo que estão sendo env
 
 \subsubsection{Análise da estratégia}
 
-Segundo \todo{trab alemao}, a classe MediaRecorder leva 1,3 segundos (em média) para ser inicializada. E não é possivel inicializar um novo MediaRecorder antes de finalizar o anterior. Logo, utilizando esta estratégia, ocorreriam períodos de 1,3 segundos em que não se poderia capturar nada. Do lado do destino, considerando apenas essa limitação, isso seria percebido como travamentos de 1,3 segundos no vídeo seguidos de saltos de 1,3 segundos na sua exibição. A classe MediaPlayer só pode ser inicializada quando o arquivo estiver pronto, e a demora na sua inicialização é, em média, 0,83 segundos.
-supondo:
+Segundo \todo{trab alemao}, a classe MediaRecorder leva 1,3 segundos (em média) para ser inicializada, e não é possivel inicializar um novo MediaRecorder antes de finalizar o anterior. Logo, utilizando esta estratégia, ocorreriam períodos de 1,3 segundos em que não se poderia capturar nada. Do lado do destino, considerando apenas essa limitação, isso seria percebido como travamentos de 1,3 segundos no vídeo seguidos de saltos de 1,3 segundos na sua exibição. A classe MediaPlayer só pode ser inicializada quando o arquivo estiver pronto (com o header e os metadados, inclusive), e a demora na sua inicialização é, em média, 0,83 segundos.
 
-\begin{itemize}
- \item duração de cada captura = 2s.
- \item tempo para inicializar a classe MediaRecorder = 1.3s.
- \item tempo para inicializar a classe MediaPlayer = 0.9s.
- \item tempo para a classe MediaRecorder inserir os metadados no início do arquivo = 0.1s.
- \item tempo para o lado do destino inserir os metadados no início do arquivo = 0.1s.
- \item tempo para transmitir um pacote pela rede = 0.1s.
- \item t = 0s a 1.3s: lado da origem: Classe MediaRecorder é inicializada.
- \item t = 1.3s: lado da origem: a inicialização da Classe MediaRecorder está pronta e a captura inicia.
- \item t = 1.3s a 3.3s: lado da origem: o arquivo local “01origem” está sendo gerado e os dados úteis do vídeo estão sendo transmitidos.
- \item t = 1.4s: lado do destino: os primeiros pacotes começam a ser recebidos.
- \item t = 3.3s: lado da origem: a captura é finalizada.
- \item t = 3.4s: lado da origem: os metadados são inseridos pela classe MediaRecorder no início do arquivo local “01origem”. Em seguida o header e os metadados são enviados ao destino.
- \item t = 3.4s: lado do destino: todos os pacotes de áudio e vídeo já foram recebidos. Faltam o header e os metadados.
- \item t = 3.4s: lado da origem: a classe MediaRecorder é inicializada novamente.
- \item t = 3.5s: lado do destino: o header e os metadados são recebidos.
- \item t = 3.6s: destino: o header e os metadados são inseridos no início do arquivo “01destino”.
- \item t = 3.6s: destino: a classe MediaPlayer é inicializada.
- \item t = 4.5s: destino: a classe MediaPlayer começa a renderização do arquivo “01destino”. (atraso = 4.5 - 1.3 = 3.2s).
- \item t = 4.7s: origem: a inicialização da Classe MediaRecorder está pronta e a captura inicia.
- \item t = 4.7s a 6.7s: origem: o arquivo local “02origem” está sendo gerado e os dados úteis do vídeo estão sendo transmitidos.
- \item t = 4.8s: destino: os primeiros pacotes da nova captura começam a ser recebidos.
- \item t = 6.5s: destino: a classe MediaPlayer finaliza a renderização do arquivo “01destino”.
- \item t = 6.7s: origem: a captura é finalizada.
- \item t = 6.8s: lado da origem: os metadados são inseridos pela classe MediaRecorder no início do arquivo local “02origem”. Em seguida o header e os metadados são enviados ao destino.
- \item t = 6.8s: destino: todos os pacotes de áudio e vídeo já foram recebidos. Faltam o header e os metadados.
- \item t = 6.8s: origem: a classe MediaRecorder é inicializada novamente.
- \item t = 6.9s: destino: o header e os metadados são recebidos.
- \item t = 7.0s: destino: o header e os metadados são inseridos no início do arquivo “02destino”.
- \item t = 7,0s: destino: a classe MediaPlayer é inicializada.
- \item t = 7.9s: destino: a classe MediaPlayer começa a renderização do arquivo “02destino”. (atraso = 7.9 - 4.7 = 3.2s. Tempo sem exibição = 7.9 - 6.5 = 1.4s).
- \item t = 8.1s: origem: a inicialização da Classe MediaRecorder está pronta e a captura inicia.
- \item t = 8.1s a 10.1s: origem: o arquivo local “03origem” está sendo gerado e os dados úteis do vídeo estão sendo transmitidos.
- \item t = 8.2s: destino: os primeiros pacotes da nova captura começam a ser recebidos.
- \item t = 9.9s: destino: a classe MediaPlayer finaliza a renderização do arquivo “02destino”.
- \item t = 10.1s: origem: a captura é finalizada.
- \item t = 10.2s: lado da origem: os metadados são inseridos pela classe MediaRecorder no início do arquivo local “03origem”. Em seguida o header e os metadados são enviados ao destino.
- \item t = 10.2s: destino: todos os pacotes de áudio e vídeo já foram recebidos. Faltam o header e os metadados.
- \item t = 10.2s: origem: a classe MediaRecorder é inicializada novamente.
- \item t = 10.3s: destino: o header e os metadados são recebidos.
- \item t = 10.4s: destino: o header e os metadados são inseridos no início do arquivo “03destino”.
- \item t = 10.4s: destino: a classe MediaPlayer é inicializada.
- \item t = 11.3s: destino: a classe MediaPlayer começa a renderização do arquivo “03destino”. (atraso = 11.3 - 8.1 = 3.2s. Tempo sem exibição = 11.3 - 9.9 = 1.4s).
-\end{itemize}
-
-E assim por diante. \todo{talvez fosse melhor representar essa linha de tempo com uma imagem}
-
-\todo{muito dado, na minha opinião. ficou muito longa essa parte. remover a linha do tempo e explicar em parágrafos a essência.}
-
-Portanto, nessa simulação, o atraso é de 3.2 segundos. Além disso, ocorrem pausas de 1.4s a cada 2s de exibição do vídeo. Em um STVITR, o atraso não deve ultrapassar 400ms. Não existe uma norma para determinar a aceitabilidade pausas na exibição, mas é evidente que as pausas obtidas nesse método tornariam a comunicação altamente frustrante. O autor reconhece que a técnica não serve para STVITR, mas seu objetivo era identificar as limitações das APIs e propor a melhor aproximação possível de um STVITR. Segundo o autor, essa provavelmente é a técnica possível de ser implementada com as classes padrão do Android que mais se aproxima de um STVITR. No entanto, ele deixa claro que sempre podem surgir novas ideias. 
+O delay obtido seria equivalente a duração de cada captura, somado ao tempo para a classe MediaRecorder inserir os metadados no início do arquivo, somado ao tempo para transmitir um pacote pela rede da origem ao destino, somado ao tempo para o lado do destino inserir os metadados no início do arquivo, somado ao tempo para inicializar a classe MediaPlayer. O autor reconhece que a técnica não serve para interação por vídeo, mas seu objetivo era identificar as limitações das APIs e propor a melhor aproximação possível de um sistema de vídeo interativo. Segundo o autor, essa provavelmente é a técnica possível de ser implementada com as classes padrão do Android que mais se aproxima de um sistema de vídeo interativo. No entanto, ele deixa claro que sempre podem surgir novas ideias.
 
 \subsection{Estratégia 2}
 É a técnica implementada em \todo{sipdroid}.
 
-Esta técnica utiliza a capacidade da classe MediaPlayer em reproduzir conteúdo ao vivo \todo{diferenciar conteúdo ao vivo de conteúdo em tempo real} utilizando o protocolo RTSP.
+Esta técnica utiliza a capacidade da classe MediaPlayer em reproduzir conteúdo ao vivo utilizando o protocolo RTSP.
 
 \subsubsection{Lado da origem}
 A classe MediaRecorder é utilizada para capturar vídeo. O método setOutputFile recebe como parâmetro um descritor de arquivo obtido de um socket implementado pela classe LocalSocket do Android. Isso significa que os dados capturados não são salvos em um arquivo local, mas sim diretamente enviados para um socket. Os dados do socket são lidos e tratados para ficarem de acordo com o protocolo RTSP.
@@ -391,7 +341,7 @@ A classe MediaRecorder é utilizada para capturar vídeo. O método setOutputFil
 A classe MediaPlayer é inicializada e o seu método setDataSource é setado para o endereço do stream RTSP.
 
 \subsubsection{Análise do método}
-O método acaba resultando em um sistema de vídeo ao vivo, e não em um STVITR, pois a implementação de RTSP do Android não serve para tempo real. Para provar isso, realizamos o seguinte teste :
+O método acaba resultando em um sistema de vídeo ao vivo, e não em um sistema de interação por vídeo em tempo real, pois a implementação de RTSP do Android não serve para tempo real. Para provar isso, realizamos o seguinte teste :
 
 \begin{enumerate}
  \item Capturamos vídeo com uma webcam conectada a um desktop utilizando o software VideoLAN .
@@ -407,7 +357,7 @@ Comparado ao método anterior, neste método não ocorrem pausas na exibição. 
 
 \subsection{Estratégia 3}
 
-Ao invés de utilizar a classe MediaRecorder para capturar, utilizar as classes Camera e AudioRecord. Com ambas as classes é possível se obter os dados não codificados dos quadros de vídeo e de áudio capturados. No entanto, não há nenhuma classe padrão do android que receba como parâmetro um quadro não codificado e que codifique-o. E quadros não codificados são grandes demais para serem transmitidos pela rede em tempo viável para STVITR. Poderia ser implementado um codificador/decodificador em Java. No entanto, a tarefa da codificação/decodificação é extremamente custosa computacionalmente, além de ser muito complexa de ser desenvolvida. Implementar uma tarefa custosa em uma linguagem que roda em máquina virtual que, por sua vez, roda em um dispositivo de baixo poder computacional, seria pouco eficiente. Além disso, mesmo que fosse possível codificar os quadros em Java, enviá-los ao destino e decodificá-los em Java em tempo viável para STVITR, não haveria como reproduzí-los utilizando as classes padrão do Android, visto que nenhuma delas tem a capacidade de receber como parâmetros quadros decodificados. Logo, esta estratégia não é possível.
+Ao invés de utilizar a classe MediaRecorder para capturar, utilizar as classes Camera e AudioRecord. Com ambas as classes é possível se obter os dados não codificados dos quadros de vídeo e de áudio capturados. No entanto, não há nenhuma classe padrão do android que receba como parâmetro um quadro não codificado e que codifique-o. E quadros não codificados são grandes demais para serem transmitidos pela rede em tempo viável para vídeo interativo. Poderia ser implementado um codificador/decodificador em Java. No entanto, a tarefa da codificação/decodificação é extremamente custosa computacionalmente, além de ser muito complexa de ser desenvolvida. Implementar uma tarefa custosa em uma linguagem que roda em máquina virtual que, por sua vez, roda em um dispositivo de baixo poder computacional, seria pouco eficiente. Além disso, mesmo que fosse possível codificar os quadros em Java, enviá-los ao destino e decodificá-los em Java em tempo viável, não haveria como reproduzí-los utilizando as classes padrão do Android, visto que nenhuma delas tem a capacidade de receber como parâmetros quadros decodificados. Logo, esta estratégia não é possível.
 
 \subsection{Estratégia 4}
 
@@ -421,10 +371,10 @@ Receber cada frame e exibí-lo com alguma classe padrão do Android que decodifi
 
 \subsubsection{Análise da estratégia}
 
-Codecs de vídeo são mais eficazes que o codec de imagens JPEG, visto que um vídeo é um conjunto de imagens relacionadas entre si, e a compressão é realizada com base na relação entre essas imagens. Um codec JPEG apenas comprime uma imagem sem relacioná-la com nenhuma outra, portanto tem menos poder de compressão. Além disso, a função foto do Android não foi projetada para este uso e é pouco eficiente. Um dos motivos é que quando a função foto é chamada, o preview do vídeo capturado é interrompido. Para tirar uma nova foto é preciso reiniciar o preview. O método em si não foi testado, mas certamente a taxa de frames e o atraso obtidos não chegariam perto do recomendado para STVITR. Outro problema dessa estratégia é não ter um correspondente para o áudio. Somente o vídeo seria transmitido.
+Codecs de vídeo são mais eficazes que o codec de imagens JPEG, visto que um vídeo é um conjunto de imagens relacionadas entre si, e a compressão é realizada com base na relação entre essas imagens. Um codec JPEG apenas comprime uma imagem sem relacioná-la com nenhuma outra, portanto tem menos poder de compressão. Além disso, a função foto do Android não foi projetada para este uso e é pouco eficiente. Um dos motivos é que quando a função foto é chamada, o preview do vídeo capturado é interrompido. Para tirar uma nova foto é preciso reiniciar o preview. O método em si não foi testado, mas certamente a taxa de frames e o atraso obtidos não chegariam perto do recomendado. Outro problema dessa estratégia é não ter um correspondente para o áudio. Somente o vídeo seria transmitido.
 
 \subsection{Estratégia 5}
-Como o Android é de código aberto, essa estratégia seria copiar as libraries nativas (C/C++) internas (privadas) ao sistema operacional que interagem com as classes java MediaPlayer e MediaRecorder e com o hardware dos aparelhos e colá-las no em um novo projeto. Em seguida, compilaríamos essas libraries dentro do nosso projeto, com a utilização da NDK \todo{explicar o que é a ndk}. Desse modo, teríamos acesso aos quadros codificados/decodificados pelo hardware e, desse modo, poderíamos utilizar alguma classe genérica de transmissão de dados do Android para realizar a transmissão/recepção desses quadros. Assim, a implementação ficaria desta forma:
+Como o Android é de código aberto, essa estratégia seria copiar as libraries nativas (C/C++) internas (privadas) ao sistema operacional que interagem com as classes java MediaPlayer e MediaRecorder e com o hardware dos aparelhos e colá-las no em um novo projeto. Em seguida, compilaríamos essas libraries dentro do nosso projeto, com a utilização da NDK. Desse modo, teríamos acesso aos quadros codificados/decodificados pelo hardware e, desse modo, poderíamos utilizar alguma classe genérica de transmissão de dados do Android para realizar a transmissão/recepção desses quadros. Assim, a implementação ficaria desta forma:
 
 Captura: câmera e microfone seriam acessados diretamente pelo C++, utilizando as libraries privadas do android correspondentes.
 
@@ -442,16 +392,16 @@ Esta seria a solução mais eficiente possível, visto que todas as tarefas pesa
 
 \section{Solução adotada}
 
-Pela análise acima, pode-se perceber que não foi possível contruir um STVITR utilizando-se apenas as classes padrão do Android. É claro que novas idéias podem surgir. A solução adotada baseia-se em algumas das classes padrão do Android apresentadas, mas sua parte principal é focada em implementações independentes.
+Pela análise acima, pode-se perceber que não foi possível contruir um sistema de interação por vídeo em tempo real utilizando-se apenas as classes padrão do Android (é claro que novas ideias podem surgir). A solução adotada baseia-se em algumas das classes padrão do Android apresentadas, mas sua parte principal é focada em implementações independentes.
 
 A solução consiste em:
 
 \subsection{Lado da origem}
 \begin{enumerate}
- \item Utilizar a classe Camera para capturar os quadros de vídeo e instalar um callback que receba cada frame não codificado obtido da captura. Com o auxilio dessa API, nós setamos os parâmetros de captura desejados (resolução, quadros/s, etc) e enviamos cada frame capturado no formato YUV420SP (também conhecido como NV21, que é o único formato de captura suportado por todos os aparelhos Android) para o C++. A JNI \todo{explicar o que é a JNI} é utilizada para passar os frames do Java para o C++.
+ \item Utilizar a classe Camera para capturar os quadros de vídeo e instalar um callback que receba cada frame não codificado obtido da captura. Com o auxilio dessa API, nós setamos os parâmetros de captura desejados (resolução, quadros/s, etc) e enviamos cada frame capturado no formato YUV420SP (também conhecido como NV21, que é o único formato de captura suportado por todos os aparelhos Android) para o C++. A JNI é utilizada para passar os frames do Java para o C++.
 Um detalhe que convém citar é a utilização de Java reflection \todo{explicar o que é java reflection} para que se possa utilizar a função setPreviewCallbackWithBuffer em versões do android anteriores a 2.2, quase dobrando a taxa de frames em comparação ao método setPreviewCallback, visto que essa função evita que o GC (garbage collector do android) interrompa o programa a cada frame.
  \item Utilizar a classe AudioRecord para capturar os quadros de áudio, e obter os quadros não codificados da captura. Para isso desenvolvemos uma classe em Java que faz uso da classe AudioRecord, e captura o audio do microfone. Cada frame capturado é enviado ao C++ no formato RAW (PCM) com a utilização da JNI.
- \item Como o Android roda sobre um kernel Linux (FU et al., 2010), foi possível compilar o ffmpeg \todo{explicar o que é o ffmpeg} em C (com a NDK) adaptado para o Android. Desse modo, é possível codificar cada quadro de forma mais eficiente que em um codificador Java. No entanto, a implementação de diversos codecs de vídeo importantes fornecida pelo ffmpeg requer que o quadro decodificado de entrada esteja no formato YUV420P. Nesses casos, antes de codificar o quadro, é preciso convertê-lo de YUV420SP para YUV420P, numa função implementada por nós.
+ \item Como o Android roda sobre um kernel Linux (FU et al., 2010), foi possível compilar o ffmpeg (que é uma solução que pode ser utilizada como uma biblioteca para codificar e decodificar vídeo em software \todo{(FFMPEG, 2010)}) em C (com a NDK) adaptado para o Android. Desse modo, é possível codificar cada quadro de forma mais eficiente que em um codificador Java. No entanto, a implementação de diversos codecs de vídeo importantes fornecida pelo ffmpeg requer que o quadro decodificado de entrada esteja no formato YUV420P. Nesses casos, antes de codificar o quadro, é preciso convertê-lo de YUV420SP para YUV420P, numa função implementada por nós.
  \item Enviar os frames codificados para o destino utilizando a implementação de sockets do C/C++. (Poderia-se passar os quadros codificados para o Java e enviá-los com alguma classe padrão do Android, mas a tarefa de passar os quadros com a JNI é custosa e complexa de ser implementada).
 \end{enumerate}
 
@@ -498,7 +448,6 @@ Os parâmetros de codificação de áudio utilizados no teste foram:
  \item Frequência: 22050Hz
  \item Bits por amostra: 16
  \item Canais: 1
- \item Taxa de quadros: 19/s \todo{fps pra áudio?}
 \end{itemize}
 O vídeo era ampliado com o OpenGL ES para a resolução máxima do respectivo aparelho. A tabela~\ref{tabela_teste2} exibe os resultados do teste.
 \begin{table*}
@@ -550,7 +499,9 @@ Também integramos nossa estratégia a um outro sistema de videoconferências j�
 
 \section{Conclusão}
 
-\todo{escrever conclusão}
+Este artigo apresenta uma solução para implementar transmissão de vídeo interativo em tempo real para Android, sendo consistente com versões do Android maiores ou iguais a 1.5. Os aspectos inovadores da estratégia são, principalmente, a codificação/decodificação de áudio e vídeo em software (com o ffmpeg compilado para o Android), a utilização da JNI para manipular os dados de áudio e de vídeo entre a camada nativa e a camada Java e a utilização de OpenGL ES para renderizar o vídeo. Todas essas escolhas são justificadas através de um estudo sobre as classes padrão do Android e suas limitações, seguida de uma comparação de estratégias propostas por trabalhos anteriores e seus resultados. Os testes da implementação da solução são apresentados, e seus resultados validam a utilização da técnica na implementação desse tipo de sistema.
+
+\todo{traduzir para portugues, tirado do artigo anterior} Overall, the article showed a good alternative solution for videoconferencing without the need for utilization of specific protocols such as SIP and RTSP without losing compatibility with different versions of Android. This solution is also one of the few that do not depend on Media Player class from Android’s API, making it different, mainly in the videoconferencing and decoding of higher amount of codecs. Unlike the related work mentioned, our solution not only performs the decoding and encoding of audio/video, but also makes the transmission and reception in real time, allowing its use for videoconferencing. As the decoding is performed in software, you can use any codec supported by FFmpeg, even if the codec is not supported by the device’s hardware.
 
 \section{Trabalhos futuros}
 
