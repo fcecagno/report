@@ -149,7 +149,7 @@ Neste trabalho iremos apresentar uma nova estratégia para criação de videocon
 
 \section{Análise da SDK do Android para multimídia}
 
-Android é um sistema operacional de código aberto (desenvolvido pela empresa Google) para dispositivos móveis construído sobre uma versão modificada do kernel Linux. Em comparação aos outros sistemas operacionais para smartphones existentes, o Android é caracterizado por aplicações de vídeo mais simples. Isso se deve às limitações das APIs fornecidas pelo Android para programação de vídeo e, alternativamente, à grande complexidade para criar tais aplicativos sem a utilização dessas APIs. A dificuldade de se encontrar bons aplicativos de vídeo para Android se torna ainda mais marcante na área de vídeo interativo.
+Android é um sistema operacional de código aberto para dispositivos móveis, desenvolvido numa colaboração entre Google e outros membros da Open Handset Alliance, e baseado no núcleo do Linux. Em comparação aos outros sistemas operacionais para smartphones existentes, o Android é caracterizado por aplicações de vídeo mais simples. Isso se deve às limitações das APIs fornecidas pelo Android para programação de vídeo e, alternativamente, à grande complexidade para criar tais aplicativos sem a utilização dessas APIs. A dificuldade de se encontrar bons aplicativos de vídeo para Android se torna ainda mais marcante na área de vídeo interativo.
 
 Aplicativos para Android são escritos na linguagem de programação Java e executam sobre a máquina virtual Dalvik. O desenvolvimento de aplicativos é feito com o kit de desenvolvimento de software para Android (Android SDK). Esse kit fornece diversas ferramentas úteis (como depuradores de código, emuladores e APIs) além de oferecer plataformas que permitem a compilação de aplicativos \cite{ableson_2009}.
 
@@ -162,40 +162,76 @@ Considerando os dois módulos de um sistema de interação por vídeo descritos 
 Existem outras classes relacionadas, porém estas apresentam pequenas extensões ou encapsulamentos das classes acima, sem importância para este trabalho. Também existem classes relacionadas ao envio e recebimento de dados genéricos pela rede que poderiam ser utilizadas em conjunto com as classes acima. A seguir as classes supracitadas serão detalhadas, e com base nas características de cada uma serão apresentadas estratégias de desenvolvimento de um sistema de vídeo interativo bem como suas limitações.
 
 \subsection{Classe MediaRecorder}
-A Classe MediaRecorder realiza a captura de áudio e de vídeo (a partir do microfone e da câmera, respectivamente) e codifica-os utilizando o hardware do aparelho. Os dados codificados podem ser salvos encapsulados em um arquivo, ou podem ser transmitidos pela rede com a utilização de sockets. A classe também pode exibir um preview da captura para o usuário local.
-Basicamente, as etapas necessárias são as seguintes:
+A classe MediaRecorder realiza a captura de áudio e de vídeo (a partir do microfone e da câmera, respectivamente) e codifica-os utilizando o hardware do aparelho. Os dados codificados podem ser salvos encapsulados em um arquivo, ou podem ser transmitidos pela rede com a utilização de sockets. A classe também pode exibir um preview da captura para o usuário local.
+
+A utilização do MediaRecorder acontece da seguinte forma:
 \begin{enumerate}
- \item Declarar uma instância da classe:
+ \item Declarar uma instância da classe
+  \begin{verbatim}
 MediaRecorder mMediaRecorder = new MediaRecorder();
- \item Escolher o destino (arquivo ou socket):
+  \end{verbatim}
+ \item Escolher se as fontes de áudio e vídeo:
+  \begin{verbatim}
+mMediaRecorder.setAudioSource(<fonte de áudio>);
+mMediaRecorder.setVideoSource(<fonte de vídeo>);
+  \end{verbatim}
+ \item Escolher o destino (arquivo ou socket)
+  \begin{verbatim}
 mMediaRecorder.setOutputFile(<destino>);
+  \end{verbatim}
  \item Iniciar a captura:
+  \begin{verbatim}
 mMediaRecorder.prepare();
 mMediaRecorder.start();
+  \end{verbatim}
  \item Exibir o preview da captura:
+  \begin{verbatim}
 mMediaRecorder.setPreviewDisplay(<superfície local>);
+  \end{verbatim}
 \end{enumerate}
 
-Portanto, a classe pode ser utilizada de duas formas diferentes: salvando em um arquivo ou utilizando um socket. É importante notar que não há como acessar diretamente os dados capturados nem os codificados, pois este não é o objetivo da classe (a classe mais adequada para essa tarefa é a Camera).
+Portanto, a classe pode ser utilizada de duas formas diferentes: salvando em um arquivo ou utilizando um socket. Além de não prover um mecanismo de acesso direto aos dados capturados, também não há como acessar os dados codificados, impossibilitando o encapsulamento dos mesmos em um protocolo de aplicação antes de enviá-los através do socket, por exemplo. 
 
 \subsection{Classe Camera}
-A classe Camera realiza a captura de vídeo (a partir da câmera) e pode exibir um preview da captura para o usuário local. Ela pode ser utilizada de duas formas: para tirar fotos (ou seja, salvar um quadro da captura, codificando-o e encapsulado-o em um arquivo) ou para instalar um callback que é chamado a cada frame capturado e que recebe os dados não codificados do frame capturado.
+A classe Camera realiza a captura de vídeo (a partir da câmera) e pode exibir um preview local da captura para o usuário. Ela pode ser utilizada de duas formas: para tirar fotos (ou seja, salvar um quadro da captura, codificando-o e encapsulado-o em um arquivo) ou para instalar um callback que é chamado a cada frame capturado e que recebe os dados não codificados do frame capturado.
+
+\lstset{language=Java,captionpos=b,tabsize=3,frame=lines,keywordstyle=\color{blue},commentstyle=\color{darkgreen},stringstyle=\color{red},numbers=left,numberstyle=\tiny,numbersep=5pt,breaklines=true,showstringspaces=false,basicstyle=\scriptsize,emph={label}}
 
 Basicamente, as etapas necessárias são as seguintes:
 \begin{enumerate}
  \item Obter acesso à câmera:
+%  \begin{lstlisting}
+%Camera mCamera = Camera.open();
+%  \end{lstlisting}
+  \begin{verbatim}
 Camera mCamera = Camera.open();
+  \end{verbatim}
  \item Escolher a superfície de preview:
+  \begin{verbatim}
 mCamera.setPreviewDisplay(<superfície local>);
+  \end{verbatim}
  \item Instalar o callback (opcional):
+  \begin{verbatim}
 mCamera.setPreviewCallback(<contexto>);
+  \end{verbatim}
  \item Iniciar a captura:
+  \begin{verbatim}
 mCamera.startPreview();
+  \end{verbatim}
  \item Tirar foto (opcional):
-takePicture(<Camera.ShutterCallback>,<Camera.PictureCallback>,<Camera.PictureCallback>);
+  \begin{verbatim}
+takePicture(<Camera.ShutterCallback>,
+    <Camera.PictureCallback>,
+    <Camera.PictureCallback>);
+  \end{verbatim}
  \item Obter os dados não codificados do frame capturado (opcional):
-@Override public void onPreviewFrame (byte[] data, Camera camera){}
+  \begin{verbatim}
+@Override
+public void onPreviewFrame (byte[] data, 
+    Camera camera){}
+  \end{verbatim}
 \end{enumerate}
+
 
 \subsection{Classe AudioRecord}
 A classe AudioRecord realiza a captura de áudio (a partir do microfone) e, enquanto captura, escreve os dados não codificados em um buffer principal. Esses dados podem ser transferidos para um buffer secundário sempre que se desejar, para que possam ser utilizados.
@@ -203,25 +239,44 @@ A classe AudioRecord realiza a captura de áudio (a partir do microfone) e, enqu
 Basicamente, as etapas necessárias são as seguintes:
 \begin{enumerate}
  \item Declarar uma instância da classe:
-AudioRecord mAudioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC, <taxa de amostragem>,<numero de canais>,<bits por amostra>,<tamanho do buffer principal>);
+  \begin{verbatim}
+AudioRecord mAudioRecord = new AudioRecord(
+    MediaRecorder.AudioSource.MIC, 
+    <taxa de amostragem>,
+    <numero de canais>,
+    <bits por amostra>,
+    <tamanho do buffer principal>);
+  \end{verbatim}
  \item Iniciar a captura:
+  \begin{verbatim}
 mAudioRecord.startRecording();
+  \end{verbatim}
  \item Transferir o conteúdo do buffer principal (quando desejado) para um buffer secundário:
-record.read(<buffer secundário>,<índice inicial do buffer secundário>,<número de bytes a transferir>);
+  \begin{verbatim}
+record.read(<buffer secundário>,
+    <índice inicial do buffer secundário>,
+    <número de bytes a transferir>);
+  \end{verbatim}
 \end{enumerate}
 
 \subsection{Classe MediaPlayer}
-A classe MediaPlayer fornece funções de alto nível para a exibição de vídeos. Basicamente, permite a escolha da origem do vídeo (arquivo local, servidor web ou streaming por RTSP), e faz o início da exibição (HASHIMI; KOMATINENI, 2009). Dada a origem do vídeo, a classe realiza a decodificação do áudio e do vídeo em hardware e os renderiza.
+A classe MediaPlayer fornece funções de alto nível para a exibição de vídeos. Basicamente, permite a escolha da origem do vídeo (arquivo local, servidor web ou streaming por RTSP), e faz o início da exibição~\cite{pro_android}. Dada a origem do vídeo, a classe realiza a decodificação do áudio e do vídeo em hardware e os renderiza.
 
 Basicamente, as etapas necessárias são as seguintes:
 \begin{enumerate}
  \item Declarar uma instância da classe:
+  \begin{verbatim}
 MediaPlayer mMediaPlayer = new MediaPlayer();
+  \end{verbatim}
  \item Escolher a origem do vídeo:
+  \begin{verbatim}
 mMediaPlayer.setDataSource(<origem do vídeo>);
+  \end{verbatim}
  \item Iniciar o processo de recebimento (caso a origem do vídeo seja remota), decodificação e renderização:
+  \begin{verbatim}
 mMediaPlayer.prepare();
 mMediaPlayer.start();
+  \end{verbatim}
 \end{enumerate}
 
 \subsection{Classe AudioTrack}
@@ -230,15 +285,30 @@ A classe AudioTrack serve para renderizar áudio. Sempre que se desejar renderiz
 Basicamente, as etapas necessárias são as seguintes:
 \begin{enumerate}
  \item Declarar uma instância da classe:
-mAudioTrack = new AudioTrack(<tipo de stream>,<taxa de amostragem>,<numero de canais>,<bits por amostra>,<tamanho do buffer principal>,<modo (estático ou stream)>);
+  \begin{verbatim}
+mAudioTrack = new AudioTrack(<tipo de stream>,
+    <taxa de amostragem>,
+    <numero de canais>,
+    <bits por amostra>,
+    <tamanho do buffer principal>,
+    <modo (estático ou stream)>);
+  \end{verbatim}
  \item Caso o modo utilizado seja o stream, chamar o método play():
+  \begin{verbatim}
 mAudioTrack.play();
-Nada será renderizado pois o buffer principal está vazio.
+  \end{verbatim}
+  Nada será renderizado pois o buffer principal está vazio.
  \item Transferir o conteúdo do buffer secundário (quando desejado) para o buffer principal:
-mAudioTrack.write(<buffer secundario>,<índice inicial do buffer secundário>,<número de bytes a transferir>);
+  \begin{verbatim}
+mAudioTrack.write(<buffer secundario>,
+    <índice inicial do buffer secundário>,
+    <número de bytes a transferir>);
+  \end{verbatim}
 Caso o modo utilizado seja o stream, cada vez que o buffer principal receber novos dados, eles serão reproduzidos sem a necessidade de chamar o método play().
  \item Caso o modo utilizado seja o estático, chamar o método play() para renderizar os dados (quando desejado):
+  \begin{verbatim}
 mAudioTrack.play();
+  \end{verbatim}
 \end{enumerate}
 
 \section{Estratégias para STVITR com as classes padrão}
@@ -248,7 +318,7 @@ mAudioTrack.play();
 
 \subsubsection{Do lado da origem}
 
-Esta estratégia consiste em iniciar uma captura de áudio e de vídeo com a classe MediaRecorder passando como parâmetro ao método setOutputFile um descritor de arquivo local (ex: /sdcard/temp0.3gp) e finalizar a captura após um período curto (ex: 2 segundos). Os dados codificados do arquivo que está sendo gerado vão sendo enviados desde o início da captura, utilizando uma classe do Android para transmissão genérica de dados. Seria muito mais simples passar como parâmetro ao método setOutputFile um socket localizado no destino. Assim os dados seriam enviados diretamente sem a utilização de arquivo local. No entanto, estamos querendo criar um sistema de STVITR utilizando apenas as classes padrão do Android, e a classe MediaPlayer (única capaz de reproduzir vídeo) reproduz apenas dados encapsulados ou com o container 3GPP ou com o container MPEG-4 (exceto quando é utilizado RTSP, que será abordado na estratégia seguinte). Ambos containers são muito similares, e só podem ser incluídos ao final da gravação do arquivo. A classe MediaRecorder, ao final da gravação de um arquivo, insere, no início do arquivo, o header e os metadados do container escolhido. O método, então, ao finalizar o período curto de gravação, abre o início do arquivo que foi gerado localmente e envia os headers e os metadados para o destino. Enquanto os headers e os metadados são enviados, repete-se todo o processo com outro arquivo local (ex: /sdcard/temp1.3gp) de mesma duração do anterior, e assim sucessivamente.
+Esta estratégia consiste em iniciar uma captura de áudio e de vídeo com a classe MediaRecorder passando como parâmetro ao método setOutputFile um descritor de arquivo local (ex: /sdcard/temp0.3gp) e finalizar a captura após um período curto (ex: 2 segundos). Os dados codificados do arquivo que está sendo gerado vão sendo enviados desde o início da captura, utilizando uma classe do Android para transmissão genérica de dados. Seria muito mais simples passar como parâmetro ao método setOutputFile um socket localizado no destino. Assim os dados seriam enviados diretamente sem a utilização de arquivo local. No entanto, estamos querendo criar um sistema de STVITR utilizando apenas as classes padrão do Android, e a classe MediaPlayer (única capaz de reproduzir vídeo) reproduz apenas dados encapsulados ou com o container 3GPP ou com o container MPEG-4 (exceto quando é utilizado RTSP, que será abordado na estratégia seguinte). Ambos containers são muito similares, e só podem ser incluídos ao final da gravação do arquivo. A classe MediaRecorder, ao final da gravação de um arquivo, insere, no início do arquivo, o header e os metadados do container escolhido. O método, então, ao finalizar o período curto de gravação, abre o início do arquivo que foi gerado localmente e envia os headers e os metadados para o destino. Enquanto os headers e os metadados são enviados, repete-se todo o processo com outro arquivo local (ex: /sdcard/temp1.3gp) de mesma duração do anterior, e assim sucessivamente. \todo{dividir esse parágrafo em mais de um!}
 
 \subsubsection{Do lado do destino}
 
@@ -277,7 +347,7 @@ supondo:
  \item t = 3.5s: lado do destino: o header e os metadados são recebidos.
  \item t = 3.6s: destino: o header e os metadados são inseridos no início do arquivo “01destino”.
  \item t = 3.6s: destino: a classe MediaPlayer é inicializada.
- \item t = 4.5s: destino: a classe MediaPlayer começa a renderização do arquivo “01destino”. (delay = 4.5 - 1.3 = 3.2s).
+ \item t = 4.5s: destino: a classe MediaPlayer começa a renderização do arquivo “01destino”. (atraso = 4.5 - 1.3 = 3.2s).
  \item t = 4.7s: origem: a inicialização da Classe MediaRecorder está pronta e a captura inicia.
  \item t = 4.7s a 6.7s: origem: o arquivo local “02origem” está sendo gerado e os dados úteis do vídeo estão sendo transmitidos.
  \item t = 4.8s: destino: os primeiros pacotes da nova captura começam a ser recebidos.
@@ -289,7 +359,7 @@ supondo:
  \item t = 6.9s: destino: o header e os metadados são recebidos.
  \item t = 7.0s: destino: o header e os metadados são inseridos no início do arquivo “02destino”.
  \item t = 7,0s: destino: a classe MediaPlayer é inicializada.
- \item t = 7.9s: destino: a classe MediaPlayer começa a renderização do arquivo “02destino”. (delay = 7.9 - 4.7 = 3.2s. Tempo sem exibição = 7.9 - 6.5 = 1.4s).
+ \item t = 7.9s: destino: a classe MediaPlayer começa a renderização do arquivo “02destino”. (atraso = 7.9 - 4.7 = 3.2s. Tempo sem exibição = 7.9 - 6.5 = 1.4s).
  \item t = 8.1s: origem: a inicialização da Classe MediaRecorder está pronta e a captura inicia.
  \item t = 8.1s a 10.1s: origem: o arquivo local “03origem” está sendo gerado e os dados úteis do vídeo estão sendo transmitidos.
  \item t = 8.2s: destino: os primeiros pacotes da nova captura começam a ser recebidos.
@@ -301,12 +371,14 @@ supondo:
  \item t = 10.3s: destino: o header e os metadados são recebidos.
  \item t = 10.4s: destino: o header e os metadados são inseridos no início do arquivo “03destino”.
  \item t = 10.4s: destino: a classe MediaPlayer é inicializada.
- \item t = 11.3s: destino: a classe MediaPlayer começa a renderização do arquivo “03destino”. (delay = 11.3 - 8.1 = 3.2s. Tempo sem exibição = 11.3 - 9.9 = 1.4s).
+ \item t = 11.3s: destino: a classe MediaPlayer começa a renderização do arquivo “03destino”. (atraso = 11.3 - 8.1 = 3.2s. Tempo sem exibição = 11.3 - 9.9 = 1.4s).
 \end{itemize}
 
 E assim por diante. \todo{talvez fosse melhor representar essa linha de tempo com uma imagem}
 
-Portanto, nessa simulação, o delay é de 3.2 segundos. Além disso, ocorrem pausas de 1.4s a cada 2s de exibição do vídeo. Em um STVITR, o maior delay recomendado é de 400ms. Não existe uma norma para determinar a aceitabilidade pausas na exibição, mas é evidente que as pausas obtidas nesse método tornariam a comunicação altamente frustrante. O autor reconhece que a técnica não serve para STVITR, mas seu objetivo era identificar as limitações das APIs e propor a melhor aproximação possível de um STVITR. Segundo o autor, essa provavelmente é a técnica possível de ser implementada com as classes padrão do Android que mais se aproxima de um STVITR. No entanto, ele deixa claro que sempre podem surgir novas ideias. 
+\todo{muito dado, na minha opinião. ficou muito longa essa parte. remover a linha do tempo e explicar em parágrafos a essência.}
+
+Portanto, nessa simulação, o atraso é de 3.2 segundos. Além disso, ocorrem pausas de 1.4s a cada 2s de exibição do vídeo. Em um STVITR, o atraso não deve ultrapassar 400ms. Não existe uma norma para determinar a aceitabilidade pausas na exibição, mas é evidente que as pausas obtidas nesse método tornariam a comunicação altamente frustrante. O autor reconhece que a técnica não serve para STVITR, mas seu objetivo era identificar as limitações das APIs e propor a melhor aproximação possível de um STVITR. Segundo o autor, essa provavelmente é a técnica possível de ser implementada com as classes padrão do Android que mais se aproxima de um STVITR. No entanto, ele deixa claro que sempre podem surgir novas ideias. 
 
 \subsection{Estratégia 2}
 É a técnica implementada em \todo{sipdroid}.
@@ -328,11 +400,11 @@ O método acaba resultando em um sistema de vídeo ao vivo, e não em um STVITR,
  \item Recebemos o stream em um Motorola Milestone rodando Android 2.0.1 utilizando a API MediaPlayer.
 \end{enumerate}
 
-O delay obtido foi de 10 segundos. Recebendo o mesmo stream no próprio VLC (ao invés de recebê-lo no Android), o delay foi de 1 segundo.	 	 	
+O atraso obtido foi de 10 segundos. Recebendo o mesmo stream no próprio VLC (ao invés de recebê-lo no Android), o atraso foi de 1 segundo.	 	 	
 
 Também fizemos uma comparação do RTSP do Android com o RTSP do VideoLAN utilizando diversos links RTSP encontrados na Internet. Para todos eles, o vídeo exibido no Android foi exibido com um atraso entre 2 e 20 segundos após o mesmo vídeo sendo exibido no VídeoLAN.
 
-Comparado ao método anterior, neste método não ocorrem pausas na exibição. Porém, segundo os testes de desempenho realizados com a classe MediaPlayer, o delay é maior que o do método anterior, devido ao baixo desempenho do RTSP utilizado juntamente com a classe MediaPlayer do Android.
+Comparado ao método anterior, neste método não ocorrem pausas na exibição. Porém, segundo os testes de desempenho realizados com a classe MediaPlayer, o atraso é maior que o do método anterior, devido ao baixo desempenho do RTSP utilizado juntamente com a classe MediaPlayer do Android.
 
 \subsection{Estratégia 3}
 
@@ -350,7 +422,7 @@ Receber cada frame e exibí-lo com alguma classe padrão do Android que decodifi
 
 \subsubsection{Análise da estratégia}
 
-Codecs de vídeo são mais eficazes que o codec de imagens JPEG, visto que um vídeo é um conjunto de imagens relacionadas entre si, e a compressão é realizada com base na relação entre essas imagens. Um codec JPEG apenas comprime uma imagem sem relacioná-la com nenhuma outra, portanto tem menos poder de compressão. Além disso, a função foto do Android não foi projetada para este uso e é pouco eficiente. Um dos motivos é que quando a função foto é chamada, o preview do vídeo capturado é interrompido. Para tirar uma nova foto é preciso reiniciar o preview. O método em si não foi testado, mas certamente a taxa de frames e o delay obtidos não chegariam perto do recomendado para STVITR. Outro problema dessa estratégia é não ter um correspondente para o áudio. Somente o vídeo seria transmitido.
+Codecs de vídeo são mais eficazes que o codec de imagens JPEG, visto que um vídeo é um conjunto de imagens relacionadas entre si, e a compressão é realizada com base na relação entre essas imagens. Um codec JPEG apenas comprime uma imagem sem relacioná-la com nenhuma outra, portanto tem menos poder de compressão. Além disso, a função foto do Android não foi projetada para este uso e é pouco eficiente. Um dos motivos é que quando a função foto é chamada, o preview do vídeo capturado é interrompido. Para tirar uma nova foto é preciso reiniciar o preview. O método em si não foi testado, mas certamente a taxa de frames e o atraso obtidos não chegariam perto do recomendado para STVITR. Outro problema dessa estratégia é não ter um correspondente para o áudio. Somente o vídeo seria transmitido.
 
 \subsection{Estratégia 5}
 Como o Android é de código aberto, essa estratégia seria copiar as libraries nativas (C/C++) internas (privadas) ao sistema operacional que interagem com as classes java MediaPlayer e MediaRecorder e com o hardware dos aparelhos e colá-las no em um novo projeto. Em seguida, compilaríamos essas libraries dentro do nosso projeto, com a utilização da NDK \todo{explicar o que é a ndk}. Desse modo, teríamos acesso aos quadros codificados/decodificados pelo hardware e, desse modo, poderíamos utilizar alguma classe genérica de transmissão de dados do Android para realizar a transmissão/recepção desses quadros. Assim, a implementação ficaria desta forma:
@@ -400,37 +472,40 @@ Também realizamos cálculos considerando a resolução máxima da tela e a orie
 \subsection{Teste 1}
 Foi testada a decodificação e a exibição de um arquivo de vídeo local com a estratégia implementada em um dispositivo HTC Magic. Como resultado, para um vídeo de resolução 176x144, foram decodificados 227 quadros por segundo. A taxa de exibição obtida foi de 60 quadros por segundo (valor máximo suportado pelo aparelho).
 \subsection{Teste 2}
-Implementamos um aplicativo de videoconferência entre dispositivos móveis com a técnica apresentada. Para testar, realizamos uma conversa por vídeo com dois aparelhos Android caracterizados pela tabela \todo{numero da tabela}.
+Implementamos um aplicativo de videoconferência entre dispositivos móveis com a técnica apresentada. Para testar, realizamos uma conversa por vídeo com dois aparelhos Android caracterizados pela tabela~\ref{tabela_dispositivos}.
 \begin{table*}
 \centering
 \caption{Dispositivos utilizados nos testes}
+\label{tabela_dispositivos}
 \begin{tabular}{|c|c|c|c|c|l} \hline
 Modelo&Processador&Versao do Android&Resolução máxima&Versão do OpenGL ES\\ \hline
 Motorola Milestone A853&500MHz&2.0.1&480x854&1.0\\ \hline
-Samsung Galaxy GT-I9000B&1000MHz&2.1-update1&480x800&1.1\\
+Samsung Galaxy S GT-I9000B&1000MHz&2.1-update1&480x800&1.1\\
 \hline\end{tabular}
 \end{table*}
-Os parâmetros de codificação de vídeo foram:
+
+Os parâmetros de codificação de vídeo utilizados no teste foram:
 \begin{itemize}
  \item Resolução: 320x240
  \item Codec: MPEG-4
  \item Taxa de bits: 256Kbps
  \item GOP: 12
- \item Taxa de quadros: 15/s
+ \item Taxa de quadros: 15fps
 \end{itemize}
-Os parâmetros de codificação de áudio foram:
+Os parâmetros de codificação de áudio utilizados no teste foram:
 \begin{itemize}
  \item Codec: MP2
  \item Taxa de bits: 64Kbps
  \item Frequência: 22050Hz
  \item Bits por amostra: 16
  \item Canais: 1
- \item Taxa de quadros: 19/s
+ \item Taxa de quadros: 19/s \todo{fps pra áudio?}
 \end{itemize}
-O vídeo era ampliado com o OpenGL ES para a resolução máxima do respectivo aparelho. A tabela \todo{numero da tabela} exibe os resultados do teste.
+O vídeo era ampliado com o OpenGL ES para a resolução máxima do respectivo aparelho. A tabela~\ref{tabela_teste2} exibe os resultados do teste.
 \begin{table*}
 \centering
 \caption{Resultados do Teste 2}
+\label{tabela_teste2}
 \begin{tabular}{|c|c|c|c|l} \hline
 Dispositivo&Tipo de medida&Taxa de quadros&Tempo médio por quadro\\ \hline
 Motorola&Captura do vídeo&15/s&1,16ms\\ \hline
@@ -443,12 +518,13 @@ Motorola&Renderização do vídeo&15/s&16,03ms\\ \hline
 Motorola&Renderização do áudio&19/s&33,39ms\\
 \hline\end{tabular}
 \end{table*}
-O delay obtido ficou abaixo dos 400ms.
+O atraso obtido ficou abaixo dos 400ms.
 \subsection{Teste 3}
-Realizamos uma transmissão de vídeo do Samsung para o Motorola (especificados na tabela \todo{numero da tabela}). Os parâmetros de codificação do áudio e do vídeo utilizados foram os mesmos do teste 2, porém com a taxa de quadros do vídeo igual a 30/s. A tabela \todo{numero tab} exibe os resultados do teste.
+Realizamos uma transmissão de vídeo do Samsung para o Motorola (especificados na tabela~\ref{tabela_dispositivos}). Os parâmetros de codificação do áudio e do vídeo utilizados foram os mesmos do teste 2, porém com a taxa de quadros do vídeo igual a 30/s. A tabela~\ref{tabela_teste3} exibe os resultados do teste.
 \begin{table*}
 \centering
 \caption{Resultados do Teste 3}
+\label{tabela_teste3}
 \begin{tabular}{|c|c|c|c|l} \hline
 Dispositivo&Tipo de medida&Taxa de quadros&Tempo médio por quadro\\ \hline
 Samsung&Captura do vídeo&30/s&0,58ms\\ \hline
@@ -457,19 +533,20 @@ Motorola&Renderização do vídeo&29/s&12,77ms\\ \hline
 Motorola&Renderização do áudio&18/s&24,24ms\\
 \hline\end{tabular}
 \end{table*}
-O delay obtido ficou abaixo dos 400ms.
+O atraso obtido foi inferior a 400ms.
 \subsection{Teste 4}
-O IVA é um sistema de videoconferências para computadores do tipo desktop. Seu foco principal é o ensino a distância. Utilizando a estratégia explicada neste trabalho, implementamos um aplicativo para Android que permite que o usuário do celular participe de videoconferências do IVA enviando seu vídeo e/ou visualizando o vídeo dos outros participantes.
+O IVA é um sistema de videoconferências para computadores do tipo desktop~\cite{roesler_iva}. Seu foco principal é o ensino a distância. Utilizando a estratégia explicada neste trabalho, implementamos um aplicativo para Android que permite que o usuário do celular participe de videoconferências do IVA enviando seu vídeo e/ou visualizando o vídeo dos outros participantes.
 
-Neste teste, o aplicativo Android recebeu um vídeo em tempo real codificado com MPEG-4 (vídeo) e MP2 (áudio) do IVA rodando em um desktop. Os parâmetros de codificação do vídeo foram: 1400 bit/s de taxa de codificação, 854x480 de resolução, 12 de GOP, codificado a 15 quadros por segundo. O áudio foi codificado a uma taxa de 128 bit/s. O Motorola (especificado na tabela \todo{numero da tabela}), rodando nosso aplicativo, recebeu e exibiu esta transmissão mantendo a taxa de 15 quadros por segundo. O áudio e o vídeo foram renderizados sincronizadamente e o delay ficou abaixo dos 400ms. A figura \todo{numero} mostra o teste em execução.
+Neste teste, o aplicativo Android recebeu um vídeo em tempo real codificado com MPEG-4 (vídeo) e MP2 (áudio) do IVA rodando em um desktop. Os parâmetros de codificação do vídeo foram: 1400 bit/s de taxa de codificação, 854x480 de resolução, 12 de GOP, codificado a 15 quadros por segundo. O áudio foi codificado a uma taxa de 128 bit/s. O Motorola (especificado na tabela~\ref{tabela_dispositivos}), rodando nosso aplicativo, recebeu e exibiu esta transmissão mantendo a taxa de 15 quadros por segundo. O áudio e o vídeo foram renderizados sincronizadamente e o atraso ficou abaixo dos 400ms. A figura~\ref{figura_eadcel} mostra o teste em execução.
 \begin{figure}
  \centering
+ \label{figura_eadcel}
  \includegraphics[scale=0.2]{./ivamobile.jpg}
  % ivamobile.jpg: 907x1385 pixel, 72dpi, 32.00x48.86 cm, bb=0 0 907 1385
 \caption{Nossa estratégia integrada ao sistema IVA}
 \end{figure}
 \subsection{Teste 5}
-Também integramos nossa estratégia a um outro sistema de videoconferências já existente chamado BigBlueButton, que funcionava apenas para desktops. Recebemos, no aplicativo Android, um fluxo de vídeo do BigBlueButton gerado por um desktop. O codec de vídeo utilizado foi FLV1 (também conhecido como Sorenson H.263), a uma resolução de 320x240. O vídeo foi exibido ampliado na máxima resolução no Samsung e no Motorola especificados na tabela \todo{numero tabela} e também em um tablet rodando Android. O delay ficou abaixo dos 400ms. \todo{inserir foto}.
+Também integramos nossa estratégia a um outro sistema de videoconferências já existente chamado BigBlueButton, que funcionava apenas para desktops. Recebemos, no aplicativo Android, um fluxo de vídeo do BigBlueButton gerado por um desktop. O codec de vídeo utilizado foi FLV1 (também conhecido como Sorenson H.263), a uma resolução de 320x240. O vídeo foi exibido ampliado na máxima resolução no Samsung e no Motorola especificados na tabela~\ref{tabela_dispositivos} e também em um tablet rodando Android. O atraso ficou abaixo dos 400ms. \todo{inserir foto}.
 
 
 \section{Conclusão}
