@@ -37,7 +37,7 @@
 
 \begin{document}
 
-\title{Uma nova API para criação de videoconferências em dispositivos móveis Android}
+\title{Uma nova técnica para criação de videoconferências em dispositivos móveis Android}
 %
 % You need the command \numberofauthors to handle the 'placement
 % and alignment' of the authors beneath the title.
@@ -192,7 +192,7 @@ mMediaRecorder.setPreviewDisplay(<superfície local>);
 Portanto, a classe pode ser utilizada de duas formas diferentes: salvando em um arquivo ou utilizando um socket. Além de não prover um mecanismo de acesso direto aos dados capturados, também não há como acessar os dados codificados, impossibilitando o encapsulamento dos mesmos em um protocolo de aplicação antes de enviá-los através do socket, por exemplo. 
 
 \subsection{Classe Camera}
-A classe Camera realiza a captura de vídeo (a partir da câmera) e pode exibir um preview local da captura para o usuário. Ela pode ser utilizada de duas formas: para tirar fotos (ou seja, salvar um quadro da captura, codificando-o e encapsulado-o em um arquivo) ou para instalar um callback que é chamado a cada frame capturado e que recebe os dados não codificados do frame capturado.
+A classe Camera realiza a captura de vídeo (a partir da câmera) e pode exibir um preview local da captura para o usuário. Ela pode ser utilizada de duas formas: para tirar fotos (ou seja, salvar um quadro da captura, codificando-o e encapsulado-o em um arquivo) ou para instalar um callback que é chamado a cada quadro capturado e que recebe os dados não codificados do quadro capturado.
 
 \lstset{language=Java,captionpos=b,tabsize=3,frame=lines,keywordstyle=\color{blue},commentstyle=\color{darkgreen},stringstyle=\color{red},numbers=left,numberstyle=\tiny,numbersep=5pt,breaklines=true,showstringspaces=false,basicstyle=\scriptsize,emph={label}}
 
@@ -223,7 +223,7 @@ takePicture(<Camera.ShutterCallback>,
     <Camera.PictureCallback>,
     <Camera.PictureCallback>);
   \end{verbatim}
- \item Obter os dados não codificados do frame capturado (opcional):
+ \item Obter os dados não codificados do quadro capturado (opcional):
   \begin{verbatim}
 @Override
 public void onPreviewFrame (byte[] data, 
@@ -310,24 +310,26 @@ mAudioTrack.play();
   \end{verbatim}
 \end{enumerate}
 
-\section{Estratégias para STVITR com as classes padrão}
+\section{Estratégias para vídeo interativo com as classes padrão}
 
 \subsection{Estratégia 1}
 É a técnica implementada em \todo{trab alemao}.
 
 \subsubsection{Do lado da origem}
 
-Esta estratégia consiste, primeiramente, em iniciar uma captura de áudio e de vídeo com a classe MediaRecorder passando como parâmetro ao método setOutputFile um descritor de arquivo local (ex: /sdcard/temp0.3gp) e finalizar a captura após um período curto (ex: 2 segundos). Os dados codificados do arquivo que está sendo gerado vão sendo enviados desde o início da captura, utilizando uma classe do Android para transmissão genérica de dados. Ao finalizar o período curto de gravação, a classe MediaRecorder insere, no ínicio do arquivo, o header e os metadados do container escolhido (que pode ser 3GPP ou MPEG-4) e envia os headers e os metadados do arquivo local para o destino. Enquanto os headers e os metadados são enviados, repete-se todo o processo com outro arquivo local (ex: /sdcard/temp1.3gp) de mesma duração do anterior, e assim sucessivamente.
+Esta estratégia consiste, primeiramente, em iniciar uma captura de áudio e de vídeo com a classe MediaRecorder passando como parâmetro ao método setOutputFile um descritor de arquivo local (ex: /sdcard/temp0.3gp) e finalizar a captura após um período curto (ex: 2 segundos). Os dados codificados do arquivo que está sendo gerado vão sendo enviados desde o início da captura, utilizando uma classe do Android para transmissão genérica de dados. Ao finalizar o período curto de gravação, a classe MediaRecorder insere, no início do arquivo, o header e os metadados do contêiner escolhido (que pode ser 3GPP ou MPEG-4) e envia o cabeçalho e os metadados do arquivo local para o destino. Enquanto o cabeçalho e os metadados são enviados, repete-se todo o processo com outro arquivo local (ex: /sdcard/temp1.3gp) de mesma duração do anterior, e assim sucessivamente.
 
 \subsubsection{Do lado do destino}
 
-O lado do destino vai recebendo os dados de áudio e vídeo que estão sendo enviados e vai armazenando-os em um arquivo. Quando, enfim, chegam o header e os metadados do container escolhido, eles são inseridos no início desse arquivo. Somente nesse instante a classe MediaPlayer pode reproduzí-los. O processo é repetido para cada arquivo curto capturado, mas os dados são armazenados em um arquivo diferente para não sobrescrever o que está sendo reproduzido pela classe MediaPlayer.
+O lado do destino vai recebendo os dados de áudio e vídeo que estão sendo enviados e vai armazenando-os em um arquivo. Quando, enfim, chegam o cabeçalho e os metadados do contêiner escolhido, eles são inseridos no início desse arquivo. Somente nesse instante a classe MediaPlayer pode reproduzi-los. O processo é repetido para cada arquivo curto capturado, mas os dados são armazenados em um arquivo diferente para não sobrescrever o que está sendo reproduzido pela classe MediaPlayer.
 
 \subsubsection{Análise da estratégia}
 
-Segundo \todo{trab alemao}, a classe MediaRecorder leva 1,3 segundos (em média) para ser inicializada, e não é possivel inicializar um novo MediaRecorder antes de finalizar o anterior. Logo, utilizando esta estratégia, ocorreriam períodos de 1,3 segundos em que não se poderia capturar nada. Do lado do destino, considerando apenas essa limitação, isso seria percebido como travamentos de 1,3 segundos no vídeo seguidos de saltos de 1,3 segundos na sua exibição. A classe MediaPlayer só pode ser inicializada quando o arquivo estiver pronto (com o header e os metadados, inclusive), e a demora na sua inicialização é, em média, 0,83 segundos.
+Segundo \todo{trab alemao}, a classe MediaRecorder leva 1,3 segundos (em média) para ser inicializada, e não é possível inicializar um novo MediaRecorder antes de finalizar o anterior. Logo, utilizando esta estratégia, ocorreriam períodos de 1,3 segundos em que não se poderia capturar nada. Do lado do destino, considerando apenas essa limitação, isso seria percebido como travamentos de 1,3 segundos no vídeo seguidos de saltos de 1,3 segundos na sua exibição. A classe MediaPlayer só pode ser inicializada quando o arquivo estiver pronto (com o cabeçalho e os metadados, inclusive), e a demora na sua inicialização é, em média, 0,83 segundos.
 
-O delay obtido seria equivalente a duração de cada captura, somado ao tempo para a classe MediaRecorder inserir os metadados no início do arquivo, somado ao tempo para transmitir um pacote pela rede da origem ao destino, somado ao tempo para o lado do destino inserir os metadados no início do arquivo, somado ao tempo para inicializar a classe MediaPlayer. O autor reconhece que a técnica não serve para interação por vídeo, mas seu objetivo era identificar as limitações das APIs e propor a melhor aproximação possível de um sistema de vídeo interativo. Segundo o autor, essa provavelmente é a técnica possível de ser implementada com as classes padrão do Android que mais se aproxima de um sistema de vídeo interativo. No entanto, ele deixa claro que sempre podem surgir novas ideias.
+O atraso obtido seria equivalente a duração de cada captura, somado ao tempo para a classe MediaRecorder inserir os metadados no início do arquivo, somado ao tempo para transmitir um pacote pela rede da origem ao destino, somado ao tempo para o lado do destino inserir os metadados no início do arquivo, somado ao tempo para inicializar a classe MediaPlayer.
+
+O autor reconhece que a técnica não serve para interação por vídeo, mas seu objetivo era identificar as limitações das APIs e propor a melhor aproximação possível de um sistema de vídeo interativo. Segundo o autor, essa provavelmente é a técnica possível de ser implementada com as classes padrão do Android que mais se aproxima de um sistema de vídeo interativo. No entanto, ele deixa claro que sempre podem surgir novas ideias.
 
 \subsection{Estratégia 2}
 É a técnica implementada em \todo{sipdroid}.
@@ -344,94 +346,92 @@ A classe MediaPlayer é inicializada e o seu método setDataSource é setado par
 O método acaba resultando em um sistema de vídeo ao vivo, e não em um sistema de interação por vídeo em tempo real, pois a implementação de RTSP do Android não serve para tempo real. Para provar isso, realizamos o seguinte teste :
 
 \begin{enumerate}
- \item Capturamos vídeo com uma webcam conectada a um desktop utilizando o software VideoLAN .
- \item Direcionamos o fluxo para um servidor de streaming RTSP (Darwin Streaming Server) especificado por um arquivo SDP (Session Description Protocol).
+ \item Capturamos vídeo com uma câmera conectada a um PC do tipo desktop utilizando o software VideoLAN \todo{citar}.
+ \item Direcionamos o fluxo para um servidor de streaming RTSP (Darwin Streaming Server \todo{citar}) especificado por um arquivo SDP (Session Description Protocol).
  \item Recebemos o stream em um Motorola Milestone rodando Android 2.0.1 utilizando a API MediaPlayer.
 \end{enumerate}
 
 O atraso obtido foi de 10 segundos. Recebendo o mesmo stream no próprio VLC (ao invés de recebê-lo no Android), o atraso foi de 1 segundo.	 	 	
 
-Também fizemos uma comparação do RTSP do Android com o RTSP do VideoLAN utilizando diversos links RTSP encontrados na Internet. Para todos eles, o vídeo exibido no Android foi exibido com um atraso entre 2 e 20 segundos após o mesmo vídeo sendo exibido no VídeoLAN.
+Também fizemos uma comparação do RTSP do Android com o RTSP do VideoLAN utilizando diversos links RTSP encontrados na Internet. Para todos eles, o vídeo exibido no Android foi exibido com um atraso entre 2 e 20 segundos após o mesmo vídeo sendo exibido no VideoLAN.
 
-Comparado ao método anterior, neste método não ocorrem pausas na exibição. Porém, segundo os testes de desempenho realizados com a classe MediaPlayer, o atraso é maior que o do método anterior, devido ao baixo desempenho do RTSP utilizado juntamente com a classe MediaPlayer do Android.
+Comparado ao método anterior, nesta estratégia não ocorrem pausas na exibição. Porém, segundo os testes de desempenho realizados com a classe MediaPlayer, o atraso é maior que o do método anterior, devido ao baixo desempenho do RTSP utilizado juntamente com a classe MediaPlayer do Android.
 
 \subsection{Estratégia 3}
 
-Ao invés de utilizar a classe MediaRecorder para capturar, utilizar as classes Camera e AudioRecord. Com ambas as classes é possível se obter os dados não codificados dos quadros de vídeo e de áudio capturados. No entanto, não há nenhuma classe padrão do android que receba como parâmetro um quadro não codificado e que codifique-o. E quadros não codificados são grandes demais para serem transmitidos pela rede em tempo viável para vídeo interativo. Poderia ser implementado um codificador/decodificador em Java. No entanto, a tarefa da codificação/decodificação é extremamente custosa computacionalmente, além de ser muito complexa de ser desenvolvida. Implementar uma tarefa custosa em uma linguagem que roda em máquina virtual que, por sua vez, roda em um dispositivo de baixo poder computacional, seria pouco eficiente. Além disso, mesmo que fosse possível codificar os quadros em Java, enviá-los ao destino e decodificá-los em Java em tempo viável, não haveria como reproduzí-los utilizando as classes padrão do Android, visto que nenhuma delas tem a capacidade de receber como parâmetros quadros decodificados. Logo, esta estratégia não é possível.
+Ao invés de utilizar a classe MediaRecorder para capturar, utilizar as classes Camera e AudioRecord. Com ambas as classes é possível se obter os dados não codificados dos quadros de vídeo e de áudio capturados. No entanto, não há nenhuma classe padrão do Android que receba como parâmetro um quadro não codificado e que codifique-o. E quadros não codificados são grandes demais para serem transmitidos pela rede em tempo viável para vídeo interativo. Poderia ser implementado um codificador/decodificador em Java. No entanto, a tarefa da codificação/decodificação é extremamente custosa computacionalmente, além de ser muito complexa de ser desenvolvida. Implementar uma tarefa custosa em uma linguagem que roda em máquina virtual que, por sua vez, roda em um dispositivo de baixo poder computacional, seria pouco eficiente.
+
+Adicionalmente, mesmo que fosse possível codificar os quadros em Java, enviá-los ao destino e decodificá-los em Java em tempo viável, não haveria como reproduzi-los utilizando as classes padrão do Android, visto que nenhuma delas têm a capacidade de receber como parâmetro um quadro decodificado (e nem codificado). Logo, esta estratégia não é possível.
 
 \subsection{Estratégia 4}
 
 \subsubsection{Lado da origem}
 
-Utilizar a função de foto da classe câmera, que retorna um frame codificado em JPEG, e enviar cada frame pela rede para o destino.
+Utilizar a função de foto da classe câmera, que retorna um quadro codificado em JPEG, e enviar cada quadro pela rede para o destino.
 
 \subsubsection{Lado do destino}
 
-Receber cada frame e exibí-lo com alguma classe padrão do Android que decodifique e exiba imagens JPEG.
+Receber cada quadro e exibi-lo com alguma classe padrão do Android que decodifique e exiba imagens JPEG.
 
 \subsubsection{Análise da estratégia}
 
-Codecs de vídeo são mais eficazes que o codec de imagens JPEG, visto que um vídeo é um conjunto de imagens relacionadas entre si, e a compressão é realizada com base na relação entre essas imagens. Um codec JPEG apenas comprime uma imagem sem relacioná-la com nenhuma outra, portanto tem menos poder de compressão. Além disso, a função foto do Android não foi projetada para este uso e é pouco eficiente. Um dos motivos é que quando a função foto é chamada, o preview do vídeo capturado é interrompido. Para tirar uma nova foto é preciso reiniciar o preview. O método em si não foi testado, mas certamente a taxa de frames e o atraso obtidos não chegariam perto do recomendado. Outro problema dessa estratégia é não ter um correspondente para o áudio. Somente o vídeo seria transmitido.
+Codecs de vídeo são mais eficazes que o codec de imagens JPEG, visto que um vídeo é um conjunto de imagens relacionadas entre si, e a compressão é realizada com base na relação entre essas imagens. Um codec JPEG apenas comprime uma imagem sem relacioná-la com nenhuma outra, portanto tem menos poder de compressão. Além disso, a função foto do Android não foi projetada para este uso e é pouco eficiente. Um dos motivos é que quando a função foto é chamada, o preview do vídeo capturado é interrompido. Para tirar uma nova foto é preciso reiniciar o preview.
+
+O método em si não foi testado, mas certamente a taxa de quadros e o atraso obtidos não chegariam perto do recomendado. Outro problema dessa estratégia é não ter um correspondente para o áudio. Somente o vídeo seria transmitido.
 
 \subsection{Estratégia 5}
-Como o Android é de código aberto, essa estratégia seria copiar as libraries nativas (C/C++) internas (privadas) ao sistema operacional que interagem com as classes java MediaPlayer e MediaRecorder e com o hardware dos aparelhos e colá-las no em um novo projeto. Em seguida, compilaríamos essas libraries dentro do nosso projeto, com a utilização da NDK. Desse modo, teríamos acesso aos quadros codificados/decodificados pelo hardware e, desse modo, poderíamos utilizar alguma classe genérica de transmissão de dados do Android para realizar a transmissão/recepção desses quadros. Assim, a implementação ficaria desta forma:
+Como o Android é de código aberto, esta estratégia seria copiar as bibliotecas nativas (C/C++) internas (privadas) ao sistema operacional que interagem com as classes Java MediaPlayer e MediaRecorder e com o hardware dos aparelhos e colá-las no em um novo projeto. Em seguida, compilaríamos essas bibliotecas dentro do nosso projeto, com a utilização da NDK. Desse modo, teríamos acesso aos quadros codificados/decodificados pelo hardware e, desse modo, poderíamos utilizar alguma classe genérica de transmissão de dados do Android para realizar a transmissão/recepção desses quadros. Assim, a implementação ficaria desta forma:
 
-Captura: câmera e microfone seriam acessados diretamente pelo C++, utilizando as libraries privadas do android correspondentes.
+Captura: câmera e microfone seriam acessados diretamente pelo C++, utilizando as bibliotecas privadas do Android correspondentes.
 
-Codificação: em hardware, utilizando as libraries privadas do android correspondentes.
+Codificação: em hardware, utilizando as bibliotecas privadas do Android correspondentes.
 
 Transmissão: alguma classe padrão do Android para transmissão genérica de dados.
 
 Recepção: alguma classe padrão do Android para transmissão genérica de dados.
 
-Decodificação: em hardware, utilizando as libraries privadas do android correspondentes.
+Decodificação: em hardware, utilizando as bibliotecas privadas do Android correspondentes.
 
-Renderização: display e alto falante seriam acessados diretamente pelo C++, utilizando as libraries privadas do android correspondentes.
+Renderização: tela e alto falante seriam acessados diretamente pelo C++, utilizando as bibliotecas privadas do Android correspondentes.
 
-Esta seria a solução mais eficiente possível, visto que todas as tarefas pesadas seriam realizadas em hardware, e os quadros trafegariam pela rede comprimidos. Contudo, como as bibliotecas nativas interagem com o resto do Android, e o sistema operacional muda muito a cada nova versão (e muda a cada modelo de aparelho também, mesmo dentro de uma mesma versão), haveria probabilidade de 50\% \todo{segundo desenvolvedor do android, apresentar fonte} do aplicativo deixar de funcionar em diferentes versões do Android ou funcionar apenas no modelo de aparelho cujo código utilizamos, e a manutenção para fazê-lo voltar a funcionar ou para que funcione em múltiplos aparelhos com certeza seria inviável em termos de complexidade. Por esses motivos, tal uso das bibliotecas privadas do Android não deve ser feito, segundo os desenvolvedores do Android. Além disso, com essa solução estaríamos limitados a utilizar os codecs suportados por padrão pelos aparelhos android. Por todos esses motivos, descartamos essa alternativa.
+Esta seria a solução mais eficiente possível, visto que todas as tarefas pesadas seriam realizadas em hardware, e os quadros trafegariam pela rede comprimidos. Contudo, como as bibliotecas nativas interagem com o resto do Android, e o sistema operacional muda muito a cada nova versão (e muda a cada modelo de aparelho também, mesmo dentro de uma mesma versão), haveria probabilidade do aplicativo deixar de funcionar em diferentes versões do Android ou funcionar apenas no modelo de aparelho cujo código utilizamos, e a manutenção para fazê-lo voltar a funcionar ou para que funcione em múltiplos aparelhos com certeza seria inviável em termos de complexidade. Por esses motivos, tal uso das bibliotecas privadas do Android não deve ser feito, segundo os desenvolvedores do Android. Além disso, com essa solução estaríamos limitados a utilizar os codecs suportados por padrão pelos aparelhos Android. Por todos esses motivos, descartamos essa alternativa.
 
 \section{Solução adotada}
 
-Pela análise acima, pode-se perceber que não foi possível contruir um sistema de interação por vídeo em tempo real utilizando-se apenas as classes padrão do Android (é claro que novas ideias podem surgir). A solução adotada baseia-se em algumas das classes padrão do Android apresentadas, mas sua parte principal é focada em implementações independentes.
-
-A solução consiste em:
+Pela análise acima, pode-se perceber que não foi possível construir um sistema de interação por vídeo em tempo real utilizando-se apenas as classes padrão do Android (é claro que novas ideias podem surgir). A solução adotada baseia-se em algumas das classes padrão do Android apresentadas, mas sua parte principal é focada em implementações independentes. A solução consiste em:
 
 \subsection{Lado da origem}
 \begin{enumerate}
- \item Utilizar a classe Camera para capturar os quadros de vídeo e instalar um callback que receba cada frame não codificado obtido da captura. Com o auxilio dessa API, nós setamos os parâmetros de captura desejados (resolução, quadros/s, etc) e enviamos cada frame capturado no formato YUV420SP (também conhecido como NV21, que é o único formato de captura suportado por todos os aparelhos Android) para o C++. A JNI é utilizada para passar os frames do Java para o C++.
-Um detalhe que convém citar é a utilização de Java reflection \todo{explicar o que é java reflection} para que se possa utilizar a função setPreviewCallbackWithBuffer em versões do android anteriores a 2.2, quase dobrando a taxa de frames em comparação ao método setPreviewCallback, visto que essa função evita que o GC (garbage collector do android) interrompa o programa a cada frame.
- \item Utilizar a classe AudioRecord para capturar os quadros de áudio, e obter os quadros não codificados da captura. Para isso desenvolvemos uma classe em Java que faz uso da classe AudioRecord, e captura o audio do microfone. Cada frame capturado é enviado ao C++ no formato RAW (PCM) com a utilização da JNI.
- \item Como o Android roda sobre um kernel Linux (FU et al., 2010), foi possível compilar o ffmpeg (que é uma solução que pode ser utilizada como uma biblioteca para codificar e decodificar vídeo em software \todo{(FFMPEG, 2010)}) em C (com a NDK) adaptado para o Android. Desse modo, é possível codificar cada quadro de forma mais eficiente que em um codificador Java. No entanto, a implementação de diversos codecs de vídeo importantes fornecida pelo ffmpeg requer que o quadro decodificado de entrada esteja no formato YUV420P. Nesses casos, antes de codificar o quadro, é preciso convertê-lo de YUV420SP para YUV420P, numa função implementada por nós.
- \item Enviar os frames codificados para o destino utilizando a implementação de sockets do C/C++. (Poderia-se passar os quadros codificados para o Java e enviá-los com alguma classe padrão do Android, mas a tarefa de passar os quadros com a JNI é custosa e complexa de ser implementada).
+ \item Utilizar a classe Camera para capturar os quadros de vídeo e instalar um callback que receba cada quadro não codificado obtido da captura. Com o auxilio dessa API, nós setamos os parâmetros de captura desejados (resolução, quadros/s, etc) e enviamos cada quadro capturado no formato YUV420SP (também conhecido como NV21, que é o único formato de captura suportado por todos os aparelhos Android) para o C++. A JNI é utilizada para passar os quadros do Java para o C++.
+Um detalhe que convém citar é a utilização de Java reflection para que se possa chamar a função setPreviewCallbackWithBuffer em versões do Android anteriores a 2.2, quase dobrando a taxa de quadros em comparação ao método setPreviewCallback, visto que essa função evita que o garbage collector do Android interrompa o programa a cada quadro.
+ \item Utilizar a classe AudioRecord para capturar os quadros de áudio, e obter os quadros não codificados da captura. Para isso desenvolvemos uma classe em Java que faz uso da classe AudioRecord, e captura o áudio do microfone. Cada quadro capturado é enviado ao C++ no formato RAW (PCM) com a utilização da JNI.
+ \item Como o Android roda sobre um kernel Linux (FU et al., 2010), foi possível compilar o ffmpeg (que é uma solução que pode ser utilizada como uma biblioteca para codificar e decodificar vídeo em software \todo{citar o ffmpeg}) em C (com a NDK) adaptado para o Android. Desse modo, é possível codificar cada quadro de forma mais eficiente que em um codificador Java. No entanto, a implementação de diversos codecs de vídeo importantes fornecida pelo ffmpeg requer que o quadro decodificado de entrada esteja no formato YUV420P. Nesses casos, antes de codificar o quadro, é preciso convertê-lo de YUV420SP para YUV420P.
+ \item Enviar os quadros codificados para o destino utilizando a implementação de sockets do C/C++. (Poderia-se passar os quadros codificados para o Java e enviá-los com alguma classe padrão do Android, mas a tarefa de passar os quadros com a JNI é custosa e complexa de ser implementada). Caso desejado, pode-se encapsular os pacotes respeitando qualquer protocolo específico (RTSP, SIP, RTMP, etc.) ou não utilizar nenhum protocolo.
 \end{enumerate}
 
 \subsection{Lado do destino}
 \begin{enumerate}
- \item Receber os quadros com a implementação de sockets do C/C++. (Igualmente poderia-se utilizar alguma classe padrão do Android, mas, pelo mesmo motivo citado no item Anterior, não é o mais indicado).
- \item Decodificar os quadros de áudio e de vídeo com o ffmpeg em C/C++ para o formato RGB. Para os casos em que o ffmpeg apenas decodifica para YUV420P, criamos uma função que converte de YUV420P para RGB.
- \item Não há como acessar o alto falante e para renderizar os quadros de áudio diretamente do C++. A solução encontrada é passar os quadros de áudio decodificados para a classe AudioTrack utilizando a JNI. Desse modo, eles são reproduzidos. A API AudioTrack toca frames de audio que são entregues a ela no formato RAW (PCM). Para enviarmos os frames de áudio do C++ para o Java, primeiramente tentamos chamar uma função Java a partir do C++ utilizando a JNI, passando como parâmetro o frame, que seria a solução mais simples. No entanto, esta solução ativa o Garbage collector a cada frame, o que causa uma enorme queda no desempenho, logo essa alternativa foi descartada. A alternativa que implementamos para evitar o GC foi utilizar uma técnica da JNI um pouco mais trabalhosa. Em resumo, essa técnica consiste na criação de um array em Java que representa um frame e de um array em C++ que também representa um frame. Em seguida, com chamadas a algumas funções da JNI, associamos os dois arrays para a mesma posição de memória para que eles sejam tratados como se fossem um só. Assim, cada vez que se atualiza o array do C++ com os dados do novo frame decodificado, essa atualização é automaticamente propagada ao array do java, sem que seja feita nenhuma cópia e nenhuma alocação de memoria adicional, resultando na solução mais eficiente que encontramos para renderizar o áudio.
- \item Não há como acessar o display para renderizar os quadros de vídeo diretamente do C++. Também não há alguma classe Java que receba como parâmetros quadros decodificados e renderize-os. A solução encontrada foi renderizar os quadros de vídeo com OpenGL ES \todo{explicar o que é opengl es} em C++, desenhando um retângulo com as dimensões desejadas e aplicando o frame de vídeo decodificado como textura RGB ao retângulo. No entanto, para que a renderização seja exibida no display, é necessário que a função de renderização do C++ seja chamada de dentro do método onDrawFrame da classe GLSurfaceView.Renderer do Java e retorne para esse método a cada frame.
+ \item Receber os quadros com a implementação de sockets do C/C++. (Igualmente poderia-se utilizar alguma classe padrão do Android, mas, pelo mesmo motivo citado no item anterior, não é o mais indicado). Pode-se criar um tratamento para o caso dos pacotes estarem de acordo com algum protocolo, como citado no item anterior.
+ \item Decodificar os quadros de áudio e de vídeo com o ffmpeg em C/C++.
+ \item Não há como acessar o alto falante e para renderizar os quadros de áudio diretamente do C++. A solução encontrada é passar os quadros de áudio decodificados para a classe AudioTrack utilizando a JNI. Desse modo, eles são reproduzidos. A API AudioTrack toca quadros de áudio que são entregues a ela no formato RAW (PCM). Para enviarmos os quadros de áudio do C++ para o Java, primeiramente tentamos chamar uma função Java a partir do C++ utilizando a JNI, passando como parâmetro o quadro, que seria a solução mais simples. No entanto, isso ativa o garbage collector a cada quadro, o que causa uma enorme queda no desempenho (100ms de interrupção por quadro, em média). Logo, essa ideia foi descartada. A alternativa que implementamos para evitar o garbage collector foi utilizar uma técnica da JNI um pouco mais trabalhosa. Em resumo, essa técnica consiste na criação de um array em Java que representa um quadro e de um array em C++ que também representa um quadro. Em seguida, com chamadas a algumas funções da JNI, associamos os dois arrays para a mesma posição de memória para que eles sejam tratados como se fossem um só. Assim, cada vez que se atualiza o array do C++ com os dados do novo quadro decodificado, essa atualização é automaticamente propagada ao array do Java, sem que seja feita nenhuma cópia e nenhuma alocação de memoria adicional, resultando na solução mais eficiente que encontramos para renderizar o áudio.
+ \item Não há como acessar a tela para renderizar os quadros de vídeo diretamente do C++. Também não há alguma classe Java que receba como parâmetros quadros decodificados e renderize-os. A solução encontrada foi renderizar os quadros de vídeo com OpenGL ES \todo{citar o opengles} em C++, desenhando um retângulo com as dimensões desejadas e aplicando o quadro de vídeo decodificado como textura RGB ao retângulo. No entanto, para que a renderização seja exibida na tela, é necessário que a função de renderização do C++ seja chamada de dentro do método onDrawFrame da classe GLSurfaceView.Renderer do Java e retorne para esse método a cada quadro. É importante citar que o OpenGL ES não renderiza quadros YUV. Desse modo, para os casos em que o ffmpeg apenas decodifica para YUV420P, é preciso convertê-lo de YUV420P para RGB. Outro detalhe importante, caso o quadro decodificado esteja numa resolução, e se queira renderizá-lo em outra, verificamos que realizando esse redimensionamento com o ffmpeg é mais lento que com o OpenGL ES. Ainda assim, caso a versão do OpenGL ES do aparelho utilizado seja a 1.0, o redimensionamento é feito em software. Caso seja 1.1 em diante, o redimensionamento é feito em hardware. Mais uma informação relevante: algumas versões do OpenGL ES suportam apenas texturas sobre retângulos de resolução cujas dimensões são potência de 2. Para poder desenhar o vídeo em qualquer resolução, criamos uma função que gera um retângulo com dimensões de potência de dois imediatamente maiores que as que irão ser utilizadas. Em seguida, a cada quadro, aplica-se a textura com qualquer dimensão sobre parte desse retângulo.
 \end{enumerate}
 
-Outro detalhe importante, caso o frame decodificado esteja numa resolução, e se queira renderizá-lo em outra, verificamos que realizando esse redimensionamento com o ffmpeg é mais lento que com o OpenGL ES. Ainda assim, caso a versão do OpenGL ES do aparelho utilizado seja a 1.0, o redimensionamento é feito em software. Caso seja 1.1 em diante, o redimensionamento é feito em hardware. Outro detalhe: algumas versões do OpenGL ES suportam apenas texturas sobre retângulos de resolução cujas dimensões são potência de 2. Para poder desenhar o vídeo em qualquer resolução, criamos uma função que gera um retângulo com dimensões de potência de dois imediatamente maiores que as que irão ser utilizadas. Em seguida, a cada frame, aplica-se a textura com qualquer dimensão sobre parte desse retângulo.
-
-Também realizamos cálculos considerando a resolução máxima da tela e a orientação do celular para que a exibição do vídeo esteja sempre centralizada na tela, independentemente da resolução e da orientação.
-
-\section{Análise técnica}
+\section{Análise de resultados da técnica}
 \subsection{Teste 1}
 Foi testada a decodificação e a exibição de um arquivo de vídeo local com a estratégia implementada em um dispositivo HTC Magic. Como resultado, para um vídeo de resolução 176x144, foram decodificados 227 quadros por segundo. A taxa de exibição obtida foi de 60 quadros por segundo (valor máximo suportado pelo aparelho).
 \subsection{Teste 2}
 Implementamos um aplicativo de videoconferência entre dispositivos móveis com a técnica apresentada. Para testar, realizamos uma conversa por vídeo com dois aparelhos Android caracterizados pela tabela~\ref{tabela_dispositivos}.
-\begin{table*}
+\begin{table}
 \centering
 \caption{Dispositivos utilizados nos testes}
 \label{tabela_dispositivos}
-\begin{tabular}{|c|c|c|c|c|l} \hline
-Modelo&Processador&Versao do Android&Resolução máxima&Versão do OpenGL ES\\ \hline
+\begin{tabular}{|p{1.5cm}|p{1.5cm}|p{1cm}|p{1.5cm}|p{1cm}|} \hline
+Modelo&Processador&Versão do Android&Resolução máxima&Versão do OpenGL ES\\ \hline
 Motorola Milestone A853&500MHz&2.0.1&480x854&1.0\\ \hline
 Samsung Galaxy S GT-I9000B&1000MHz&2.1-update1&480x800&1.1\\
 \hline\end{tabular}
-\end{table*}
+\end{table}
 
 Os parâmetros de codificação de vídeo utilizados no teste foram:
 \begin{itemize}
@@ -450,11 +450,11 @@ Os parâmetros de codificação de áudio utilizados no teste foram:
  \item Canais: 1
 \end{itemize}
 O vídeo era ampliado com o OpenGL ES para a resolução máxima do respectivo aparelho. A tabela~\ref{tabela_teste2} exibe os resultados do teste.
-\begin{table*}
+\begin{table}
 \centering
 \caption{Resultados do Teste 2}
 \label{tabela_teste2}
-\begin{tabular}{|c|c|c|c|l} \hline
+\begin{tabular}{|p{1.5cm}|p{2.5cm}|p{1.2cm}|p{1.2cm}|} \hline
 Dispositivo&Tipo de medida&Taxa de quadros&Tempo médio por quadro\\ \hline
 Motorola&Captura do vídeo&15/s&1,16ms\\ \hline
 Motorola&Captura do áudio&19/s&0,07ms\\ \hline
@@ -465,22 +465,22 @@ Samsung&Captura do áudio&19/s&0,03ms\\ \hline
 Motorola&Renderização do vídeo&15/s&16,03ms\\ \hline
 Motorola&Renderização do áudio&19/s&33,39ms\\
 \hline\end{tabular}
-\end{table*}
+\end{table}
 O atraso obtido ficou abaixo dos 400ms.
 \subsection{Teste 3}
 Realizamos uma transmissão de vídeo do Samsung para o Motorola (especificados na tabela~\ref{tabela_dispositivos}). Os parâmetros de codificação do áudio e do vídeo utilizados foram os mesmos do teste 2, porém com a taxa de quadros do vídeo igual a 30/s. A tabela~\ref{tabela_teste3} exibe os resultados do teste.
-\begin{table*}
+\begin{table}
 \centering
 \caption{Resultados do Teste 3}
 \label{tabela_teste3}
-\begin{tabular}{|c|c|c|c|l} \hline
+\begin{tabular}{|p{1.5cm}|p{2.5cm}|p{1.2cm}|p{1.2cm}|} \hline
 Dispositivo&Tipo de medida&Taxa de quadros&Tempo médio por quadro\\ \hline
 Samsung&Captura do vídeo&30/s&0,58ms\\ \hline
 Samsung&Captura do áudio&19/s&0,02ms\\ \hline
 Motorola&Renderização do vídeo&29/s&12,77ms\\ \hline
 Motorola&Renderização do áudio&18/s&24,24ms\\
 \hline\end{tabular}
-\end{table*}
+\end{table}
 O atraso obtido foi inferior a 400ms.
 \subsection{Teste 4}
 O IVA é um sistema de videoconferências para computadores do tipo desktop~\cite{roesler_iva}. Seu foco principal é o ensino a distância. Utilizando a estratégia explicada neste trabalho, implementamos um aplicativo para Android que permite que o usuário do celular participe de videoconferências do IVA enviando seu vídeo e/ou visualizando o vídeo dos outros participantes.
@@ -489,23 +489,30 @@ Neste teste, o aplicativo Android recebeu um vídeo em tempo real codificado com
 \begin{figure}
  \centering
  \label{figura_eadcel}
- \includegraphics[scale=0.2]{./ivamobile.jpg}
+ \includegraphics[scale=0.15]{./ivamobile.jpg}
  % ivamobile.jpg: 907x1385 pixel, 72dpi, 32.00x48.86 cm, bb=0 0 907 1385
 \caption{Nossa estratégia integrada ao sistema IVA}
 \end{figure}
 \subsection{Teste 5}
-Também integramos nossa estratégia a um outro sistema de videoconferências já existente chamado BigBlueButton, que funcionava apenas para desktops. Recebemos, no aplicativo Android, um fluxo de vídeo do BigBlueButton gerado por um desktop. O codec de vídeo utilizado foi FLV1 (também conhecido como Sorenson H.263), a uma resolução de 320x240. O vídeo foi exibido ampliado na máxima resolução no Samsung e no Motorola especificados na tabela~\ref{tabela_dispositivos} e também em um tablet rodando Android. O atraso ficou abaixo dos 400ms. \todo{inserir foto}.
+Também integramos nossa estratégia a um outro sistema de videoconferências já existente chamado BigBlueButton, que funcionava com suporte a vídeo apenas para desktops. Recebemos, no aplicativo Android (figura~\ref{figura_mconf}), um fluxo de vídeo do BigBlueButton gerado por um desktop. O codec de vídeo utilizado foi FLV1 (também conhecido como Sorenson H.263), a uma resolução de 320x240. O vídeo foi exibido ampliado na máxima resolução no Samsung e no Motorola especificados na tabela~\ref{tabela_dispositivos} e também em um tablet rodando Android. O atraso ficou abaixo dos 400ms.
+\begin{figure}
+ \centering
+ \label{figura_mconf}
+ \includegraphics[scale=0.4]{./mconf.jpg}
+ % ivamobile.jpg: 907x1385 pixel, 72dpi, 32.00x48.86 cm, bb=0 0 907 1385
+\caption{Nossa estratégia integrada ao sistema mconf}
+\end{figure}
 
 
 \section{Conclusão}
 
 Este artigo apresenta uma solução para implementar transmissão de vídeo interativo em tempo real para Android, sendo consistente com versões do Android maiores ou iguais a 1.5. Os aspectos inovadores da estratégia são, principalmente, a codificação/decodificação de áudio e vídeo em software (com o ffmpeg compilado para o Android), a utilização da JNI para manipular os dados de áudio e de vídeo entre a camada nativa e a camada Java e a utilização de OpenGL ES para renderizar o vídeo. Todas essas escolhas são justificadas através de um estudo sobre as classes padrão do Android e suas limitações, seguida de uma comparação de estratégias propostas por trabalhos anteriores e seus resultados. Os testes da implementação da solução são apresentados, e seus resultados validam a utilização da técnica na implementação desse tipo de sistema.
 
-\todo{traduzir para portugues, tirado do artigo anterior} Overall, the article showed a good alternative solution for videoconferencing without the need for utilization of specific protocols such as SIP and RTSP without losing compatibility with different versions of Android. This solution is also one of the few that do not depend on Media Player class from Android’s API, making it different, mainly in the videoconferencing and decoding of higher amount of codecs. Unlike the related work mentioned, our solution not only performs the decoding and encoding of audio/video, but also makes the transmission and reception in real time, allowing its use for videoconferencing. As the decoding is performed in software, you can use any codec supported by FFmpeg, even if the codec is not supported by the device’s hardware.
+Dentre os demais aspectos positivos da técnica, pode-se citar que ela é independente de protocolo. Em outras palavras, não há a necessidade de utilizar protocolos específicos, como o SIP, o RTSP e o RTMP, porém eles podem ser utilizados caso se deseje. Além disso, a solução não depende das classes MediaRecorder e MediaPlayer, o que a torna diferenciada, principalmente no que diz respeito a permitir a utilização de um grande número de codecs, até mesmo os não suportados pelo hardware do dispositivo. Adicionalmente, ao contrário dos trabalhos relacionados mencionados, nossa estratégia não apenas realiza codificação/decodificação e transmissão de áudio e vídeo, mas também faz essa transmissão em tempo real, permitindo o seu uso para conversas por vídeo e videoconferências.
 
 \section{Trabalhos futuros}
 
-Estamos desenvolvendo um framework que irá encapsular todas as partes complexas da implementação dessa técnica. O framework permitirá que seja possível implementar aplicativos de interação por vídeo com a estratégia acima de modo simples e rápido, mas ao mesmo tempo oferecendo flexibilidade ao programador com relação a aspectos como, por exemplo, escolha dos codecs a serem utilizado e a escolha da forma de transmissão/recepção dos dados codificados. Por exemplo, o programador, se desejar, poderá implementar seu próprio protocolo para transmissão, utilizar um protocolo padrão já existente, ou utilizar a transmissão fornecida pelo framework. Também será possível utilizar o framework para arquivos de vídeo locais que estão codificados com codecs ou formatos não suportados em hardware pelo android, visto que o ffmpeg suporta, em software, um número muito grande de codecs.
+Estamos desenvolvendo um framework que irá encapsular todas as partes complexas da implementação desta técnica. O framework permitirá que seja possível implementar aplicativos de interação por vídeo com a estratégia acima de modo simples e rápido, mas ao mesmo tempo oferecendo flexibilidade ao programador com relação a aspectos como, por exemplo, escolha dos codecs a serem utilizados e escolha da forma de transmissão/recepção dos dados codificados. Por exemplo, o programador, se desejar, poderá implementar seu próprio protocolo para transmissão, utilizar um protocolo padrão já existente, ou utilizar a transmissão fornecida pelo framework. Também será possível utilizar o framework para arquivos de vídeo locais que estão codificados com codecs ou formatos não suportados em hardware pelo Android, visto que o ffmpeg suporta, em software, um número muito grande de codecs.
 
 %
 % The following two commands are all you need in the
