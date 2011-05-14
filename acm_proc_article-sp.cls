@@ -555,7 +555,7 @@
 \def\fps@figure{tbp}
 \def\ftype@figure{1}
 \def\ext@figure{lof}
-\def\fnum@figure{Figure \thefigure}
+\def\fnum@figure{Figura \thefigure}
 \def\figure{\@float{figure}}
 %\let\endfigure\end@float
 \def\endfigure{\end@float} 		% Gerry January 2008
@@ -567,7 +567,7 @@
 \def\fps@table{tbp}
 \def\ftype@table{2}
 \def\ext@table{lot}
-\def\fnum@table{Table \thetable}
+\def\fnum@table{Tabela \thetable}
 \def\table{\@float{table}}
 %\let\endtable\end@float
 \def\endtable{\end@float}		% Gerry January 2008
