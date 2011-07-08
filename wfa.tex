@@ -1,0 +1,167 @@
+% THIS IS SIGPROC-SP.TEX - VERSION 3.1
+% WORKS WITH V3.2SP OF ACM_PROC_ARTICLE-SP.CLS
+% APRIL 2009
+%
+% It is an example file showing how to use the 'acm_proc_article-sp.cls' V3.2SP
+% LaTeX2e document class file for Conference Proceedings submissions.
+% ----------------------------------------------------------------------------------------------------------------
+% This .tex file (and associated .cls V3.2SP) *DOES NOT* produce:
+%       1) The Permission Statement
+%       2) The Conference (location) Info information
+%       3) The Copyright Line with ACM data
+%       4) Page numbering
+% ---------------------------------------------------------------------------------------------------------------
+% It is an example which *does* use the .bib file (from which the .bbl file
+% is produced).
+% REMEMBER HOWEVER: After having produced the .bbl file,
+% and prior to final submission,
+% you need to 'insert'  your .bbl file into your source .tex file so as to provide
+% ONE 'self-contained' source file.
+%
+% Questions regarding SIGS should be sent to
+% Adrienne Griscti ---> griscti@acm.org
+%
+% Questions/suggestions regarding the guidelines, .tex and .cls files, etc. to
+% Gerald Murray ---> murray@hq.acm.org
+%
+% For tracking purposes - this is V3.1SP - APRIL 2009
+
+\documentclass{acm_proc_article-sp}
+
+\usepackage[utf8]{inputenc}
+\usepackage[brazilian]{babel}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{textcomp}
+%\usepackage{algorithm2e}
+%\hyphenation{po-de-ría-mos}
+\newcommand{\todo}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\bf \uppercase{#1}}}
+
+\begin{document}
+
+\title{Mconf-Mobile: videoconferência \\BigBlueButton no Android}
+%
+% You need the command \numberofauthors to handle the 'placement
+% and alignment' of the authors beneath the title.
+%
+% For aesthetic reasons, we recommend 'three authors at a time'
+% i.e. three 'name/affiliation blocks' be placed beneath the title.
+%
+% NOTE: You are NOT restricted in how many 'rows' of
+% "name/affiliations" may appear. We just ask that you restrict
+% the number of 'columns' to three.
+%
+% Because of the available 'opening page real-estate'
+% we ask you to refrain from putting more than six authors
+% (two rows with three columns) beneath the article title.
+% More than six makes the first-page appear very cluttered indeed.
+%
+% Use the \alignauthor commands to handle the names
+% and affiliations for an 'aesthetic maximum' of six authors.
+% Add names, affiliations, addresses for
+% the seventh etc. author(s) as the argument for the
+% \additionalauthors command.
+% These 'additional authors' will be output/set for you
+% without further effort on your part as the last section in
+% the body of your article BEFORE References or any Appendices.
+
+\numberofauthors{1} %  in this sample file, there are a *total*
+% of EIGHT authors. SIX appear on the 'first-page' (for formatting
+% reasons) and the remaining two appear in the \additionalauthors section.
+%
+\author{
+% You can go ahead and credit any number of authors here,
+% e.g. one 'row of three' or two rows (consisting of one row of three
+% and a second row of one, two or three).
+%
+% The command \alignauthor (no curly braces needed) should
+% precede each author name, affiliation/snail-mail address and
+% e-mail address. Additionally, tag each line of
+% affiliation/address with \affaddr, and tag the
+% e-mail address with \email.
+%
+% 1st. author
+%\alignauthor
+Felipe Cecagno,
+Giancarlo Rampanelli, 
+Valter Roesler\\
+       \affaddr{Instituto de Informática}\\
+       \affaddr{Universidade Federal do Rio Grande do Sul}\\
+       \affaddr{Porto Alegre, Rio Grande do Sul, Brasil}\\
+       \email{\{fcecagno, grampanelli, roesler\}@inf.ufrgs.br}
+}
+\date{10 de julho de 2011}
+
+\maketitle
+\begin{resumo}
+  Este artigo tem o objetivo de apresentar o resultado parcial do projeto GT-Mconf. O BBB-Android é um aplicativo para dispositivos móveis com sistema operacional Android, e através dele é possível interagir com outros usuários em uma videoconferência no sistema BigBlueButton. Serão apresentados alguns objetivos do projeto, a arquitetura da solução e suas principais funcionalidades.
+\end{resumo}
+
+\begin{abstract}
+\todo{traduzir abstract}
+\end{abstract}
+
+% http://www.acm.org/about/class/ccs98-html
+% A category with the (minimum) three required fields
+%\category{}{Peer-to-peer multimedia systems and streaming}{}
+%\category{}{Software development using multimedia techniques}{}
+%\category{H.4}{Information Systems Applications}{Miscellaneous}
+
+
+\category{C.3}{Special-purpose and application-based systems}{Real-time and embedded systems}
+\category{J.7}{Computers in other systems}{Real time}
+\category{I.6}{Simulation and modeling}{Applications}
+\category{H.4}{Information systems applications}{Communications Applications}{Computer conferencing, teleconferencing, and videoconferencing}
+
+\terms{Design, Experimentation}
+
+\keywords{Interação multimídia de tempo real, Vídeo, JNI}
+
+\section{Introdução}
+
+Dispositivos móveis inteligentes vem ganhando a cada dia mais espaço e popularidade entre as pessoas. A troca de telefones celulares burros por \emph{smartphones} acontece por diversos motivos, e um deles é a grande variedade de aplicativos disponíveis. Dentre eles, os mais populares são os games \todo{referência aqui}, que aproveitam a capacidade de processamento, gráfico ou não, para atrair os usuários.
+
+Além dos jogos, aplicações de vídeo em tempo real vêm crescendo no mercado de aplicativos. Clientes VoIP como o Sipdroid e aplicativos populares por sua versão para desktop como o Skype já incluem a funcionalidade de vídeo chamada nos seus aplicativos para dispositivos móveis. Além destes, o Fring permite chamada em grupos de até quatro pessoas.
+
+Entretanto, tanto o Skype quanto o Fring permitem chamadas apenas para clientes de mesmo tipo, ou seja, Skype só fala com Skype e Fring só fala com Fring. Os clientes VoIP são mais genéricos, mas ao mesmo tempo mais limitados quanto a funcionalidades.
+
+O objetivo do subprojeto Mconf-Mobile é desenvolver um aplicativo para videoconferência integrado ao ambiente BigBlueButton. Com isso visa-se a interação plena entre dispositivos móveis e clientes desktop conectados ao sistema através da Web.
+
+\section{Arquitetura}
+
+O BigBlueButton é um sistema de código aberto para webconferência voltado principalmente para ensino à distância. Ele oferece funcionalidades como interação por áudio, vídeo e bate-papo (público e privado), além de compartilhamento da tela do computador e apresentação síncrona de slides.
+
+O servidor do BigBlueButton utiliza o Red5, que é uma implementação livre do Flash Media Server. Por isso, o cliente Web é implementado em Flash, e toda a comunicação (exceto o áudio) com o servidor é através do protocolo RTMP. Além da comunicação por vídeo, realizada de forma transparente entre o cliente Flash e o servidor Red5, são utilizados Remote Shared Objects (RSO) e Remote Procedure Calls (RPC) para as demais trocas de mensagens, como bate-papo e gerenciamento de status de participantes.
+
+Para áudio, o sistema utiliza um servidor VoIP convencional, que pode ser o FreeSWITCH ou o Asterisk, e o cliente Web utiliza uma implementação de telefone SIP em Flash.
+
+A arquitetura do aplicativo BBB-Android reflete um pouco da arquitetura do cliente Web do BigBlueButton. O Android oferece suporte a plataforma Flash a partir da versão 2.2, mas optou-se por desenvolver um aplicativo nativo através da SDK padrão para permitir compatibilidade com as versões anteriores.
+
+\subsection{Flazr}
+
+Toda a comunicação RTMP entre o aplicativo e o servidor BigBlueButton é feita através da biblioteca Flazr, uma implementação livre em Java de protocolos de streaming multimídia. Entretanto, a biblioteca não oferece suporte a RSO, recurso necessário para realização plena da comunicação com o servidor. Por isso tal funcionalidade teve de ser adicionada à biblioteca, e teve como base a implementação do próprio Red5.
+
+\subsection{BBB-Java}
+
+\subsection{BBB-Android}
+
+\section{Principais funcionalidades}
+
+\section{Conclusão}~\cite{roesler_iva}
+
+%
+% The following two commands are all you need in the
+% initial runs of your .tex file to
+% produce the bibliography for the citations in your paper.
+\bibliographystyle{abbrv}
+\bibliography{paper}  % sigproc.bib is the name of the Bibliography in this case
+% You must have a proper ".bib" file
+%  and remember to run:
+% latex bibtex latex latex
+% to resolve all references
+%
+% ACM needs 'a single self-contained file'!
+%
+\balancecolumns
+% That's all folks!
+\end{document}
