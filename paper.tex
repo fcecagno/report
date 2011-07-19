@@ -444,7 +444,7 @@ De maneira similar, não há como acessar o hardware da tela diretamente do cód
 
 Através do OpenGL ES, desenha-se um retângulo com as dimensões desejadas e aplica-se uma textura ao retângulo contendo o quadro de vídeo. No entanto, para que a textura seja exibida na tela, é necessário que a função de renderização seja chamada de dentro do método \emph{onDrawFrame} da classe GLSurfaceView.Render e retorne para o método a cada quadro. Além disso, o OpenGL ES só permite aplicação de texturas no formato RGB, e o FFmpeg, por sua vez, só decodifica quadros de vídeo para o formato YUV420P, sendo necessária uma conversão intermediária.
 
-Caso a resolução do vídeo recebido seja diferente das dimensões da região de pintura da tela, utiliza-se o próprio OpenGL ES para a realização do redimensionamento. Isso porque foi verificado experimentalmente que o OpenGL ES possui melhor desempenho do que o FFmpeg para realizar tal operação, até porque no OpenGL ES o redimensionamento é feito em hardware nas versões posteriores a 1.1.
+Caso a resolução do vídeo recebido seja diferente das dimensões da região de pintura da tela, utiliza-se o próprio OpenGL ES para a realização do redimensionamento. Isso porque foi verificado experimentalmente que o OpenGL ES possui melhor desempenho do que o FFmpeg para realizar tal operação, até porque no OpenGL ES o redimensionamento é feito em hardware na versão 1.1 e posterior.
 
 Outra limitação do OpenGL ES é a capacidade de, em algumas versões, somente suportar aplicação de texturas sobre retângulos de dimensões potência de dois. Ou seja, para desenhar um vídeo com resolução 320x240, deve-se utilizar uma área de desenho de pelo menos 512x256. Dessa forma que a limitação foi superada: cria-se uma região com dimensões potência de dois imediatamente maiores do que o tamanho do vídeo, e aplica-se a textura de qualquer dimensão sobre parte dessa região.
 
@@ -458,7 +458,7 @@ A fim de validar experimentalmente a estratégia proposta, foram realizados algu
 \label{tabela_dispositivos}
 \begin{tabular}{|p{1.5cm}|p{1.5cm}|p{1cm}|p{1.5cm}|p{1cm}|} \hline
 Modelo&Processador&Android&Resolução&OpenGL ES\\ \hline
-HTC Magic&528MHz&1.6&320x480&1.0\\ \hline
+HTC Magic&528MHz&1.6&320x480&1.1\\ \hline
 Motorola Milestone A853&500MHz&2.0.1&480x854&1.0\\ \hline
 Samsung Galaxy S GT-I9000B&1000MHz&2.1-update1&480x800&1.1\\
 \hline\end{tabular}
