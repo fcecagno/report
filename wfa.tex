@@ -83,12 +83,11 @@
 % 1st. author
 %\alignauthor
 Felipe Cecagno,
-Giancarlo Rampanelli, 
 Valter Roesler\\
        \affaddr{Instituto de Informática}\\
        \affaddr{Universidade Federal do Rio Grande do Sul}\\
        \affaddr{Porto Alegre, Rio Grande do Sul, Brasil}\\
-       \email{\{fcecagno, grampanelli, roesler\}@inf.ufrgs.br}
+       \email{\{fcecagno, roesler\}@inf.ufrgs.br}
 }
 \date{10 de julho de 2011}
 
@@ -98,6 +97,8 @@ Valter Roesler\\
 \end{resumo}
 
 \begin{abstract}
+  This article aims to present the partial result of the GT-Mconf project. The BBB-Android is an application for mobile devices with Android operational system, and \todo{???} it's possible to interact with other users in a videoconferencing on BigBlueButton system. It will be presented some goals of the project, the solution architecture and the main functionalities.
+
 \todo{traduzir abstract}
 \end{abstract}
 
@@ -119,6 +120,8 @@ Valter Roesler\\
 
 \section{Introdução}
 
+\todo{falar mais do GT-Mconf}
+
 Dispositivos móveis inteligentes vem ganhando a cada dia mais espaço e popularidade entre as pessoas. A troca de telefones celulares burros por \emph{smartphones} acontece por diversos motivos, e um deles é a grande variedade de aplicativos disponíveis. Dentre eles, os mais populares são os games \todo{referência aqui}, que aproveitam a capacidade de processamento, gráfico ou não, para atrair os usuários.
 
 Além dos jogos, aplicações de vídeo em tempo real vêm crescendo no mercado de aplicativos. Clientes VoIP como o Sipdroid e aplicativos populares por sua versão para desktop como o Skype já incluem a funcionalidade de vídeo chamada nos seus aplicativos para dispositivos móveis. Além destes, o Fring permite chamada em grupos de até quatro pessoas.
@@ -129,9 +132,9 @@ O objetivo do subprojeto Mconf-Mobile é desenvolver um aplicativo para videocon
 
 \section{Arquitetura}
 
-O BigBlueButton é um sistema de código aberto para webconferência voltado principalmente para ensino à distância. Ele oferece funcionalidades como interação por áudio, vídeo e bate-papo (público e privado), além de compartilhamento da tela do computador e apresentação síncrona de slides.
+O BigBlueButton é um sistema de código aberto para webconferência voltado principalmente para ensino à distância. Ele oferece funcionalidades como interação por áudio, vídeo e bate-papo (público e privado), além de compartilhamento da tela do computador e apresentação síncrona de slides e documentos.
 
-O servidor do BigBlueButton utiliza o Red5, que é uma implementação livre do Adobe Flash Media Server. Por isso, o cliente Web é implementado em Flash, e toda a comunicação (com exceção dos dados de áudio) com o servidor é feita através do protocolo RTMP. Além da comunicação por vídeo, realizada de forma transparente entre o cliente Flash e o servidor Red5, são utilizados Remote Shared Objects (RSO) e Remote Procedure Calls (RPC) para as demais trocas de mensagens, como bate-papo e gerenciamento de status de participantes.
+O servidor do BigBlueButton utiliza o Red5, que é uma implementação livre do Adobe Flash Media Server. Por isso, o cliente Web é implementado em Flash, e toda a comunicação com o servidor é feita através do protocolo RTMP. Além da comunicação por vídeo, realizada de forma transparente entre o cliente Flash e o servidor Red5, são utilizados Remote Shared Objects (RSO) e Remote Procedure Calls (RPC) para as demais trocas de mensagens, como bate-papo e gerenciamento de status de participantes.
 
 Para áudio, o sistema utiliza um servidor VoIP, que pode ser o FreeSWITCH ou o Asterisk. No cliente Web, é utilizada uma implementação de telefone SIP em Flash.
 
@@ -139,37 +142,47 @@ O Android oferece suporte a plataforma Flash a partir da versão 2.2, mas optou-
 
 \subsection{Flazr}
 
-Toda a comunicação RTMP entre o aplicativo e o servidor BigBlueButton é feita através da biblioteca Flazr, uma implementação livre em Java de protocolos de streaming multimídia. Entretanto, a biblioteca não oferece suporte a RSO, recurso necessário para realização plena da comunicação com o servidor. Por isso tal funcionalidade teve de ser adicionada à biblioteca, e foi utilizada como base a implementação de RSO do próprio Red5.
+Toda a comunicação RTMP entre o aplicativo e o servidor BigBlueButton é feita através da biblioteca Flazr, uma implementação livre em Java de protocolos de streaming multimídia. A biblioteca implementa partes importantes do protocolo RTMP, como por exemplo o \emph{handshake} inicial e multiplexação/demultiplexação de mensagens de controle, áudio e vídeo, e comandos de RPC e controle de fluxos de dados.
+
+Entretanto, a biblioteca não oferece suporte a RSO, recurso necessário para realização plena da comunicação com o servidor. Por exemplo, atualização de status de participantes da conferência como informação de quem entrou e quem saíu, publicação de uma stream de vídeo ou então levantar a mão para pedir permissão para falar são ações informadas através do objeto \textbf{participantsSO}. Outro exemplo é a troca de mensagens de bate-papo públicas, que são realizadas através do objeto \textbf{chatSO}. Por isso tal funcionalidade teve de ser adicionada à biblioteca, e foi utilizada como base a implementação de RSO do próprio Red5.
 
 \subsection{BBB-Java}
 
-A fim de possibilitar o desenvolvimento de novos aplicativos integrados ao BigBlueButton, buscou-se desacoplar ao máximo a biblioteca responsável pela comunicação com o servidor de webconferência do código do aplicativo Android. Para isso criou-se o BBB-Java, que é a biblioteca responsável pela comunicação do lado do cliente com o servidor.
+A fim de possibilitar o desenvolvimento de novos aplicativos integrados ao BigBlueButton, buscou-se desacoplar ao máximo a biblioteca responsável pela comunicação com o servidor de webconferência do código do aplicativo Android. Por isso foi criado o BBB-Java, que é a biblioteca responsável pela comunicação do cliente com o servidor.
 
 Dentre os recursos oferecidos pela biblioteca estão:
 \begin{itemize}
- \item Gerenciamento de salas de conferência (pesquisa, criação e acesso);
- \item Atualização do status dos participantes da sessão:
+ \item Gerenciamento de salas de conferência (pesquisa das salas existentes, criação de novas salas e acesso a uma sala específica);
+ \item Atualização do status dos participantes da sessão;
  \item Troca de mensagens de bate-papo (público e privado);
- \item Recepção e envio de vídeo.
+ \item Recepção e envio de dados de vídeo.
 \end{itemize}
 
-Disponibilizando uma biblioteca de interação com o servidor BigBlueButton, espera-se ver crescer em um futuro próximo o número de aplicativos capazes de interagir com o sistema.
+O BBB-Java utiliza a versão modificada da biblioteca Flazr para realizar a comunicação RTMP com o servidor. Disponibilizando uma biblioteca de interação com o BigBlueButton espera-se ver crescer em no futuro o número de aplicativos capazes de interagir com o sistema. Além disso, a biblioteca pode ser utilizada para a criação de robôs de teste do sistema, que podem ser úteis para a realização de testes de funcionamento e de carga.
 
 \subsection{BBB-Android}
 
-O BBB-Android é o aplicativo Android propriamente dito. Foi desenvolvido através do \emph{Software Development Kit} padrão do Android, além do \emph{Native Development Kit} do Android, que permite integração de código desenvolvido nas linguagens C e C++.
+O BBB-Android é um aplicativo que permite a interação entre usuários em dispositivos móveis dotados do sistema operacional Android e usuários de computadores pessoais. Esse aplicativo foi desenvolvido utilizando o \emph{Software Development Kit} padrão do Android, além do \emph{Native Development Kit} do Android, que possibilita integração de código desenvolvido nas linguagens C e C++.
+
+Considerando o fato de que o servidor BigBlueButton utiliza um servidor VoIP para lidar com os fluxos de áudio, para o BBB-Android adotou-se a estratégia de integrar ao aplicativo uma solução de VoIP de código aberto conhecida e consolidada. Optou-se por realizar a integração do aplicativo Sipdroid, um dos softphones SIP mais populares do Android Market, ao BBB-Android, adicionando assim a funcionalidade de interação por áudio através do aplicativo.
+
+\todo{FFmpeg}
 
 \section{Principais funcionalidades}
 
-\subsection{Interação por áudio}
+\subsection{Bate-papo}
+
+\subsection{Áudio}
 
 O BBB-Android permite que usuários conectados a uma conferência através de um dispositivo móvel interajam de forma natural com os demais participantes através de áudio. A comunicação é feita através de SIP
 
-\subsection{Interação por vídeo}
+\subsection{Vídeo}
+
 \subsection{Gerência de conferência}
 
 \section{Conclusão}~\cite{roesler_iva}
 
+\todo{trabalhos futuros: captura de vídeo, múltiplos vídeos, módulo de apresentação, bloco de notas}
 %
 % The following two commands are all you need in the
 % initial runs of your .tex file to
