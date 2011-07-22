@@ -33,6 +33,12 @@
 \usepackage{color}
 \usepackage{listings}
 \usepackage{textcomp}
+
+%\usepackage{url}
+\usepackage[colorlinks]{hyperref}
+\definecolor{darkblue}{rgb}{0,0,0.5}
+\hypersetup{ colorlinks=true, urlcolor=darkblue, linkcolor=darkblue, citecolor=darkblue }
+
 %\usepackage{algorithm2e}
 %\hyphenation{po-de-ría-mos}
 \newcommand{\todo}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\bf \uppercase{#1}}}
@@ -89,17 +95,15 @@ Valter Roesler\\
        \affaddr{Porto Alegre, Rio Grande do Sul, Brasil}\\
        \email{\{fcecagno, roesler\}@inf.ufrgs.br}
 }
-\date{10 de julho de 2011}
+\date{24 de julho de 2011}
 
 \maketitle
 \begin{resumo}
-  Este artigo tem o objetivo de apresentar o resultado parcial do projeto GT-Mconf. O BBB-Android é um aplicativo para dispositivos móveis com sistema operacional Android, e através dele é possível interagir com outros usuários em uma videoconferência no sistema BigBlueButton. Serão apresentados alguns objetivos do projeto, a arquitetura da solução e suas principais funcionalidades.
+  Este artigo apresenta um dos resultados desenvolvidos no projeto Mconf. O Mconf-Mobile é um aplicativo de código aberto para dispositivos móveis com sistema operacional Android que permite interação entre usuários de smartphones e tablets com usuários de computadores de mesa através do sistema de webconferência BigBlueButton. Serão apresentados alguns objetivos do projeto, a arquitetura da solução e suas principais funcionalidades.
 \end{resumo}
 
 \begin{abstract}
-  This article aims to present the partial result of the GT-Mconf project. The BBB-Android is an application for mobile devices with Android operational system, and \todo{???} it's possible to interact with other users in a videoconferencing on BigBlueButton system. It will be presented some goals of the project, the solution architecture and the main functionalities.
-
-\todo{traduzir abstract}
+  This article presents a result the Mconf project. The Mconf-Mobile is an application for mobile devices with Android operational system, and through it is possible to interact with other users in a videoconferencing on BigBlueButton system. It will be presented some goals of the project, the solution architecture and the main functionalities.
 \end{abstract}
 
 % http://www.acm.org/about/class/ccs98-html
@@ -109,46 +113,56 @@ Valter Roesler\\
 %\category{H.4}{Information Systems Applications}{Miscellaneous}
 
 
-\category{C.3}{Special-purpose and application-based systems}{Real-time and embedded systems}
-\category{J.7}{Computers in other systems}{Real time}
-\category{I.6}{Simulation and modeling}{Applications}
-\category{H.4}{Information systems applications}{Communications Applications}{Computer conferencing, teleconferencing, and videoconferencing}
+\category{C.3}{Special-purpose and application-based systems: }{Real-time and embedded systems}
+%\category{J.7}{Computers in other systems}{Real time}
+%\category{I.6}{Simulation and modeling}{Applications}
+\category{H.4}{Information systems applications}{Communications Applications: }{Computer conferencing, teleconferencing, and videoconferencing}
 
-\terms{Design, Experimentation}
+%\terms{Design, Experimentation}
 
-\keywords{Interação multimídia de tempo real, Vídeo, JNI}
+\keywords{Videoconferência, Android, BigBlueButton, Código aberto, Mconf}
 
 \section{Introdução}
 
-\todo{falar mais do GT-Mconf}
+Dispositivos móveis inteligentes vêm ganhando a cada dia mais espaço e popularidade entre as pessoas. A troca de telefones celulares ``burros'' por smartphones acontece por diversos motivos, e um deles é a grande variedade de aplicativos disponíveis. Dentre eles, os mais populares são os aplicativos de entretenimento~\cite{android-stats}, categoria que inclui os jogos, que aproveitam a capacidade de processamento dos dispositivos e oferecem distração aos usuários.
 
-Dispositivos móveis inteligentes vem ganhando a cada dia mais espaço e popularidade entre as pessoas. A troca de telefones celulares burros por \emph{smartphones} acontece por diversos motivos, e um deles é a grande variedade de aplicativos disponíveis. Dentre eles, os mais populares são os games \todo{referência aqui}, que aproveitam a capacidade de processamento, gráfico ou não, para atrair os usuários.
+Além dos jogos, aplicações de vídeo em tempo real vêm crescendo no mercado de aplicativos. Clientes VoIP\footnote{\emph{Voice over IP}, ou Voz sobre IP} como o Sipdroid e aplicativos populares por sua versão para desktop como o Skype já incluem a funcionalidade de vídeo chamada nos seus aplicativos para dispositivos móveis. Além destes, o Fring permite chamada em grupos de até quatro pessoas.
 
-Além dos jogos, aplicações de vídeo em tempo real vêm crescendo no mercado de aplicativos. Clientes VoIP como o Sipdroid e aplicativos populares por sua versão para desktop como o Skype já incluem a funcionalidade de vídeo chamada nos seus aplicativos para dispositivos móveis. Além destes, o Fring permite chamada em grupos de até quatro pessoas.
+Entretanto, tanto o Skype quanto o Fring permitem chamadas apenas para clientes de mesmo tipo, ou seja, Skype se comunica com Skype e Fring se comunica com Fring, mas não existe interação entre eles. Os clientes VoIP são mais genéricos, mas ao mesmo tempo mais limitados quanto a funcionalidades.
 
-Entretanto, tanto o Skype quanto o Fring permitem chamadas apenas para clientes de mesmo tipo, ou seja, Skype só fala com Skype e Fring só fala com Fring. Os clientes VoIP são mais genéricos, mas ao mesmo tempo mais limitados quanto a funcionalidades.
+\todo{falar sobre por que android?}
 
-O objetivo do subprojeto Mconf-Mobile é desenvolver um aplicativo para videoconferência integrado ao ambiente BigBlueButton. Com isso visa-se a interação plena entre dispositivos móveis e clientes desktop conectados ao sistema através da Web.
+O principal objetivo do projeto Mconf é proporcionar uma solução de código aberto para webconferência com foco na facilidade de uso e integração com dispositivos móveis e redes sociais\footnote{\url{http://inf.ufrgs.br/prav/gtmconf}}. A solução integra o sistema de webconferência BigBlueButton com o portal Web em forma de rede social Global Plaza, e prevê interação com dispositivos móveis através do Mconf-Mobile.
 
-\section{Arquitetura}
+O projeto Mconf é desenvolvido pelo Laboratório de Projetos em Áudio e Vídeo da Universidade Federal do Rio Grande do Sul, teve início em novembro 2010 e é financiado pela Rede Nacional de Ensino e Pesquisa no âmbito do programa de Grupos de Trabalho da RNP.
+
+O código fonte do Mconf-Mobile está disponível em um repositório público do GitHub\footnote{\url{https://github.com/mconf/mconf-mobile}} e é licenciado sob a \emph{GNU General Public License}. O aplicativo está disponível para \emph{download} no Google Code do projeto\footnote{\url{http://code.google.com/p/mconf/}}, e futuras versões serão disponibilizadas gratuitamente na loja oficial do Android.
+
+%O objetivo do subprojeto Mconf-Mobile é desenvolver um aplicativo para videoconferência integrado ao ambiente BigBlueButton. Com isso visa-se a interação plena entre dispositivos móveis e clientes desktop conectados ao sistema através da Web.
+
+\section{Arquitetura}\label{sec:arquitetura}
+
+Conforme descrito anteriormente, o Mconf integra dois sistemas existentes de código aberto voltados para videoconferência: o BigBlueButton e o Global Plaza. Entretanto, o aplicativo Android se comunica diretamente com o BigBlueButton e não realiza qualquer interação com o Global Plaza. Isso se deve a uma decisão estratégica de projetar o Mconf-Mobile como o cliente Android oficial do BigBlueButton. Dessa forma, usuários do BigBlueButton podem utilizar o aplicativo independente do portal Web do Mconf. Tal decisão fez o projeto ganhar visibilidade e atrair a atenção da comunidade de desenvolvedores do BigBlueButton (que conta com mais de 950 membros\footnote{\url{http://groups.google.com/group/bigbluebutton-dev/about}}).
 
 O BigBlueButton é um sistema de código aberto para webconferência voltado principalmente para ensino à distância. Ele oferece funcionalidades como interação por áudio, vídeo e bate-papo (público e privado), além de compartilhamento da tela do computador e apresentação síncrona de slides e documentos.
 
-O servidor do BigBlueButton utiliza o Red5, que é uma implementação livre do Adobe Flash Media Server. Por isso, o cliente Web é implementado em Flash, e toda a comunicação com o servidor é feita através do protocolo RTMP. Além da comunicação por vídeo, realizada de forma transparente entre o cliente Flash e o servidor Red5, são utilizados Remote Shared Objects (RSO) e Remote Procedure Calls (RPC) para as demais trocas de mensagens, como bate-papo e gerenciamento de status de participantes.
+O cliente Web para desktop é desenvolvido na plataforma Adobe Flash, e toda a comunicação com o servidor é feita através do protocolo proprietário RTMP\footnote{\emph{Real-Time Messaging Protocol}}. Já o servidor do BigBlueButton utiliza o Red5\footnote{\url{http://www.red5.org/}}, que é uma implementação livre do Adobe Flash Media Server. Além da comunicação por vídeo, realizada de forma transparente entre o cliente Flash e o servidor Red5, são utilizados \emph{Remote Shared Objects} (RSO) e \emph{Remote Procedure Calls} (RPC) para as demais trocas de mensagens, como bate-papo e gerenciamento de status de participantes.
 
-Para áudio, o sistema utiliza um servidor VoIP, que pode ser o FreeSWITCH ou o Asterisk. No cliente Web, é utilizada uma implementação de telefone SIP em Flash.
+Para áudio, o sistema utiliza um servidor VoIP, que pode ser tanto o FreeSWITCH quanto o Asterisk. No cliente Web é utilizada uma implementação de telefone SIP\footnote{\emph{Session Initiation Protocol}} em Flash.
 
-O Android oferece suporte a plataforma Flash a partir da versão 2.2, mas optou-se por desenvolver um aplicativo nativo através da SDK padrão para permitir compatibilidade com as versões anteriores. A arquitetura do aplicativo Android será detalhada nas subseções seguintes.
+Apesar do Android oferecer suporte a plataforma Flash a partir da sua versão 2.2, optou-se por desenvolver um aplicativo nativo através da SDK padrão do Android para permitir compatibilidade com as versões anteriores. A arquitetura do aplicativo será detalhada nas subseções seguintes.
 
 \subsection{Flazr}
 
-Toda a comunicação RTMP entre o aplicativo e o servidor BigBlueButton é feita através da biblioteca Flazr, uma implementação livre em Java de protocolos de streaming multimídia. A biblioteca implementa partes importantes do protocolo RTMP, como por exemplo o \emph{handshake} inicial e multiplexação/demultiplexação de mensagens de controle, áudio e vídeo, e comandos de RPC e controle de fluxos de dados.
+Toda a comunicação RTMP entre o aplicativo e o servidor BigBlueButton é feita através da biblioteca Flazr, uma implementação livre em Java de protocolos de streaming multimídia\footnote{\url{http://flazr.com}}. A biblioteca implementa partes importantes do protocolo RTMP, como por exemplo o \emph{handshake} inicial e multiplexação/demultiplexação de mensagens de controle, áudio e vídeo, e comandos de RPC e controle de fluxos de dados.
 
-Entretanto, a biblioteca não oferece suporte a RSO, recurso necessário para realização plena da comunicação com o servidor. Por exemplo, atualização de status de participantes da conferência como informação de quem entrou e quem saíu, publicação de uma stream de vídeo ou então levantar a mão para pedir permissão para falar são ações informadas através do objeto \textbf{participantsSO}. Outro exemplo é a troca de mensagens de bate-papo públicas, que são realizadas através do objeto \textbf{chatSO}. Por isso tal funcionalidade teve de ser adicionada à biblioteca, e foi utilizada como base a implementação de RSO do próprio Red5.
+Entretanto, a biblioteca não oferece suporte a RSO, recurso indispensável para realização plena da comunicação com o servidor. Por exemplo, informações de entrada e saída de participantes, presença de vídeo de um determinado participante ou pedido de atenção através do recurso ``levantar a mão'' são ações informadas através do objeto \textbf{participantsSO}. Outro exemplo é a troca de mensagens públicas de bate-papo, que são realizadas através do objeto \textbf{chatSO}. 
+
+Devido à necessidade, tal funcionalidade teve de ser adicionada à biblioteca. A implementação de gerência de objetos compartilhados e a multiplexação/demultiplexação de mensagens teve como base o código do Red5 e a especificação do protocolo RTMP~\cite{rtmp}.
 
 \subsection{BBB-Java}
 
-A fim de possibilitar o desenvolvimento de novos aplicativos integrados ao BigBlueButton, buscou-se desacoplar ao máximo a biblioteca responsável pela comunicação com o servidor de webconferência do código do aplicativo Android. Por isso foi criado o BBB-Java, que é a biblioteca responsável pela comunicação do cliente com o servidor.
+O BBB-Java é a biblioteca responsável pela interação entre um aplicativo genérico em Java e um servidor BigBlueButton. Essa biblioteca foi desenvolvida pelo projeto Mconf para ser utilizada no Mconf-Mobile, mas buscou-se manter um baixo acoplamento entre a biblioteca e o aplicativo Android exatamente para possibilitar e incentivar o desenvolvimento de novos aplicativos não-Web integrados ao sistema de webconferência. Além disso, a biblioteca pode ser utilizada para a criação de aplicativos robôs que podem auxiliar na realização de testes de funcionamento e de carga.
 
 Dentre os recursos oferecidos pela biblioteca estão:
 \begin{itemize}
@@ -158,31 +172,59 @@ Dentre os recursos oferecidos pela biblioteca estão:
  \item Recepção e envio de dados de vídeo.
 \end{itemize}
 
-O BBB-Java utiliza a versão modificada da biblioteca Flazr para realizar a comunicação RTMP com o servidor. Disponibilizando uma biblioteca de interação com o BigBlueButton espera-se ver crescer em no futuro o número de aplicativos capazes de interagir com o sistema. Além disso, a biblioteca pode ser utilizada para a criação de robôs de teste do sistema, que podem ser úteis para a realização de testes de funcionamento e de carga.
+O gerenciamento de salas de conferência é feito através de chamadas a um aplicativo Web JSP (\emph{mobile.jsp}) desenvolvido no projeto Mconf, que utiliza a API do BigBlueButton para executar tais funções. Um aplicativo intermediário é necessário pois a API do BigBlueButton utiliza um \emph{salt} alfanumérico de 32 caracteres para gerar um \emph{checksum} de cada requisição. Esse \emph{salt} é conhecido apenas em um ambiente Web, não em aplicações externas como é o caso do BBB-Java, e não é plausível que um aplicativo exija do usuário uma senha de 32 dígitos para acesso a um servidor.
 
-\subsection{BBB-Android}
+Inicialmente, em caráter experimental, o \emph{mobile.jsp} removia a necessidade de um \emph{salt}. Essa brecha de segurança foi solucionada quando foi implantado um novo \emph{salt} de apenas 5 caracteres, o que torna factível a entrada desse dado pelo usuário.
 
-O BBB-Android é um aplicativo que permite a interação entre usuários em dispositivos móveis dotados do sistema operacional Android e usuários de computadores pessoais. Esse aplicativo foi desenvolvido utilizando o \emph{Software Development Kit} padrão do Android, além do \emph{Native Development Kit} do Android, que possibilita integração de código desenvolvido nas linguagens C e C++.
+Os demais recursos são oferecidos pela biblioteca através da comunicação RTMP com o servidor, e para isso utilizou-se a versão modificada da biblioteca Flazr, com suporte a RSO.
 
-Considerando o fato de que o servidor BigBlueButton utiliza um servidor VoIP para lidar com os fluxos de áudio, para o BBB-Android adotou-se a estratégia de integrar ao aplicativo uma solução de VoIP de código aberto conhecida e consolidada. Optou-se por realizar a integração do aplicativo Sipdroid, um dos softphones SIP mais populares do Android Market, ao BBB-Android, adicionando assim a funcionalidade de interação por áudio através do aplicativo.
+\subsection{BBB-Android}\label{subsec:bbb-android}
 
-\todo{FFmpeg}
+O BBB-Android é o aplicativo Android que utiliza o BBB-Java para interação com o servidor BigBlueButton. Esse aplicativo foi escrito principalmente em Java, utilizando o \emph{Software Development Kit} (SDK) padrão do Android, e uma pequena parte crítica em desempenho foi desenvolvida em C/C++ utilizando o \emph{Native Development Kit} (NDK) do Android.
+
+Considerando o fato de que o servidor BigBlueButton utiliza um servidor VoIP para lidar com os fluxos de áudio, para o BBB-Android adotou-se a estratégia de integrar ao aplicativo uma solução de VoIP de código aberto existente. Optou-se por realizar a integração do aplicativo Sipdroid\footnote{\url{https://market.android.com/details?id=org.sipdroid.sipua}}, um dos telefones SIP mais populares do Android Market, ao BBB-Android adicionando assim a funcionalidade de interação por áudio através do aplicativo. O BigBlueButton utiliza por padrão o codec Speex, que o Sipdroid possui uma implementação em software compilada através da NDK.
+
+O codec de vídeo padrão utilizado no BigBlueButton é o H.263, e a estratégia de solução foi a mesma do Sipdroid. Optou-se por utilizar uma compilação otimizada da biblioteca FFmpeg\footnote{\url{http://www.ffmpeg.org/}} para Android, gerada através da NDK do Android, que tivesse apenas esse codec habilitado. O FFmpeg é uma biblioteca escrita na linguagem C que implementa diversos codificadores e decodificadores de áudio e vídeo.
 
 \section{Principais funcionalidades}
 
+A figura~\ref{fig:mconf-mobile} ilustra as principais funcionalidades do aplicativo, que serão descritas nesta seção.
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=45mm]{app1.png}
+\caption{Tela principal do Mconf-Mobile}\label{fig:mconf-mobile}
+%\caption{Tela principal do Mconf-Mobile: no centro, o vídeo de um participante sendo exibido; ao fundo, lista dos participantes da sessão e lista dos participantes da conferência de voz; na parte inferior, bate-papo público deslizante e botões de controle de áudio do dispositivo}\label{fig:mconf-mobile}
+\end{figure}
+
 \subsection{Bate-papo}
+
+O aplicativo, bem como o cliente Web do BigBlueButton, possui a funcionalidade de bate-papo, que pode ser tanto público quanto privado com cada participante. O bate-papo público pode ser observado na figura~\ref{fig:mconf-mobile} como uma barra deslizante, que com um toque do usuário encobre a lista de participantes e deixa a mostra todas as mensagens trocadas (juntamente com o originador da mensagem e horário), e uma caixa de texto para envio de novas mensagens.
+
+Já o bate-papo privado é acessado com um toque do usuário sobre o nome do participante que ele deseja iniciar uma conversa. Uma nova tela é aberta, com as mesmas características do bate-papo público, mas com a particularidade de que somente aquele usuário terá acesso a conversação.
 
 \subsection{Áudio}
 
-O BBB-Android permite que usuários conectados a uma conferência através de um dispositivo móvel interajam de forma natural com os demais participantes através de áudio. A comunicação é feita através de SIP
+O áudio é parte fundamental da interação em um ambiente de videoconferência, logo essa importância é refletida na interface principal do aplicativo. Ao habilitar a conferência de áudio através do botão \textbf{Menu} do aparelho, dois botões aparecem na parte inferior da interface (ver figura~\ref{fig:mconf-mobile}: ``Fala contínua'' e ``Pressione para falar''.
+
+Os botões de controle de áudio são indispensáveis para uma interação de qualidade, pois experimentalmente verificou-se que o microfone de dispositivos móveis são muito sensíveis a ruído. Além disso, a utilização do botão ``Pressione para falar'' atenua problemas de eco acústico que podem ocorrer se o usuário não utilizar fones de ouvido.
+
+É também possível através do menu habilitar o alto-falante do dispositivo, ajustar controle de volume e ganho do microfone, e também encerrar a conferência de áudio.
 
 \subsection{Vídeo}
 
+O recurso de vídeo, presente no cliente Web do BigBlueButton, também é explorado no aplicativo Android. Como pode ser visto na figura~\ref{fig:mconf-mobile}, um ícone em forma de webcam informa se o usuário possui ou não sua câmera habilitada. Através de um toque longo sobre o nome do participante com vídeo habilitado, o usuário do aplicativo pode escolher a opção de exibição do vídeo. Ao fazê-lo, um diálogo com o vídeo do participante é exibido.
+
 \subsection{Gerência de conferência}
 
-\section{Conclusão}~\cite{roesler_iva}
+Através da interface do aplicativo, caso o usuário entre na sessão como \textbf{Moderador}, é possível realizar uma série de operações administrativas como promover um participante para Apresentador, colocar em mudo um participante que esteja emitindo ruído, abaixar a mão de um participante que pediu atenção, e até expulsar um participante da sessão. Esses recursos proporcionam ao aplicativo um novo caso de uso, em que o moderador da sessão (por exemplo, um professor em uma videoaula) não permanece ao frente ao computador e utiliza um dispositivo móvel como um controle-remoto para gerenciar a videoconferência.
 
-\todo{trabalhos futuros: captura de vídeo, múltiplos vídeos, módulo de apresentação, bloco de notas}
+\section{Conclusão}
+
+Este artigo apresentou o Mconf-Mobile, um aplicativo que integra um sistema de webconferência em dispositivos móveis com sistema operacional Android. A principal contribuição do projeto Mconf é o desenvolvimento em código aberto de uma solução completa de videoconferência que integre dispositivos móveis. O desenvolvimento modular conforme apresentado na seção~\ref{sec:arquitetura} permite que as partes de software produzidas no projeto sejam utilizadas em outros projetos de forma independente.
+
+Uma série de novas funcionalidades estão previstas para o futuro, dentre elas estão permitir captura de vídeo a partir de um dispositivo móvel, possibilidade de visualização de várias vídeos ao mesmo tempo, integração do módulo de apresentação do BigBlueButton ao aplicativo e desenvolvimento de um novo módulo que permita edição cooperativa de texto através de um bloco de notas.
+
 %
 % The following two commands are all you need in the
 % initial runs of your .tex file to
