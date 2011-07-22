@@ -3,6 +3,6 @@
 *.blg
 *.log
 *~
-*.pdf
 *.backup
 *.orig
+*.out
