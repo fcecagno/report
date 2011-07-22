@@ -1388,7 +1388,7 @@
 \def\thebibliography#1{% 
 \ifnum\addauflag=0\addauthorsection\global\addauflag=1\fi
      \section[References]{%    <=== OPTIONAL ARGUMENT ADDED HERE
-        {References} % was uppercased but this affects pdf bookmarks (SP/GM October 2004)
+        {Refer\^{e}ncias} % was uppercased but this affects pdf bookmarks (SP/GM October 2004)
          \@mkboth{{\refname}}{{\refname}}%
      }%
      \list{[\arabic{enumi}]}{%
