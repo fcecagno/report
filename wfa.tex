@@ -99,7 +99,7 @@ Valter Roesler\\
 
 \maketitle
 \begin{resumo}
-  Este artigo apresenta um dos resultados desenvolvidos no projeto Mconf. O Mconf-Mobile é um aplicativo de código aberto para dispositivos móveis com sistema operacional Android. Ele permite interação entre usuários de smartphones e tablets com usuários de computadores de mesa através do sistema de webconferência BigBlueButton. Serão apresentados alguns objetivos do projeto, a arquitetura da solução e suas principais funcionalidades.
+  Este artigo apresenta um dos resultados desenvolvidos no projeto Mconf. O Mconf-Mobile é um aplicativo de código aberto para dispositivos móveis com sistema operacional Android. Ele permite interação entre usuários de smartphones e tablets e usuários de computadores de mesa através do sistema de webconferência BigBlueButton. Serão apresentados alguns objetivos do projeto, a arquitetura da solução e suas principais funcionalidades.
 \end{resumo}
 
 \begin{abstract}
@@ -120,19 +120,19 @@ Valter Roesler\\
 
 %\terms{Design, Experimentation}
 
-\keywords{Videoconferência, Android, BigBlueButton, Código aberto, Mconf}
+\keywords{Mconf, Webconferência, Android, BigBlueButton, Código aberto}
 
 \section{Introdução}
 
-Dispositivos móveis inteligentes vêm ganhando a cada dia mais espaço e popularidade. A troca de telefones celulares ``burros'' por smartphones acontece por diversos motivos, e um deles é a grande variedade de aplicativos disponíveis. Dentre eles, os mais populares são os aplicativos de entretenimento~\cite{android-stats}, categoria que inclui os jogos, que aproveitam a capacidade de processamento dos dispositivos e oferecem distração aos usuários.
+Dispositivos móveis inteligentes vêm ganhando a cada dia mais espaço e popularidade. A troca de telefones celulares ``burros'' por smartphones acontece por diversos motivos, e um deles é a grande variedade de aplicativos disponíveis. Dentre os oferecidos na loja oficial de aplicativos do Android, os mais populares são os aplicativos de entretenimento~\cite{android-stats}, categoria que inclui os jogos, que aproveitam a capacidade de processamento dos dispositivos e oferecem diversão aos usuários.
 
 Além dos jogos, aplicações de vídeo em tempo real vêm crescendo no mercado de aplicativos. Clientes VoIP\footnote{\emph{Voice over IP}, ou Voz sobre IP} como o Sipdroid e aplicativos populares por sua versão para desktop como o Skype já incluem a funcionalidade de videochamada nos seus aplicativos para dispositivos móveis. Além destes, o Fring permite chamada em grupos de até quatro pessoas.
 
-Porém, tanto o Skype quanto o Fring são softwares proprietários, ou seja, o código fonte dos sistemas não está disponível, e não utilizam protocolos padrão conhecidos e/ou abertos, o que impossibilita a interoperabilidade com outros sistemas. Além disso, os dois sistemas usados como exemplo têm restrições quanto a funcionalidade: o Skype permite vídeo chamada apenas entre dois pontos - entre mais pontos, existe o recurso de chamada de voz, ou então um dos usuários deve ter uma conta Premium do sistema; e o Fring possibilita comunicação entre quatro participantes, não sendo possível videoconferência entre muitos participantes.
+Porém, tanto o Skype quanto o Fring são softwares proprietários, ou seja, o código fonte dos sistemas não está disponível, e não utilizam protocolos padrão conhecidos e/ou abertos, o que impossibilita a interoperabilidade com outros sistemas. Além disso, os dois sistemas usados como exemplo têm restrições quanto a funcionalidades: o Skype permite vídeo chamada apenas entre dois pontos - entre mais pontos, existe o recurso de chamada de voz, ou então um dos usuários deve ter uma conta Premium do sistema; e o Fring possibilita comunicação entre quatro participantes, não sendo possível videoconferência entre muitos participantes.
 
 Os clientes VoIP são mais genéricos e utilizam protocolos conhecidos - o Sipdroid, por exemplo, utiliza o protocolo padrão SIP. Entretanto, tais sistemas possuem conhecidos problemas de usabilidade: são complicados de configurar e de utilizar, o que muitas vezes impede o uso por usuários leigos.
 
-O principal objetivo do projeto Mconf é proporcionar uma solução de código aberto para webconferência com foco na facilidade de uso e integração com dispositivos móveis~\cite{mconf-book}. A solução integra o sistema de webconferência BigBlueButton~\cite{bigbluebutton} com o portal Mconf-Web (baseado no Global Plaza\footnote{\url{http://www.global-project.eu/}}), e prevê interação com dispositivos móveis através do Mconf-Mobile.
+O principal objetivo do projeto Mconf é proporcionar uma solução de código aberto para webconferência com foco na facilidade de uso e integração com dispositivos móveis~\cite{mconf-book}. A solução integra o sistema de webconferência BigBlueButton~\cite{bigbluebutton} com o portal Mconf-Web~\cite{mconf-web} (baseado no Global Plaza\footnote{\url{http://www.global-project.eu/}}), e prevê interação com dispositivos móveis através do Mconf-Mobile. O Mconf-Web é a aplicação web utilizada no portal \url{https://mconf.org}.
 
 O projeto Mconf é desenvolvido pelo Laboratório de Projetos em Áudio e Vídeo da Universidade Federal do Rio Grande do Sul, teve início em novembro de 2010 e é financiado pela Rede Nacional de Ensino e Pesquisa no âmbito do programa Grupos de Trabalho da área de Pesquisa, Desenvolvimento e Inovação da RNP.
 
@@ -144,7 +144,7 @@ O código-fonte do Mconf-Mobile está disponível em um repositório público\fo
 
 Conforme descrito anteriormente, o Mconf integra dois sistemas existentes de código aberto voltados para videoconferência: o BigBlueButton e o Global Plaza. Entretanto, o Mconf-Mobile não se limita a essa integração e pode ser utilizado junto a qualquer outro \emph{front end} integrado ao BigBlueButton, como por exemplo o Moodle, ferramenta de apoio à aprendizagem, ou o Wordpress, plataforma para criação de blogs e sites.
 
-A possibilidade de integração a diversos \emph{front ends} se deve à API do tipo REST que o BigBlueButton oferece, e a um recurso do Android chamado de \emph{Intent Filter}. O \emph{Intent Filter} é utilizado para definir que qualquer URL acessada no Android via navegador Web que contenha o prefixo \textbf{bigbluebutton://} ao invés do tradicional \textbf{http://} direcione a chamada para a aplicação Mconf-Mobile que é executada automaticamente ao clicar no link. O Mconf-Mobile, por sua vez, utiliza a URL com o prefixo modificado para entrar na sala de videoconferência. A integração do Mconf-Mobile com o portal Mconf-Web será apresentada a seguir.
+A possibilidade de integração a diversos \emph{front ends} se deve à API do tipo REST que o BigBlueButton oferece, e a um recurso do Android chamado de \emph{Intent Filter}. O \emph{Intent Filter} é utilizado para definir que qualquer URL acessada no Android via navegador Web que contenha o prefixo \textbf{bigbluebutton://} ao invés do tradicional \textbf{http://} direcione a chamada para a aplicação Mconf-Mobile que é executada automaticamente ao clicar no link. O Mconf-Mobile, por sua vez, utiliza a URL com o prefixo modificado para entrar na sala de videoconferência. A integração do Mconf-Mobile com o portal Mconf-Web será apresentada na subseção~\ref{subsec:mconf-web}.
 
 %\begin{figure}[htp]
 %\centering
@@ -152,7 +152,7 @@ A possibilidade de integração a diversos \emph{front ends} se deve à API do t
 %\caption{Visão geral da arquitetura do Mconf-Mobile}\label{fig:architecture}
 %\end{figure}
 
-O BigBlueButton é um sistema de código aberto para webconferência voltado principalmente para ensino à distância. Ele oferece funcionalidades como interação por áudio, vídeo e bate-papo (público e privado), além de compartilhamento da tela do computador e apresentação síncrona de slides e documentos. Além disso, o BigBlueButton possui uma grande comunidade de desenvolvedores com mais de 1200 membros\footnote{\url{https://groups.google.com/group/bigbluebutton-dev/about}}.
+O BigBlueButton é um sistema de código aberto para webconferência voltado principalmente para ensino à distância. Ele oferece funcionalidades como interação por áudio, vídeo e bate-papo (público e privado), além de compartilhamento da tela do computador e apresentação síncrona de slides e documentos. Além disso, o BigBlueButton possui uma grande comunidade de desenvolvedores, com mais de 1200 membros\footnote{\url{https://groups.google.com/group/bigbluebutton-dev/about}}.
 
 O cliente web para desktop é desenvolvido na plataforma Adobe Flash e toda a comunicação com o servidor é feita através do protocolo RTMP\footnote{\emph{Real-Time Messaging Protocol}}. Já o servidor do BigBlueButton utiliza o Red5\footnote{\url{http://www.red5.org/}}, que é uma implementação livre do Adobe Flash Media Server. Além da comunicação por vídeo, realizada de forma transparente entre o cliente Flash e o servidor Red5, são utilizados \emph{Remote Shared Objects} (RSO) e \emph{Remote Procedure Calls} (RPC) para as demais trocas de mensagens, como bate-papo e gerenciamento de status de participantes. Tanto RSO quanto RPC são recursos presentes na especificação do protocolo RTMP~\cite{rtmp}.
 
@@ -160,7 +160,7 @@ Para áudio, o sistema utiliza um servidor VoIP, que pode ser tanto o FreeSWITCH
 
 %Apesar do Android oferecer suporte à plataforma Flash a partir da sua versão 2.2, optou-se por desenvolver um aplicativo nativo através da SDK padrão do Android para permitir compatibilidade com as versões anteriores do Android e, principalmente, para permitir captura e transmissão de áudio e vídeo através do dispositivo móvel, recursos indisponíveis no Adobe Flash Player para Android. Uma visão geral da arquitetura do aplicativo é apresentada na figura~\ref{fig:architecture} e será detalhada nas subseções seguintes.
 
-Apesar do Android oferecer suporte à plataforma Flash a partir da sua versão 2.2, optou-se por desenvolver um aplicativo nativo através da SDK padrão do Android para permitir compatibilidade com as versões anteriores do Android e, principalmente, para permitir captura e transmissão de áudio e vídeo através do dispositivo móvel, recursos indisponíveis no Adobe Flash Player para Android. A arquitetura do aplicativo será detalhada nas subseções seguintes.
+Apesar do Android oferecer suporte à plataforma Flash a partir da sua versão 2.2, optou-se por desenvolver o Mconf-Mobile como um aplicativo nativo através da SDK padrão do Android para permitir compatibilidade com as versões anteriores do Android e, principalmente, para permitir captura e transmissão de áudio e vídeo através do dispositivo móvel, recursos indisponíveis no Adobe Flash Player para Android. A arquitetura do aplicativo será detalhada nas subseções seguintes.
 
 \subsection{Flazr}
 
@@ -172,11 +172,11 @@ Por isso, o suporte a RSO teve de ser adicionado à biblioteca. A implementaçã
 
 \subsection{BBB-Java}
 
-O BBB-Java é a biblioteca responsável pela interação entre um aplicativo genérico em Java e um servidor BigBlueButton. Essa biblioteca foi desenvolvida pelo projeto Mconf para ser utilizada no Mconf-Mobile, mas buscou-se manter um baixo acoplamento entre a biblioteca e o aplicativo Android para possibilitar o desenvolvimento de novos aplicativos não-web integrados ao sistema de webconferência. Além disso, a biblioteca pode ser utilizada na criação de aplicativos robôs que auxiliem a realização de testes funcionais e de carga.
+O BBB-Java é a biblioteca responsável pela interação entre um aplicativo genérico em Java e um servidor BigBlueButton. Essa biblioteca foi desenvolvida pelo projeto Mconf para ser utilizada no Mconf-Mobile, mas buscou-se manter um baixo acoplamento entre a biblioteca e o aplicativo Android para possibilitar o desenvolvimento de novos aplicativos não-web integrados ao sistema de webconferência. Além disso, a biblioteca pode ser utilizada na criação de aplicativos robôs que auxiliem na realização de testes funcionais e de carga.
 
 Dentre os recursos oferecidos pela biblioteca estão:
 \begin{itemize}
- \item Acesso a salas de conferência;
+ \item Acesso a salas de videoconferência;
  \item Atualização do status dos participantes da sessão;
  \item Troca de mensagens de bate-papo (público e privado);
  \item Recepção e envio de dados de vídeo.
@@ -184,7 +184,7 @@ Dentre os recursos oferecidos pela biblioteca estão:
 
 O acesso a salas de conferência pode acontecer de duas formas:
 \begin{itemize}
- \item Através da tela inicial da aplicação: ao executar o Mconf-Mobile, o usuário é convidado a entrar com suas credenciais de acesso do portal \url{mconf.org}, e a partir dessa tela ele poderá acessar sua sala de videoconferência pessoal e as salas de comunidades das quais o usuário faz parte.
+ \item Através da tela inicial da aplicação: ao executar o Mconf-Mobile, o usuário é convidado a entrar com suas credenciais de acesso do portal \url{mconf.org} (como pode ser visto na figura~\ref{fig:mconf-entrada}, e a partir dessa tela ele poderá acessar sua sala de videoconferência pessoal e as salas de comunidades das quais o usuário faz parte.
  \item Através de um portal Web: a lógica por trás da API do BigBlueButton pode ser implementada por um portal Web, como por exemplo o Mconf-Web ou o Moodle. Ao clicar em um link para entrar numa sala de videoconferência no navegador do Android, a URL de JOIN com o prefixo modificado \textbf{bigbluebutton://} fará com que o Mconf-Mobile seja executado automaticamente, e com essa URL ele será capaz de entrar na sala pretendida pelo usuário.
 \end{itemize}
 
@@ -196,14 +196,30 @@ Considerando que o servidor BigBlueButton utiliza um servidor VoIP para lidar co
 
 O codec de vídeo padrão utilizado no BigBlueButton é o H.263, e a estratégia de solução foi a mesma do Sipdroid. Optou-se por utilizar uma compilação otimizada da biblioteca FFmpeg\footnote{\url{http://www.ffmpeg.org/}} para Android, gerada através do NDK, que tivesse apenas esse codec habilitado. O FFmpeg é uma biblioteca escrita na linguagem C que implementa diversos codificadores e decodificadores de áudio e vídeo.
 
+\begin{figure}[htp]
+\centering
+\includegraphics[height=50mm]{app3.png}
+\caption{Tela de entrada do Mconf-Mobile}\label{fig:mconf-entrada}
+%\caption{Tela principal do Mconf-Mobile: no centro, o vídeo de um participante sendo exibido; ao fundo, lista dos participantes da sessão e lista dos participantes da conferência de voz; na parte inferior, bate-papo público deslizante e botões de controle de áudio do dispositivo}\label{fig:mconf-mobile}
+\end{figure}
+
 \section{Principais funcionalidades}
 
-A figura~\ref{fig:mconf-mobile} ilustra as principais funcionalidades do aplicativo, que serão descritas nesta seção.
+A figura~\ref{fig:mconf-mobile} ilustra a tela principal do aplicativo, onde é exibida a lista dos participantes da sessão, indicativos de status dos participantes (por exemplo, se o participante está transmitindo vídeo), o vídeo de um participante remoto sobrepondo a interface e os controles de áudio.
 
 \begin{figure}[htp]
 \centering
-\includegraphics[width=45mm]{app1.png}
+\includegraphics[height=50mm]{app2.png}
 \caption{Tela principal do Mconf-Mobile}\label{fig:mconf-mobile}
+%\caption{Tela principal do Mconf-Mobile: no centro, o vídeo de um participante sendo exibido; ao fundo, lista dos participantes da sessão e lista dos participantes da conferência de voz; na parte inferior, bate-papo público deslizante e botões de controle de áudio do dispositivo}\label{fig:mconf-mobile}
+\end{figure}
+
+O menu principal do aplicativo, acessível a partir do botão \textbf{Menu} do dispositivo móvel, exibe opções de início da interação por áudio e vídeo e o recurso de levantar a mão. As principais funcionalidades da aplicação serão descritas a seguir.
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=85mm]{menu_merged.png}
+\caption{À esquerda, menu principal do aplicativo; à direita, menu de toque longo sobre o nome de um participante}\label{fig:menu}
 %\caption{Tela principal do Mconf-Mobile: no centro, o vídeo de um participante sendo exibido; ao fundo, lista dos participantes da sessão e lista dos participantes da conferência de voz; na parte inferior, bate-papo público deslizante e botões de controle de áudio do dispositivo}\label{fig:mconf-mobile}
 \end{figure}
 
@@ -215,33 +231,56 @@ Já o bate-papo privado é acessado com um toque do usuário sobre o nome do par
 
 \subsection{Áudio}
 
-O áudio é parte fundamental da interação em um ambiente de videoconferência, logo essa importância é refletida na interface principal do aplicativo. Ao habilitar a conferência de áudio através do botão \textbf{Menu} do aparelho, dois botões aparecem na parte inferior da interface (ver figura~\ref{fig:mconf-mobile}: ``Fala contínua'' e ``Pressione para falar'').
+O áudio é parte fundamental da interação em um ambiente de videoconferência, logo essa importância é refletida na interface principal do aplicativo. Ao habilitar a conferência de áudio através do botão \textbf{Menu} do aparelho (como mostra a figura~\ref{fig:menu}), dois botões aparecem na parte inferior da interface (ver figura~\ref{fig:mconf-mobile}: ``Fala contínua'' e ``Pressione para falar'').
 
 Os botões de controle de áudio são indispensáveis para uma interação de qualidade, pois experimentalmente verificou-se que o microfone de dispositivos móveis é muito sensível a ruído. Além disso, a utilização do botão ``Pressione para falar'' atenua problemas de eco acústico que podem ocorrer se o usuário não utilizar fones de ouvido.
 
-Através do menu também é possível habilitar o alto-falante do dispositivo, ajustar controle de volume e ganho do microfone, e também encerrar a conferência de áudio.
+Através do menu também é possível habilitar o alto-falante do dispositivo, ajustar controle de volume e ganho do microfone, e também encerrar a conferência de áudio. Estas novas opções são oferecidas somente depois que o usuário selecionar a opção \textbf{Iniciar voz}, e por isso não aparecem na figura~\ref{fig:menu}.
 
 \subsection{Vídeo}
 
 %O recurso de vídeo, presente no cliente web do BigBlueButton, também é explorado no aplicativo Android. Como pode ser visto na figura~\ref{fig:mconf-mobile}, um ícone em forma de webcam informa se o usuário possui ou não sua câmera habilitada. Através de um toque longo sobre o nome do participante com vídeo habilitado, o usuário pode escolher a opção de exibição do vídeo. Ao fazê-lo, uma tela sobreposta com o vídeo do participante é exibida.
 
-O recurso de vídeo, presente no cliente web do BigBlueButton, também é explorado no aplicativo Android. Como pode ser visto na figura~\ref{fig:mconf-mobile}, um ícone em forma de webcam informa se o participante possui sua câmera habilitada. Um toque longo sobre o nome deste participante faz aparecer um menu com a opção ``Exibir vídeo''. Ao selecioná-la, o vídeo do participante é exibido em uma tela sobreposta.
+A tela principal da aplicação indica, entre outras informações, quais são os usuários que possuem o recurso de vídeo habilitado. Isso pode ser visto na figura~\ref{fig:mconf-mobile}, onde ao lado do nome de alguns participantes aparece o ícone de uma webcam. Ao efetuar um toque longo sobre o nome de qualquer usuário, a aplicação exibe um menu de ações possíveis para com aquele usuário, como mostra a figura~\ref{fig:menu}. Para os usuários que tiverem o recurso de vídeo habilitado, a opção ``Exibir vídeo'' será listada, e permitirá visualizar o vídeo do participante remoto, como ilustra a figura~\ref{fig:mconf-mobile}. 
 
-\subsection{Gerência de conferência}
+%\begin{figure}[htp]
+%\centering
+%\includegraphics[width=35mm]{menu_user.png}
+%\caption{Menu de toque longo sobre o nome de um participante}\label{fig:menu-user}
+%\end{figure}
 
-Caso o usuário entre na sessão como \textbf{Moderador}, é possível realizar uma série de operações administrativas, como promover um participante a Apresentador, colocar em mudo um participante que esteja emitindo ruído, abaixar a mão de um participante que pediu atenção e até expulsar um participante da sessão. 
+A janela de vídeo do participante remoto é flutuante e sobrepõe a lista de usuários. Ao colocar o dispositivo na posição horizontal, o vídeo é maximizado ocupando assim toda a tela. A qualquer momento, pressionando o botão \textbf{Voltar} do dispositivo, o vídeo é fechado.
 
-Esses recursos sugerem um novo caso de uso para o aplicativo: um professor utiliza o quadro negro para uma exposição aos seus alunos que estão remotamente conectados; ele não permanece em frente ao seu computador durante a exposição, mas pode utilizar um dispositivo móvel como controle remoto para gerenciar a videoconferência (checar mensagens de bate-papo, atender a um pedido de atenção, etc.).
+Além de visualizar o vídeo de um participante remoto, também é possível transmitir para a videoconferência a imagem capturada da câmera frontal do dispositivo. Esse recurso é acessível através do menu principal do aplicativo, como pode ser visto na figura~\ref{fig:menu}, opção ``Iniciar vídeo''.
 
-%Esses recursos sugerem um novo caso de uso para o aplicativo, em que o moderador da sessão (por exemplo, um professor em uma videoaula) não permanece em frente ao computador e utiliza um dispositivo móvel como controle remoto para gerenciar a videoconferência.
+%\subsection{Gerência de videoconferência}
 
-\subsection{Integração com portais Web}
+%Caso o usuário entre na sessão como \textbf{Moderador}, é possível realizar uma série de operações administrativas, como por exemplo, promover um participante a \textbf{Apresentador}, colocar em mudo um participante que esteja emitindo ruído, abaixar a mão de um participante que pediu atenção e até expulsar um participante da sessão. 
+
+%Esses recursos sugerem um novo caso de uso para o aplicativo: um professor utiliza o quadro negro para uma exposição aos seus alunos que estão remotamente conectados; ele não permanece em frente ao seu computador durante a exposição, mas pode utilizar um dispositivo móvel como controle remoto para gerenciar a videoconferência (checar mensagens de bate-papo, atender a um pedido de atenção, etc.).
+
+\subsection{Integração com portais Web}\label{subsec:mconf-web}
+
+Conforme descrito anteriormente, o Mconf-Mobile pode ser facilmente integrado a portais Web que servem de \emph{front end} para o serviço de webconferência do BigBlueButton. Na figura~\ref{fig:mconf-integration} é exemplificado o mecanismo de integração do Mconf-Mobile com o portal \url{mconf.org}.
+
+\begin{figure}[htp]
+\centering
+\includegraphics[width=85mm]{mconf_integration.png}
+\caption{Modelo de integração com o \url{mconf.org}}\label{fig:mconf-integration}
+%\caption{Tela principal do Mconf-Mobile: no centro, o vídeo de um participante sendo exibido; ao fundo, lista dos participantes da sessão e lista dos participantes da conferência de voz; na parte inferior, bate-papo público deslizante e botões de controle de áudio do dispositivo}\label{fig:mconf-mobile}
+\end{figure}
+
+Quando o usuário entra no portal \url{mconf.org} através do navegador Web do seu dispositivo móvel e coloca suas credenciais de acesso, é exibida na página inicial informações sobre a sua sala pessoal de webconferência. Essa sala possui um link fixo no formato \textbf{https://mconf.org/webconf/<id\_do\_usuário>}, recurso que facilita o convite de pessoas para uma sessão de webconferência.
+
+Como pode ser visto à esquerda na figura~\ref{fig:mconf-integration}, um ícone com a forma de um telefone celular é apresentado para que o usuário acesse sua sala através de um dispositivo móvel. Ao clicar nesse ícone, sempre através do navegador Web do Android, é exibida a tela exemplificada à direita na figura~\ref{fig:mconf-integration}, que contém um link para acesso à sala (redireciona para uma URL de prefixo \textbf{bigbluebutton://}) e um QR-Code, que da mesma forma dá acesso à sala de webconferência quando escaneado por um dispositivo móvel. O mesmo modelo é usado para as salas de webconferência das comunidades de usuários.
+
+Vale ressaltar que a integração realizada no portal \url{mconf.org} pode ser facilmente reproduzida em qualquer outro portal Web, desde que este seja integrado ao sistema BigBlueButton.
 
 \section{Conclusão}
 
-Este artigo apresentou o Mconf-Mobile, um aplicativo para videoconferência em dispositivos móveis com sistema operacional Android. A principal contribuição do projeto Mconf é o desenvolvimento em código aberto de uma solução completa de videoconferência que integra dispositivos móveis e redes sociais. O desenvolvimento modular, conforme apresentado na seção~\ref{sec:arquitetura}, permite que as partes de software produzidas sejam utilizadas em outros projetos de forma independente.
+Este artigo apresentou o Mconf-Mobile, um aplicativo para videoconferência em dispositivos móveis com sistema operacional Android. A principal contribuição do projeto Mconf é o desenvolvimento em código aberto de uma solução completa de webconferência que integra desktops e dispositivos móveis. O desenvolvimento modular, conforme apresentado na seção~\ref{sec:arquitetura}, permite que as partes de software produzidas sejam utilizadas em outros projetos de forma independente.
 
-Novas funcionalidades estão previstas para o futuro, como captura de vídeo a partir de um dispositivo móvel, possibilidade de visualização de vários vídeos ao mesmo tempo, integração do módulo de apresentação do BigBlueButton ao aplicativo e desenvolvimento de um novo módulo que permita edição cooperativa de texto através de um bloco de notas. 
+Novas funcionalidades estão previstas para o futuro, como por exemplo a possibilidade de visualização de vários vídeos ao mesmo tempo, integração do módulo de apresentação do BigBlueButton ao aplicativo e desenvolvimento de um novo módulo que permita edição cooperativa de texto através de um bloco de notas. A aplicação Mconf-Mobile está disponível para download gratuito na loja oficial de aplicativos do Android, e o portal \url{mconf.org} é aberto e acessível por qualquer pessoa.
 
 %
 % The following two commands are all you need in the
