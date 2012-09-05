@@ -174,13 +174,7 @@ Por isso, o suporte a RSO teve de ser adicionado à biblioteca. A implementaçã
 
 O BBB-Java é a biblioteca responsável pela interação entre um aplicativo genérico em Java e um servidor BigBlueButton. Essa biblioteca foi desenvolvida pelo projeto Mconf para ser utilizada no Mconf-Mobile, mas buscou-se manter um baixo acoplamento entre a biblioteca e o aplicativo Android para possibilitar o desenvolvimento de novos aplicativos não-web integrados ao sistema de webconferência. Além disso, a biblioteca pode ser utilizada na criação de aplicativos robôs que auxiliem na realização de testes funcionais e de carga.
 
-Dentre os recursos oferecidos pela biblioteca estão:
-\begin{itemize}
- \item Acesso a salas de videoconferência;
- \item Atualização do status dos participantes da sessão;
- \item Troca de mensagens de bate-papo (público e privado);
- \item Recepção e envio de dados de vídeo.
-\end{itemize}
+Dentre os recursos oferecidos pela biblioteca estão: acesso a salas de videoconferência, atualização do status dos participantes da sessão, troca de mensagens de bate-papo (público e privado) e recepção e envio de dados de vídeo.
 
 O acesso a salas de conferência pode acontecer de duas formas:
 \begin{itemize}
@@ -190,7 +184,7 @@ O acesso a salas de conferência pode acontecer de duas formas:
 
 \subsection{Mconf-Mobile}\label{subsec:bbb-android}
 
-O Mconf-Mobile é o aplicativo Android que utiliza o BBB-Java para interação com o servidor BigBlueButton. Esse aplicativo foi escrito principalmente em Java, utilizando o \emph{Software Development Kit} (SDK) padrão do Android, e uma pequena parte crítica em desempenho foi desenvolvida em C/C++ com o \emph{Native Development Kit} (NDK).
+O Mconf-Mobile é o aplicativo Android que utiliza o BBB-Java para interação com o servidor BigBlueButton. Esse aplicativo foi escrito principalmente em Java, utilizando o \emph{Software Development Kit} (SDK) padrão do Android, e uma pequena parte crítica em desempenho (relacionada à codificação e decodificação de vídeo) foi desenvolvida em C/C++ com o \emph{Native Development Kit} (NDK).
 
 Considerando que o servidor BigBlueButton utiliza um servidor VoIP para lidar com os fluxos de áudio, para o Mconf-Mobile adotou-se a estratégia de integrar ao aplicativo uma solução existente de VoIP de código aberto. Optou-se pelo aplicativo Sipdroid\footnote{\url{https://play.google.com/store/apps/details?id=org.sipdroid.sipua}}, um dos telefones SIP mais populares da loja de aplicativos oficial do Android, adicionando assim a funcionalidade de interação por áudio. Dentre os codecs suportados pelo Sipdroid está o Speex, codec padrão de áudio do BigBlueButton, implementado na linguagem C e compilado através do NDK.
 
@@ -218,7 +212,7 @@ O menu principal do aplicativo, acessível a partir do botão \textbf{Menu} do d
 
 \begin{figure}[htp]
 \centering
-\includegraphics[width=85mm]{menu_merged.png}
+\includegraphics[width=75mm]{menu_merged.png}
 \caption{À esquerda, menu principal do aplicativo; à direita, menu de toque longo sobre o nome de um participante}\label{fig:menu}
 %\caption{Tela principal do Mconf-Mobile: no centro, o vídeo de um participante sendo exibido; ao fundo, lista dos participantes da sessão e lista dos participantes da conferência de voz; na parte inferior, bate-papo público deslizante e botões de controle de áudio do dispositivo}\label{fig:mconf-mobile}
 \end{figure}
@@ -270,7 +264,7 @@ Conforme descrito anteriormente, o Mconf-Mobile pode ser facilmente integrado a 
 %\caption{Tela principal do Mconf-Mobile: no centro, o vídeo de um participante sendo exibido; ao fundo, lista dos participantes da sessão e lista dos participantes da conferência de voz; na parte inferior, bate-papo público deslizante e botões de controle de áudio do dispositivo}\label{fig:mconf-mobile}
 \end{figure}
 
-Quando o usuário entra no portal \url{mconf.org} através do navegador Web do seu dispositivo móvel e coloca suas credenciais de acesso, é exibida na página inicial informações sobre a sua sala pessoal de webconferência. Essa sala possui um link fixo no formato \textbf{https://mconf.org/webconf/<id\_do\_usuário>}, recurso que facilita o convite de pessoas para uma sessão de webconferência.
+Quando o usuário entra no portal \url{mconf.org} através do navegador Web do seu dispositivo móvel e coloca suas credenciais de acesso, é exibida na página inicial informações sobre a sua sala pessoal de webconferência. Essa sala possui um link fixo no formato \url{https://mconf.org/webconf/<id\_do\_usuário>}, recurso que facilita o convite de pessoas para uma sessão de webconferência.
 
 Como pode ser visto à esquerda na figura~\ref{fig:mconf-integration}, um ícone com a forma de um telefone celular é apresentado para que o usuário acesse sua sala através de um dispositivo móvel. Ao clicar nesse ícone, sempre através do navegador Web do Android, é exibida a tela exemplificada à direita na figura~\ref{fig:mconf-integration}, que contém um link para acesso à sala (redireciona para uma URL de prefixo \textbf{bigbluebutton://}) e um QR-Code, que da mesma forma dá acesso à sala de webconferência quando escaneado por um dispositivo móvel. O mesmo modelo é usado para as salas de webconferência das comunidades de usuários.
 
@@ -280,7 +274,9 @@ Vale ressaltar que a integração realizada no portal \url{mconf.org} pode ser f
 
 Este artigo apresentou o Mconf-Mobile, um aplicativo para videoconferência em dispositivos móveis com sistema operacional Android. A principal contribuição do projeto Mconf é o desenvolvimento em código aberto de uma solução completa de webconferência que integra desktops e dispositivos móveis. O desenvolvimento modular, conforme apresentado na seção~\ref{sec:arquitetura}, permite que as partes de software produzidas sejam utilizadas em outros projetos de forma independente.
 
-Novas funcionalidades estão previstas para o futuro, como por exemplo a possibilidade de visualização de vários vídeos ao mesmo tempo, integração do módulo de apresentação do BigBlueButton ao aplicativo e desenvolvimento de um novo módulo que permita edição cooperativa de texto através de um bloco de notas. A aplicação Mconf-Mobile está disponível para download gratuito na loja oficial de aplicativos do Android, e o portal \url{mconf.org} é aberto e acessível por qualquer pessoa.
+Novas funcionalidades estão previstas para o futuro, como por exemplo a possibilidade de visualização de vários vídeos ao mesmo tempo, integração do módulo de apresentação do BigBlueButton ao aplicativo e desenvolvimento de um novo módulo que permita edição cooperativa de texto através de um bloco de notas. Além disso, será desenvolvido um mecanismo de priorização do fluxo de dados de áudio sobre os demais fluxos a fim de manter a qualidade da conferência de voz em dispositivos com limitação de processamento ou largura de banda de rede. 
+
+A aplicação Mconf-Mobile está disponível para download gratuito na loja oficial de aplicativos do Android, e o portal \url{mconf.org} é aberto e acessível por qualquer pessoa.
 
 %
 % The following two commands are all you need in the
